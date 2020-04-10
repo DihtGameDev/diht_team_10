@@ -55,8 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\PrefsStorage.cs" />
-     <Compile Include="Assets\Scripts\Test.cs" />
+     <Compile Include="Assets\Scripts\ExtentedPlayerPrefs.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
