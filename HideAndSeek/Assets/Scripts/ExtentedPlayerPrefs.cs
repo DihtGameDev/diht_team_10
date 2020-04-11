@@ -5,10 +5,10 @@ public static class ExtentedPlayerPrefs {
         PlayerPrefs.SetString(key, JsonUtility.ToJson(obj));
     }
 
-    public static T GetObject<T>(string key) where T : class {
+    public static T GetObject<T>(string key, T defaultObj=null) where T : class {
         string jsonString = PlayerPrefs.GetString(key, "");
         if (jsonString == "") {
-            return null;
+            return defaultObj;
         } else {
             return JsonUtility.FromJson<T>(jsonString);
         }

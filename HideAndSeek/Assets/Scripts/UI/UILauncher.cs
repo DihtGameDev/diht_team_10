@@ -10,8 +10,6 @@ public class UILauncher : MonoBehaviour {
     private Button _settingsBtn;
     private Button _quickplayBtn;
 
-    private Settings _settings;
-
     protected void Start() {
         _canvasGO = GameObject.Find("Canvas");
 
@@ -20,13 +18,9 @@ public class UILauncher : MonoBehaviour {
         _quickplayBtn = _canvasGO.transform.Find("QuickPlayBtn").GetComponent<Button>();
 
         _settingsBtn.onClick.AddListener(OnSettingsClicked);
-        _quickplayBtn.onClick.AddListener(OnQuckplayClicked);
+        _quickplayBtn.onClick.AddListener(OnQuickplayClicked);
 
-        _settings = ExtentedPlayerPrefs.GetObject<Settings>(Constants.PlayerPrefs.SETTINGS);
-        if (_settings == null)
-            _settings = new Settings();
-
-        _nicknameField.text = _settings.nickname;
+        _nicknameField.text = Settings.getInstance().nickname;
     }
 
     private void OnSettingsClicked() {
@@ -34,10 +28,11 @@ public class UILauncher : MonoBehaviour {
         print("settings button clicked");
     }
 
-    private void OnQuckplayClicked() {
+    private void OnQuickplayClicked() {
         // TODO
         _settings.nickname = _nicknameField.text;
         ExtentedPlayerPrefs.SetObject<Settings>(Constants.PlayerPrefs.SETTINGS, _settings);
+        GameObject.Find("Launcher").GetComponent<Launcher>().Connect();
         print("on quick play clicked");
     }
 }
