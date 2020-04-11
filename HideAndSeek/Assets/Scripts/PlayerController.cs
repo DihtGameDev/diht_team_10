@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour {
             }
 
             transform.eulerAngles = new Vector3(0,
-                                                Mathf.LerpAngle(transform.eulerAngles.y, angle + 180f, 0.08f),
+                                                Mathf.LerpAngle(transform.eulerAngles.y, angle + 180f, _lerpAngleCoeff),
                                                 0);
         }
     }
