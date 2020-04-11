@@ -5,9 +5,15 @@ using Photon.Pun;
 using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks {
+    private UILauncher ui;
+
     protected void Awake() {
         // master will synchronize rooms
         PhotonNetwork.AutomaticallySyncScene = true;
+
+        ui = new UILauncher(GameObject.Find("Canvas"));
+        ui.nicknameField.text = Settings.getInstance().nickname;
+        ui.quickplayBtn.onClick.AddListener(Connect);
     }
 
     public void Connect() {
@@ -51,7 +57,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     private IEnumerator Wait() {
-        while (PhotonNetwork.CurrentRoom.PlayerCount != 2) {
+        while (PhotonNetwork.CurrentRoom.PlayerCount != 3) {
             yield return new WaitForSeconds(0.2f);
         }
 

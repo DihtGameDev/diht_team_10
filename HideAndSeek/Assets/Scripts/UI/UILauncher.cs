@@ -3,36 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UILauncher : MonoBehaviour {
+public class UILauncher {
     private GameObject _canvasGO;
 
-    private InputField _nicknameField;
-    private Button _settingsBtn;
-    private Button _quickplayBtn;
+    public InputField nicknameField;
+    public Button settingsBtn;
+    public Button quickplayBtn;
 
-    protected void Start() {
-        _canvasGO = GameObject.Find("Canvas");
+    public UILauncher(GameObject canvasGO) {
+        _canvasGO = canvasGO;
 
-        _nicknameField = _canvasGO.transform.Find("NicknameField").GetComponent<InputField>();
-        _settingsBtn = _canvasGO.transform.Find("SettingsBtn").GetComponent<Button>();
-        _quickplayBtn = _canvasGO.transform.Find("QuickPlayBtn").GetComponent<Button>();
-
-        _settingsBtn.onClick.AddListener(OnSettingsClicked);
-        _quickplayBtn.onClick.AddListener(OnQuickplayClicked);
-
-        _nicknameField.text = Settings.getInstance().nickname;
+        Init();
     }
 
-    private void OnSettingsClicked() {
-        // TODO
-        print("settings button clicked");
-    }
-
-    private void OnQuickplayClicked() {
-        // TODO
-        _settings.nickname = _nicknameField.text;
-        ExtentedPlayerPrefs.SetObject<Settings>(Constants.PlayerPrefs.SETTINGS, _settings);
-        GameObject.Find("Launcher").GetComponent<Launcher>().Connect();
-        print("on quick play clicked");
+    private void Init() {
+        nicknameField = _canvasGO.transform.Find("NicknameField").GetComponent<InputField>();
+        settingsBtn = _canvasGO.transform.Find("SettingsBtn").GetComponent<Button>();
+        quickplayBtn = _canvasGO.transform.Find("QuickPlayBtn").GetComponent<Button>();
     }
 }
