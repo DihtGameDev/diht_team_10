@@ -13,11 +13,10 @@ public class CameraController : MonoBehaviour {
     private GameObject fadedGameObject = null; // optimization
 
     private void Start() {
-        if (_chasingObj == null) {
-            SetChasingObject(GameObject.FindGameObjectsWithTag("Player")[0]);
-        } else {
-            _deltaChasingObjPos = transform.position - _chasingObj.transform.position;
-        }
+        transform.eulerAngles = new Vector3(33.09f, -15f, 0f);
+        _deltaChasingObjPos = new Vector3(2.0f, 7.9f, -6f);
+        // _deltaChasingObjPos = transform.position - _chasingObj.transform.position;
+
 
         StartCoroutine("FadeOverlappingObjects");
     }
@@ -25,15 +24,22 @@ public class CameraController : MonoBehaviour {
     private void Update() {
         if (_chasingObj != null) {
             transform.position = Vector3.Lerp(transform.position, _chasingObj.transform.position + _deltaChasingObjPos, _cameraChasingLerp);
+        } else {
+            GameObject player = GameObject.Find("MyPlayer");
+            if (player != null)
+                SetChasingObject(player);
         }
     }
 
     private void SetChasingObject(GameObject chasingObj) {
         _chasingObj = chasingObj;
-        _deltaChasingObjPos = transform.position - _chasingObj.transform.position;
+     //   _deltaChasingObjPos = transform.position - _chasingObj.transform.position;
     }
     
     private IEnumerator FadeOverlappingObjects() {
+        while (_chasingObj == null)
+            yield return new WaitForSeconds(.4f);
+
         int layerMask = LayerMask.GetMask("Obstacle"); // = 1 << 9;
 
         Vector3 dir = _chasingObj.transform.position - transform.position;

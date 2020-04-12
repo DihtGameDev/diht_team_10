@@ -18,10 +18,10 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public void Connect() {
         if (PhotonNetwork.IsConnected) {
-            print("Connect(): isConnected");
+            Debug.Log("Connect(): isConnected");
             PhotonNetwork.JoinRandomRoom();
         } else {
-            print("Connect(), first connecting");
+            Debug.Log("Connect(), first connecting");
             PhotonNetwork.GameVersion = "1";
             PhotonNetwork.NickName = Settings.getInstance().nickname;
             PhotonNetwork.ConnectUsingSettings(); // first connecting
@@ -29,21 +29,21 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     public override void OnConnectedToMaster() {
-        print("OnConnectedToMaster(), before JoinRandomRoom");
+        Debug.Log("OnConnectedToMaster(), before JoinRandomRoom");
         PhotonNetwork.JoinRandomRoom();
     }
     public override void OnDisconnected(DisconnectCause cause) {
-        print("onDisconnected() with reason: " + cause);
+        Debug.Log("onDisconnected() with reason: " + cause);
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message) {
-        print("OnJoinRandomFailed(). Therefore we create new Room");
+        Debug.Log("OnJoinRandomFailed(). Therefore we create new Room");
         // we failed to join a random room, maybe none exists or they are all full. Therefore we create a new room.
         PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 3 });
     }
 
     public override void OnJoinedRoom() {
-        print("OnJoinedRoom(): " + PhotonNetwork.NickName);
+        Debug.Log("OnJoinedRoom(): " + PhotonNetwork.NickName);
 
         /*
         if (PhotonNetwork.IsMasterClient) {
@@ -57,11 +57,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     private IEnumerator Wait() {
-        while (PhotonNetwork.CurrentRoom.PlayerCount != 3) {
+        while (PhotonNetwork.CurrentRoom.PlayerCount != 2) {
             yield return new WaitForSeconds(0.2f);
         }
 
-        print("load the Room for 3");
+        Debug.Log("load the Room for 3");
         PhotonNetwork.LoadLevel("Room for 3");
     }
 }

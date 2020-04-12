@@ -13,12 +13,15 @@ public class PlayerController : MonoBehaviour {
 
     public Joystick _moveJoystick;
 
+    private void Awake() {
+        _moveJoystick = GameObject.Find("Canvas").GetComponentInChildren<Joystick>();
+    }
+
     private void Start() {
         _rb = GetComponent<Rigidbody>();
-        _moveJoystick = GameObject.Find("Canvas").GetComponentInChildren<Joystick>();
 
         if (_moveJoystick == null) {
-            print("Needs FixedJoystick on this scene");
+            Debug.Log("Needs FixedJoystick on this scene");
             throw new UnassignedReferenceException();
         }
     }
@@ -31,8 +34,8 @@ public class PlayerController : MonoBehaviour {
 
     private void _Move() {
         Vector3 pos = transform.position;
-        pos.x += _moveJoystick.Direction.x * 0.03f;
-        pos.z += _moveJoystick.Direction.y * 0.03f;
+        pos.x += _moveJoystick.Direction.x * moveSpeed;
+        pos.z += _moveJoystick.Direction.y * moveSpeed;
         transform.position = pos;
         if (_moveJoystick.Direction != Vector2.zero) {
             float angle = Mathf.Rad2Deg * Mathf.Atan(_moveJoystick.Direction.x / _moveJoystick.Direction.y);
