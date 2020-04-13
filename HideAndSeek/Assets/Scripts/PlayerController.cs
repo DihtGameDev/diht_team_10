@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float _lerpAngleCoeff = 0.08f;
 
-    public float moveSpeed = 0.03f;
+    public float moveSpeed = 0.06f;
 
     public Joystick _moveJoystick;
 

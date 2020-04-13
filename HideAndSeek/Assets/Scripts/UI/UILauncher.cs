@@ -7,6 +7,7 @@ public class UILauncher : UIBase {
     public InputField nicknameField;
     public Button settingsBtn;
     public Button quickplayBtn;
+    public Text connectingMessage;
     
     public UILauncher(GameObject canvasGO) : base(canvasGO) {
     }
@@ -15,5 +16,6 @@ public class UILauncher : UIBase {
         nicknameField = canvasGO.transform.Find("NicknameField").GetComponent<InputField>();
         settingsBtn = canvasGO.transform.Find("SettingsBtn").GetComponent<Button>();
         quickplayBtn = canvasGO.transform.Find("QuickPlayBtn").GetComponent<Button>();
+        connectingMessage = canvasGO.transform.Find("ConnectingMessage").GetComponent<Text>();
     }
 }

@@ -6,6 +6,7 @@ using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks {
     private UILauncher ui;
+    private bool connectedToRoom = false;
 
     protected void Awake() {
         // master will synchronize rooms
@@ -14,9 +15,18 @@ public class Launcher : MonoBehaviourPunCallbacks {
         ui = new UILauncher(GameObject.Find("Canvas"));
         ui.nicknameField.text = Settings.getInstance().nickname;
         ui.quickplayBtn.onClick.AddListener(Connect);
+        ui.connectingMessage.gameObject.SetActive(false);
+    }
+
+    protected void Update() {
+        if (connectedToRoom) {
+            ui.connectingMessage.text = "Waiting for players (" + PhotonNetwork.PlayerList.Length + "/2)";
+        }
     }
 
     public void Connect() {
+        ui.connectingMessage.text = "Connecting...";
+        ui.connectingMessage.gameObject.SetActive(true);
         if (PhotonNetwork.IsConnected) {
             Debug.Log("Connect(): isConnected");
             PhotonNetwork.JoinRandomRoom();
@@ -44,6 +54,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnJoinedRoom() {
         Debug.Log("OnJoinedRoom(): " + PhotonNetwork.NickName);
+        connectedToRoom = true;
 
         /*
         if (PhotonNetwork.IsMasterClient) {
