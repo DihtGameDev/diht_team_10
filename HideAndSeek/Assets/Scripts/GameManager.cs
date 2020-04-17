@@ -10,7 +10,12 @@ public class GameManager : MonoBehaviourPunCallbacks {
     private GameObject _myPlayer;
     private UIGame uiGame;
 
-    public void Start() {
+    [SerializeField]
+    private GameObject nicknameTextPrefab;
+
+    private NicknameManager _nicknameManager = new NicknameManager();
+
+    protected void Start() {
         uiGame = new UIGame(GameObject.Find("Canvas"));
 
         uiGame.moveJoystick.gameObject.SetActive(false);
@@ -39,6 +44,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
         Invoke("StartGame", 5f);
     }
 
+    protected void Update() {
+        _nicknameManager.Update();
+    }
+
     private void StartGame() {
         uiGame.loadingScreenGO.SetActive(false);
         uiGame.moveJoystick.gameObject.SetActive(true);
@@ -48,16 +57,38 @@ public class GameManager : MonoBehaviourPunCallbacks {
         if (PhotonNetwork.IsMasterClient) { // i am seeker
             pc.moveSpeed = pc.moveSpeed * 2f;
         }
+
+        _nicknameManager.InitPlayers(
+            GameObject.Find("Canvas").gameObject,
+            nicknameTextPrefab
+        );
+
+        SetNicknames();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
         Debug.Log("Player entered: " + newPlayer.NickName);
+
+        Invoke("SetNicknames", 3f);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) {
         Debug.Log("OnPlayerLeftRoom(): " + otherPlayer.NickName);
         if (PhotonNetwork.IsMasterClient) {
             Debug.Log("now I am master!");
+        }
+
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+            if (player.GetComponent<PhotonView>().Owner == null) {
+                _nicknameManager.DeletePlayer(player);
+            }
+        }
+        
+    }
+
+    private void SetNicknames() {
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+            _nicknameManager.AddPlayer(player, player.GetComponent<PhotonView>().Owner.NickName);
         }
     }
 }
