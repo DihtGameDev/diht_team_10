@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -19,12 +18,15 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     protected void Update() {
-        if (connectedToRoom) {
+        /*if (connectedToRoom) {
             ui.connectingMessage.text = "Waiting for players (" + PhotonNetwork.PlayerList.Length + "/2)";
-        }
+        }*/
     }
 
     public void Connect() {
+        Settings.getInstance().nickname = ui.nicknameField.text;
+        Settings.save();
+
         ui.connectingMessage.text = "Connecting...";
         ui.connectingMessage.gameObject.SetActive(true);
         if (PhotonNetwork.IsConnected) {
@@ -63,7 +65,9 @@ public class Launcher : MonoBehaviourPunCallbacks {
         } */
 
         if (PhotonNetwork.IsMasterClient) {
-            StartCoroutine(Wait());
+            Debug.Log("load the Room for 3");
+            PhotonNetwork.LoadLevel("Room for 3");
+            //  StartCoroutine(Wait());
         }
     }
 

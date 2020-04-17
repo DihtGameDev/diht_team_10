@@ -3,7 +3,10 @@ guid: 707862fdd13913f43a3d090b367e9493
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - nicknameTextPrefab: {fileID: 3649851159907094752, guid: fb3a6fe42058f634baddb078c571687d,
+      type: 3}
+  - _moveJoystick: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

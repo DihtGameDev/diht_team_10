@@ -13,9 +13,15 @@ public class CameraController : MonoBehaviour {
     private GameObject fadedGameObject = null; // optimization
 
     private void Start() {
-        transform.eulerAngles = new Vector3(33.09f, -15f, 0f);
-        _deltaChasingObjPos = new Vector3(2.0f, 7.9f, -6f);
-        // _deltaChasingObjPos = transform.position - _chasingObj.transform.position;
+        // first variant
+        // transform.eulerAngles = new Vector3(33.09f, -15f, 0f);
+        // _deltaChasingObjPos = new Vector3(2.0f, 7.9f, -6f);
+
+        // second variant
+        transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
+         _deltaChasingObjPos = new Vector3(2.0f, 12.6f, -6f);
+
+        // _deltaChasingObjPos = transform.position - _chasingObj.transform.position; 
 
 
         StartCoroutine("FadeOverlappingObjects");

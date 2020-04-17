@@ -15,4 +15,10 @@ public class Settings {
         }
         return _settings;
     }
+
+    public static void save() {
+        if (_settings != null) {
+            ExtentedPlayerPrefs.SetObject<Settings>(Constants.PlayerPrefs.SETTINGS, _settings);
+        }
+    }
 }
