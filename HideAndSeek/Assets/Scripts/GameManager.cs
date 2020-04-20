@@ -5,63 +5,64 @@ using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 
+public enum PlayerType {
+    SEEKER, HIDEMAN
+}
+
 public class GameManager : MonoBehaviourPunCallbacks {
     public GameObject sunObj;
-    private GameObject _myPlayer;
-    private UIGame uiGame;
+    public UIGame uiGame;
 
     [SerializeField]
     private GameObject nicknameTextPrefab;
 
-    private NicknameManager _nicknameManager = new NicknameManager();
+    public static GameManager GAME_MANAGER;
+
+    public GameObject mainPlayer;
+    public PlayerType playerType;
+    public NicknameManager nicknameManager;
+
+    protected void Awake() {
+        GAME_MANAGER = this;
+    }
 
     protected void Start() {
         uiGame = new UIGame(GameObject.Find("Canvas"));
 
         uiGame.moveJoystick.gameObject.SetActive(false);
+        nicknameManager = NicknameManager.GetInstance(GameObject.Find("Canvas"), nicknameTextPrefab);
 
         if (!PhotonNetwork.IsConnected) {
             Debug.Log("Something went wrong, while loading this scene");
             SceneManager.LoadScene("Launcher");
         }
 
-        if (PhotonNetwork.IsMasterClient) {
-            Debug.Log("I am master client");
-
-            sunObj.SetActive(false);
-
-            _myPlayer = PhotonNetwork.Instantiate("Seeker", new Vector3(1f, 0f, 1f), Quaternion.identity, 0);
-        } else {
-            Debug.Log("I am not master client");
-
-            _myPlayer = PhotonNetwork.Instantiate("Hideman",
-                new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f)),
-                Quaternion.identity, 0);
-        }
-
-        _myPlayer.name = "MyPlayer";
-
-        Invoke("StartGame", 5f);
+        Invoke("StartGame", 1f);
     }
 
     protected void Update() {
-        _nicknameManager.Update();
+        nicknameManager.Update();
     }
 
     private void StartGame() {
+        Respawn();
+
         uiGame.loadingScreenGO.SetActive(false);
         uiGame.moveJoystick.gameObject.SetActive(true);
 
-        PlayerController pc = _myPlayer.AddComponent<PlayerController>();
+        SetNicknames();
+    }
 
-        if (PhotonNetwork.IsMasterClient) { // i am seeker
-            pc.moveSpeed = pc.moveSpeed * 2f;
+    private void Respawn() {
+        playerType = ChooseTeam();
+        CreatePlayer(playerType);
+
+        if (playerType == PlayerType.SEEKER) { // i am seeker
+            mainPlayer.AddComponent<Seeker>();
+        } else {
+            mainPlayer.AddComponent<Hideman>();
         }
-
-        _nicknameManager.InitPlayers(
-            GameObject.Find("Canvas").gameObject,
-            nicknameTextPrefab
-        );
+        Camera.main.GetComponent<CameraController>().SetChasingObject(mainPlayer);
 
         SetNicknames();
     }
@@ -69,7 +70,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public override void OnPlayerEnteredRoom(Player newPlayer) {
         Debug.Log("Player entered: " + newPlayer.NickName);
 
-        Invoke("SetNicknames", 3f);
+        Invoke("SetNicknames", 5f);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) {
@@ -78,17 +79,56 @@ public class GameManager : MonoBehaviourPunCallbacks {
             Debug.Log("now I am master!");
         }
 
-        foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+        foreach (var player in GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG)) {
             if (player.GetComponent<PhotonView>().Owner == null) {
-                _nicknameManager.DeletePlayer(player);
+                nicknameManager.DeletePlayer(player);
+            }
+        }
+
+        foreach (var player in GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG)) {
+            if (player.GetComponent<PhotonView>().Owner == null) {
+                nicknameManager.DeletePlayer(player);
             }
         }
         
     }
 
+    public void CreatePlayer(PlayerType playerType) {
+        if (playerType == PlayerType.SEEKER) {
+            sunObj.SetActive(false);
+            mainPlayer = PhotonNetwork.Instantiate("Seeker", new Vector3(1f, 0f, 1f), Quaternion.identity, 0);
+        } else {
+            mainPlayer = PhotonNetwork.Instantiate("Hideman",
+                new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f)),
+                Quaternion.identity, 0);
+        }
+
+        mainPlayer.name = "MyPlayer";
+    }
+
+    public PlayerType ChooseTeam() {
+        int seekersCount = GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG).Length;
+
+        if (seekersCount == 0) {
+            return PlayerType.SEEKER;
+        }
+
+        int hidemansCount = GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG).Length;
+        int coeff = hidemansCount / seekersCount;
+
+        return coeff <= 2 ? PlayerType.HIDEMAN : PlayerType.SEEKER;
+    }
+
     private void SetNicknames() {
-        foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
-            _nicknameManager.AddPlayer(player, player.GetComponent<PhotonView>().Owner.NickName);
+        print("SetNicknames, my tag: " + mainPlayer.tag);
+        var allies = GameObject.FindGameObjectsWithTag(
+            mainPlayer.tag == Constants.SEEKER_TAG ?
+            Constants.SEEKER_TAG :
+            Constants.HIDEMAN_TAG
+            );
+
+        foreach (var player in allies) {
+            nicknameManager.AddPlayer(player, player.GetComponent<PhotonView>().Owner.NickName);
         }
     }
 }

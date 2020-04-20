@@ -8,9 +8,13 @@ public class NicknameManager {
     private RectTransform _canvasRect;
     private GameObject _nicknamePrefab;
 
-    public void InitPlayers(GameObject canvasGO, GameObject nicknamePrefab) {
+    private NicknameManager(GameObject canvasGO, GameObject nicknamePrefab) {
         _canvasRect = canvasGO.GetComponent<RectTransform>();
         _nicknamePrefab = nicknamePrefab;
+    }
+
+    public static NicknameManager GetInstance(GameObject canvasGO, GameObject nicknamePrefab) {
+        return new NicknameManager(canvasGO, nicknamePrefab);
     }
 
     public void Update() {

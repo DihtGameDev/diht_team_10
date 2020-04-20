@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 6257717685035592673}
   - component: {fileID: 7701480983690050180}
   - component: {fileID: 7701480983690050179}
+  - component: {fileID: -8477428438960455623}
   m_Layer: 8
   m_Name: Hideman
-  m_TagString: Player
+  m_TagString: Hideman
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,3 +149,15 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-8477428438960455623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6257717685035592672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d981eb6d0c7bf4bb66821522206ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

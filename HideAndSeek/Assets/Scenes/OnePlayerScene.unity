@@ -756,14 +756,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 848797942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 707862fdd13913f43a3d090b367e9493, type: 3}
+  m_Script: {fileID: 11500000, guid: f160df3f576d3c5469a144afa95ca162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nicknameTextPrefab: {fileID: 3649851159907094752, guid: fb3a6fe42058f634baddb078c571687d,
-    type: 3}
   _lerpAngleCoeff: 0.08
-  moveSpeed: 0.03
   _moveJoystick: {fileID: 0}
+  moveSpeed: 0.06
 --- !u!1001 &871806597
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ ScriptsOnlyBuild:
     - FloatingJoystick
     - GameManager
     - Launcher
+    - PlayerRPC
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
     - Photon.Pun.Demo.Asteroids.Bullet
@@ -15,6 +16,8 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
+    PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -106,29 +109,31 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10940}
     - Class: 114
-      Script: {instanceID: 11022}
+      Script: {instanceID: 11024}
     - Class: 114
-      Script: {instanceID: 11026}
+      Script: {instanceID: 11028}
     - Class: 114
-      Script: {instanceID: 11032}
+      Script: {instanceID: 11034}
     - Class: 114
-      Script: {instanceID: 11046}
+      Script: {instanceID: 11048}
     - Class: 114
-      Script: {instanceID: 11234}
+      Script: {instanceID: 11236}
     - Class: 114
-      Script: {instanceID: 11244}
+      Script: {instanceID: 11248}
     - Class: 114
-      Script: {instanceID: 11250}
+      Script: {instanceID: 11254}
     - Class: 114
-      Script: {instanceID: 11374}
+      Script: {instanceID: 11314}
     - Class: 114
-      Script: {instanceID: 11722}
+      Script: {instanceID: 11380}
     - Class: 114
-      Script: {instanceID: 11800}
+      Script: {instanceID: 11730}
     - Class: 114
-      Script: {instanceID: 11832}
+      Script: {instanceID: 11810}
     - Class: 114
-      Script: {instanceID: 11840}
+      Script: {instanceID: 11842}
+    - Class: 114
+      Script: {instanceID: 11850}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -199,9 +204,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10954}
     - Class: 114
-      Script: {instanceID: 11374}
+      Script: {instanceID: 11380}
     - Class: 114
-      Script: {instanceID: 11800}
+      Script: {instanceID: 11810}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -999,7 +1004,7 @@ ScriptsOnlyBuild:
     className: PlayerUI
   - hash:
       serializedVersion: 2
-      Hash: 24083ead534d159cc6c84bad6c28fb00
+      Hash: e6343f098fff6a068e27dd43bd27c75c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1197,6 +1202,12 @@ ScriptsOnlyBuild:
     className: TextMeshProUGUI
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PlayerRPC
+  - hash:
+      serializedVersion: 2
       Hash: 7221ab9307aaa6b66a416e2e4561f420
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -1255,6 +1266,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
     className: PlayerListView
+  - hash:
+      serializedVersion: 2
+      Hash: 79a664a6ca9beb6f9a818a10b9a438e7
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Hideman
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -1323,7 +1340,7 @@ ScriptsOnlyBuild:
     className: MoveByKeys
   - hash:
       serializedVersion: 2
-      Hash: aefb76e003b70986070d3488ed37d267
+      Hash: 79a664a6ca9beb6f9a818a10b9a438e7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1483,6 +1500,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
     className: CurrentRoomIsOfflineProperty
+  - hash:
+      serializedVersion: 2
+      Hash: 79a664a6ca9beb6f9a818a10b9a438e7
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Seeker
   - hash:
       serializedVersion: 2
       Hash: 9dac16f3efc511835ac976dfae55f580

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public static class Constants {
     public static class PlayerPrefs {
-        public static string SETTINGS = "settings";
+        public const string SETTINGS = "settings";
     }
+
+    public const string PLAYER_TAG = "Player";
+    public const string SEEKER_TAG = "Seeker";
+    public const string HIDEMAN_TAG = "Hideman";
 }

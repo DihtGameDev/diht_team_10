@@ -185,9 +185,10 @@ GameObject:
   - component: {fileID: 3903393556535760769}
   - component: {fileID: 2093679141457848462}
   - component: {fileID: 2093679141457848457}
+  - component: {fileID: 2274103040597006756}
   m_Layer: 8
   m_Name: Seeker
-  m_TagString: Player
+  m_TagString: Seeker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -320,6 +321,18 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2274103040597006756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2393934939969157610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d981eb6d0c7bf4bb66821522206ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8027579815565136353
 GameObject:
   m_ObjectHideFlags: 0

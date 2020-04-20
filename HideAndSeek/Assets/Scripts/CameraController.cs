@@ -30,16 +30,15 @@ public class CameraController : MonoBehaviour {
     private void Update() {
         if (_chasingObj != null) {
             transform.position = Vector3.Lerp(transform.position, _chasingObj.transform.position + _deltaChasingObjPos, _cameraChasingLerp);
-        } else {
+        } /*else {
             GameObject player = GameObject.Find("MyPlayer");
             if (player != null)
                 SetChasingObject(player);
-        }
+        }*/
     }
 
-    private void SetChasingObject(GameObject chasingObj) {
+    public void SetChasingObject(GameObject chasingObj) {
         _chasingObj = chasingObj;
-     //   _deltaChasingObjPos = transform.position - _chasingObj.transform.position;
     }
     
     private IEnumerator FadeOverlappingObjects() {

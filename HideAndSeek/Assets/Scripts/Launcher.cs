@@ -31,27 +31,40 @@ public class Launcher : MonoBehaviourPunCallbacks {
         ui.connectingMessage.gameObject.SetActive(true);
         if (PhotonNetwork.IsConnected) {
             Debug.Log("Connect(): isConnected");
-            PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.JoinRoom("test");
         } else {
             Debug.Log("Connect(), first connecting");
             PhotonNetwork.GameVersion = "1";
             PhotonNetwork.NickName = Settings.getInstance().nickname;
-            PhotonNetwork.ConnectUsingSettings(); // first connecting
+            PhotonNetwork.ConnectUsingSettings(); // connect to photon
         }
     }
 
     public override void OnConnectedToMaster() {
         Debug.Log("OnConnectedToMaster(), before JoinRandomRoom");
-        PhotonNetwork.JoinRandomRoom();
+        //  PhotonNetwork.JoinRandomRoom();
+
+        PhotonNetwork.CreateRoom("test", new RoomOptions { MaxPlayers = 5 });
+      //  PhotonNetwork.JoinRoom("test");
     }
     public override void OnDisconnected(DisconnectCause cause) {
         Debug.Log("onDisconnected() with reason: " + cause);
     }
 
+    public override void OnCreatedRoom() {
+        print("OnCreatedRoom");
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message) {
+        print("OnCreateRoomFailed with message: " + message);
+        PhotonNetwork.JoinRoom("test");
+    }
+
     public override void OnJoinRandomFailed(short returnCode, string message) {
-        Debug.Log("OnJoinRandomFailed(). Therefore we create new Room");
+        Debug.Log("OnJoinRandomFailed(). mith message: " + message);
+        Debug.Log("Therefore we create new Room");
         // we failed to join a random room, maybe none exists or they are all full. Therefore we create a new room.
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 3 });
+        PhotonNetwork.CreateRoom("test", new RoomOptions { MaxPlayers = 5 });
     }
 
     public override void OnJoinedRoom() {
