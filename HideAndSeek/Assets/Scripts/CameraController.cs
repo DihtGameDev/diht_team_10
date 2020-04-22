@@ -22,12 +22,12 @@ public class CameraController : MonoBehaviour {
         //    _deltaChasingObjPos = new Vector3(2.0f, 12.6f, -6f);
 
         // third variant
-         transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
-         _deltaChasingObjPos = new Vector3(2.0f, 18.09f, -8.74f);
+      //   transform.eulerAngles = new Vector3(46.2f, -15f, 0f);
+      //   _deltaChasingObjPos = new Vector3(4.31f, 30f, -18.3f);
 
         // fourth variant
-        // transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
-        // _deltaChasingObjPos = new Vector3(2.0f, 18.09f, -8.74f);
+         transform.eulerAngles = new Vector3(46.2f, -15f, 0f);
+         _deltaChasingObjPos = new Vector3(3.89f, 18.6f, -13f);
 
         // _deltaChasingObjPos = transform.position - _chasingObj.transform.position; 
 

@@ -25,6 +25,7 @@ public class NicknameManager {
                 ((__viewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f))
                 );
 
+            __worldObject_ScreenPosition.y += 55f; // for above player position
             player.Value.anchoredPosition = __worldObject_ScreenPosition;
         }
     }

@@ -24,11 +24,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     protected void Awake() {
         GAME_MANAGER = this;
+        uiGame = new UIGame(GameObject.Find("Canvas"));
     }
 
     protected void Start() {
-        uiGame = new UIGame(GameObject.Find("Canvas"));
-
         uiGame.moveJoystick.gameObject.SetActive(false);
         nicknameManager = NicknameManager.GetInstance(GameObject.Find("Canvas"), nicknameTextPrefab);
 
@@ -96,9 +95,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public void CreatePlayer(PlayerType playerType) {
         if (playerType == PlayerType.SEEKER) {
             sunObj.SetActive(false);
-            mainPlayer = PhotonNetwork.Instantiate("Seeker", new Vector3(1f, 0f, 1f), Quaternion.identity, 0);
+            mainPlayer = PhotonNetwork.Instantiate("SeekerGhost", new Vector3(1f, 0f, 1f), Quaternion.identity, 0);
         } else {
-            mainPlayer = PhotonNetwork.Instantiate("Hideman",
+            mainPlayer = PhotonNetwork.Instantiate("FixedHideman",
                 new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f)),
                 Quaternion.identity, 0);
         }
@@ -120,7 +119,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     private void SetNicknames() {
-        print("SetNicknames, my tag: " + mainPlayer.tag);
         var allies = GameObject.FindGameObjectsWithTag(
             mainPlayer.tag == Constants.SEEKER_TAG ?
             Constants.SEEKER_TAG :

@@ -13,14 +13,12 @@ public class PlayerController : MonoBehaviour {
     private CharacterController _controller;
 
     public float moveSpeed = 5f;
-    private Animator _animator;
 
     protected void Awake() {
         StartCoroutine("TrySetJoystick");
     }
 
     protected void Start() {
-        _animator = GetComponentInChildren<Animator>();
         _controller = GetComponent<CharacterController>();
      /*   if (_moveJoystick == null) {
             Debug.Log("Needs FixedJoystick on this scene");
@@ -40,18 +38,11 @@ public class PlayerController : MonoBehaviour {
 
     private IEnumerator Move() {
         while (true) {
-            Vector3 pos = transform.position;
-            
-            pos.x += _moveJoystick.Direction.x * moveSpeed * Time.deltaTime;
-            pos.z += _moveJoystick.Direction.y * moveSpeed * Time.deltaTime;
-            float deltaMagnitude = (pos - transform.position).magnitude;
-
             Vector3 dir = Vector3.zero;
             dir.x = _moveJoystick.Direction.x;
             dir.z = _moveJoystick.Direction.y;
             _controller.Move(dir * moveSpeed * Time.deltaTime);
 
-          //  transform.position = pos;
             if (_moveJoystick.Direction != Vector2.zero) {
                 float angle = Mathf.Rad2Deg * Mathf.Atan(_moveJoystick.Direction.x / _moveJoystick.Direction.y);
                 if (_moveJoystick.Direction.y < 0) {
@@ -62,8 +53,6 @@ public class PlayerController : MonoBehaviour {
                                                     Mathf.LerpAngle(transform.eulerAngles.y, angle, _lerpAngleCoeff),
                                                     0);
             }
-
-            _animator.SetBool("IsMoving", deltaMagnitude != 0f);
 
             yield return null;
         }

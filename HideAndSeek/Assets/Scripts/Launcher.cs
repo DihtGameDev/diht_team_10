@@ -79,7 +79,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
         if (PhotonNetwork.IsMasterClient) {
             Debug.Log("load the Room for 3");
-            PhotonNetwork.LoadLevel("Room for 3");
+            PhotonNetwork.LoadLevel("Room for 5");
             //  StartCoroutine(Wait());
         }
     }

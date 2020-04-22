@@ -34,8 +34,8 @@ public class UIGame : UIBase {
     }
 
     private IEnumerator RespawnTick() {
-        for (int i = 20; i >= 1; --i) {
-            respawnText.text = "" + i;
+        for (int i = Constants.RESPAWN_TIME; i >= 1; --i) {
+            respawnText.text = "Появление через " + i;
             yield return new WaitForSeconds(1f);
         }
 
