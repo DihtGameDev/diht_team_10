@@ -1,27 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour {
-    private Rigidbody _rb;
-
     [SerializeField]
     private float _lerpAngleCoeff = 0.08f;
 
     [SerializeField]
     private Joystick _moveJoystick;
 
-    public float moveSpeed = 2f;
+    private CharacterController _controller;
+
+    public float moveSpeed = 5f;
+    private Animator _animator;
 
     protected void Awake() {
         StartCoroutine("TrySetJoystick");
     }
 
     protected void Start() {
-        _rb = GetComponent<Rigidbody>();
-
+        _animator = GetComponentInChildren<Animator>();
+        _controller = GetComponent<CharacterController>();
      /*   if (_moveJoystick == null) {
             Debug.Log("Needs FixedJoystick on this scene");
             throw new UnassignedReferenceException();
@@ -41,9 +41,17 @@ public class PlayerController : MonoBehaviour {
     private IEnumerator Move() {
         while (true) {
             Vector3 pos = transform.position;
+            
             pos.x += _moveJoystick.Direction.x * moveSpeed * Time.deltaTime;
             pos.z += _moveJoystick.Direction.y * moveSpeed * Time.deltaTime;
-            transform.position = pos;
+            float deltaMagnitude = (pos - transform.position).magnitude;
+
+            Vector3 dir = Vector3.zero;
+            dir.x = _moveJoystick.Direction.x;
+            dir.z = _moveJoystick.Direction.y;
+            _controller.Move(dir * moveSpeed * Time.deltaTime);
+
+          //  transform.position = pos;
             if (_moveJoystick.Direction != Vector2.zero) {
                 float angle = Mathf.Rad2Deg * Mathf.Atan(_moveJoystick.Direction.x / _moveJoystick.Direction.y);
                 if (_moveJoystick.Direction.y < 0) {
@@ -51,12 +59,11 @@ public class PlayerController : MonoBehaviour {
                 }
 
                 transform.eulerAngles = new Vector3(0,
-                                                    Mathf.LerpAngle(transform.eulerAngles.y, angle + 180f, _lerpAngleCoeff),
+                                                    Mathf.LerpAngle(transform.eulerAngles.y, angle, _lerpAngleCoeff),
                                                     0);
             }
 
-            _rb.velocity = Vector3.zero;
-            _rb.angularVelocity = Vector3.zero;
+            _animator.SetBool("IsMoving", deltaMagnitude != 0f);
 
             yield return null;
         }

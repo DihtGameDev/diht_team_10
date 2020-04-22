@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 
 public class PlayerRPC : MonoBehaviour {
@@ -16,13 +14,13 @@ public class PlayerRPC : MonoBehaviour {
                 if (player == GameManager.GAME_MANAGER.mainPlayer) {
                     Camera.main.GetComponent<CameraController>().SetChasingObject(null);
                     GameManager.GAME_MANAGER.uiGame.StartRespawnTimer();
-                    GameManager.GAME_MANAGER.Invoke("Respawn", 20f);
+                    GameManager.GAME_MANAGER.Invoke("Respawn", Constants.RESPAWN_TIME);
                 }
 
                 GameManager.GAME_MANAGER.nicknameManager.DeletePlayer(player);
                 Destroy(player);
 
-                GameManager.GAME_MANAGER.uiGame.PrintInChat(killerNickname + " оттрахал " + photonView.Owner.NickName);
+                GameManager.GAME_MANAGER.uiGame.PrintInChat(killerNickname + " убил " + photonView.Owner.NickName);
 
                 return;
             }

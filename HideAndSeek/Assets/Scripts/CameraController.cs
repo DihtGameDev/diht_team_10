@@ -18,8 +18,16 @@ public class CameraController : MonoBehaviour {
         // _deltaChasingObjPos = new Vector3(2.0f, 7.9f, -6f);
 
         // second variant
-        transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
-         _deltaChasingObjPos = new Vector3(2.0f, 12.6f, -6f);
+        //   transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
+        //    _deltaChasingObjPos = new Vector3(2.0f, 12.6f, -6f);
+
+        // third variant
+         transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
+         _deltaChasingObjPos = new Vector3(2.0f, 18.09f, -8.74f);
+
+        // fourth variant
+        // transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
+        // _deltaChasingObjPos = new Vector3(2.0f, 18.09f, -8.74f);
 
         // _deltaChasingObjPos = transform.position - _chasingObj.transform.position; 
 
@@ -42,13 +50,14 @@ public class CameraController : MonoBehaviour {
     }
     
     private IEnumerator FadeOverlappingObjects() {
-        while (_chasingObj == null)
+        while (_chasingObj == null) {
             yield return new WaitForSeconds(.4f);
+        }
 
         int layerMask = LayerMask.GetMask("Obstacle"); // = 1 << 9;
 
+        yield return new WaitForSeconds(2f); // for setting delta from chasing... to camera(otherwise it doesn't have time)
         Vector3 dir = _chasingObj.transform.position - transform.position;
-        dir = dir / dir.magnitude; // normalize
 
         while (true) {
             Renderer r = _CheckOverlapping(dir, layerMask);
@@ -78,11 +87,11 @@ public class CameraController : MonoBehaviour {
                 return fadedRenderer;
             } else {
                 fadedGameObject = hit.collider.gameObject;
-                return fadedGameObject.GetComponent<Renderer>();
+                return fadedGameObject.GetComponentInChildren<Renderer>();
             }
         } else {
             fadedGameObject = null;
-            Debug.DrawRay(transform.position, dir * 1000, Color.white);
+        //    Debug.DrawRay(transform.position, dir * 10000, Color.white);
             return null;
         }
     }
