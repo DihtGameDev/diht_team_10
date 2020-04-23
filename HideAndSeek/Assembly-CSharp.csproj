@@ -91,6 +91,8 @@
      <Compile Include="Assets\Scripts\UI\UIBase.cs" />
      <Compile Include="Assets\Scripts\UI\UIGame.cs" />
      <Compile Include="Assets\Scripts\UI\UILauncher.cs" />
+     <Compile Include="Assets\Scripts\UI\Widgets\UIGameWidget.cs" />
+     <Compile Include="Assets\Scripts\UI\Widgets\UILauncherWidget.cs" />
      <Compile Include="Assets\Scripts\UIManager.cs" />
      <None Include="Assets\Photon\PhotonLibs\changes-library.txt" />
      <None Include="Assets\Photon\PhotonUnityNetworking\link.xml" />

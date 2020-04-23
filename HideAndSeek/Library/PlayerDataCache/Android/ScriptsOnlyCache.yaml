@@ -3,6 +3,7 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - CameraController
     - FloatingJoystick
+    - FpsCounter
     - GameManager
     - Launcher
     - PlayerRPC
@@ -272,6 +273,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 11380}
     - Class: 114
       Script: {instanceID: 11810}
+    - Class: 114
+      Script: {instanceID: 136092}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1069,7 +1072,7 @@ ScriptsOnlyBuild:
     className: PlayerUI
   - hash:
       serializedVersion: 2
-      Hash: e6343f098fff6a068e27dd43bd27c75c
+      Hash: 114605ae50f5968012fc4221ff406580
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1667,6 +1670,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SeekerGhostAnim
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FpsCounter
   platform: 13
   scenePathNames:
   - Assets/Scenes/Launcher.unity

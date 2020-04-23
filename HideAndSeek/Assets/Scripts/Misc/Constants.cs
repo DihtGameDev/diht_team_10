@@ -7,7 +7,7 @@ public static class Constants {
         public const string SETTINGS = "settings";
     }
 
-    public const int RESPAWN_TIME = 20;
+    public const int RESPAWN_TIME = 10;
 
     public const string PLAYER_TAG = "Player";
     public const string SEEKER_TAG = "Seeker";

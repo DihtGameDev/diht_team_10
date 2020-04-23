@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIGame : UIBase {
-    public GameObject loadingScreenGO;
-    public Joystick moveJoystick;
-    public Text chatText;
-    public Text respawnText;
+public class UIGame : UIBase<UIGameWidget> {
+    public GameObject loadingScreenGO => _widget.loadingScreenGO;
+    public Joystick moveJoystick => _widget.moveJoystick;
+    public Text chatText => _widget.chatText;
+    public Text respawnText => _widget.respawnText;
 
-    public UIGame(GameObject canvasGO) : base(canvasGO) {
-    }
-
-    protected override void Init() {
-        loadingScreenGO = canvasGO.transform.Find("LoadingScreen").gameObject;
-        moveJoystick = canvasGO.GetComponentInChildren<Joystick>();
-        chatText = canvasGO.transform.Find("Chat").GetComponent<Text>();
-        respawnText = canvasGO.transform.Find("RespawnText").GetComponent<Text>();
+    public UIGame(UIGameWidget gameWidget) : base(gameWidget) {
     }
 
     public void PrintInChat(string message) {

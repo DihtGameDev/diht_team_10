@@ -11,6 +11,9 @@ public enum PlayerType {
 
 public class GameManager : MonoBehaviourPunCallbacks {
     [SerializeField]
+    private UIGameWidget _uiGameWidget;
+
+    [SerializeField]
     private GameObject _nicknameTextPrefab;
 
     public static GameManager GAME_MANAGER;
@@ -24,10 +27,11 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     protected void Awake() {
         GAME_MANAGER = this;
-        uiGame = new UIGame(GameObject.Find("Canvas"));
     }
 
     protected void Start() {
+        uiGame = new UIGame(_uiGameWidget);
+
         uiGame.moveJoystick.gameObject.SetActive(false);
         nicknameManager = NicknameManager.GetInstance(GameObject.Find("Canvas"), _nicknameTextPrefab);
 
@@ -78,15 +82,15 @@ public class GameManager : MonoBehaviourPunCallbacks {
             Debug.Log("now I am master!");
         }
 
-        foreach (var player in GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG)) {
-            if (player.GetComponent<PhotonView>().Owner == null) {
-                nicknameManager.DeletePlayer(player);
+        foreach (var __player in GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG)) {
+            if (__player.GetComponent<PhotonView>().Owner == null) {
+                nicknameManager.DeletePlayer(__player);
             }
         }
 
-        foreach (var player in GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG)) {
-            if (player.GetComponent<PhotonView>().Owner == null) {
-                nicknameManager.DeletePlayer(player);
+        foreach (var __player in GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG)) {
+            if (__player.GetComponent<PhotonView>().Owner == null) {
+                nicknameManager.DeletePlayer(__player);
             }
         }
         
@@ -106,27 +110,27 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public PlayerType ChooseTeam() {
-        int seekersCount = GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG).Length;
+        int __seekersCount = GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG).Length;
 
-        if (seekersCount == 0) {
+        if (__seekersCount == 0) {
             return PlayerType.SEEKER;
         }
 
-        int hidemansCount = GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG).Length;
-        int coeff = hidemansCount / seekersCount;
+        int __hidemansCount = GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG).Length;
+        int __coeff = __hidemansCount / __seekersCount;
 
-        return coeff <= 2 ? PlayerType.HIDEMAN : PlayerType.SEEKER;
+        return __coeff <= 2 ? PlayerType.HIDEMAN : PlayerType.SEEKER;
     }
 
     private void SetNicknames() {
-        var allies = GameObject.FindGameObjectsWithTag(
+        var __allies = GameObject.FindGameObjectsWithTag(
             mainPlayer.tag == Constants.SEEKER_TAG ?
             Constants.SEEKER_TAG :
             Constants.HIDEMAN_TAG
             );
 
-        foreach (var player in allies) {
-            nicknameManager.AddPlayer(player, player.GetComponent<PhotonView>().Owner.NickName);
+        foreach (var __player in __allies) {
+            nicknameManager.AddPlayer(__player, __player.GetComponent<PhotonView>().Owner.NickName);
         }
     }
 }

@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class UIBase {
-    protected GameObject canvasGO;
+public abstract class UIBase<TWidget> where TWidget : MonoBehaviour {
+    protected TWidget _widget;
 
-    public UIBase(GameObject canvasGO) {
-        this.canvasGO = canvasGO;
-
-        Init();
+    public UIBase(TWidget widget) {
+        _widget = widget;
     }
-
-    abstract protected void Init();
 }

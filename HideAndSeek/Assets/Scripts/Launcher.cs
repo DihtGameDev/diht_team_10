@@ -4,17 +4,21 @@ using Photon.Pun;
 using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks {
-    private UILauncher _ui;
+    [SerializeField]
+    private UILauncherWidget _uiLauncherWidget;
+
+    private UILauncher _launcherUI;
+
     private bool _connectedToRoom = false;
 
     protected void Awake() {
         // master will synchronize rooms
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        _ui = new UILauncher(GameObject.Find("Canvas"));
-        _ui.nicknameField.text = Settings.getInstance().nickname;
-        _ui.quickplayBtn.onClick.AddListener(Connect);
-        _ui.connectingMessage.gameObject.SetActive(false);
+        _launcherUI = new UILauncher(_uiLauncherWidget);
+        _launcherUI.nicknameField.text = Settings.getInstance().nickname;
+        _launcherUI.quickplayBtn.onClick.AddListener(Connect);
+        _launcherUI.connectingMessage.gameObject.SetActive(false);
     }
 
     protected void Update() {
@@ -24,11 +28,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     public void Connect() {
-        Settings.getInstance().nickname = _ui.nicknameField.text;
+        Settings.getInstance().nickname = _launcherUI.nicknameField.text;
         Settings.save();
 
-        _ui.connectingMessage.text = "Connecting...";
-        _ui.connectingMessage.gameObject.SetActive(true);
+        _launcherUI.connectingMessage.text = "Connecting...";
+        _launcherUI.connectingMessage.gameObject.SetActive(true);
         if (PhotonNetwork.IsConnected) {
             Debug.Log("Connect(): isConnected");
             PhotonNetwork.JoinRoom("test");

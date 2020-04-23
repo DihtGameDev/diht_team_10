@@ -3,19 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UILauncher : UIBase {
-    public InputField nicknameField;
-    public Button settingsBtn;
-    public Button quickplayBtn;
-    public Text connectingMessage;
+public class UILauncher : UIBase<UILauncherWidget> {
+    public InputField nicknameField => _widget.nicknameField;
+    public Button settingsBtn => _widget.settingsBtn;
+    public Button quickplayBtn => _widget.quickplayBtn;
+    public Text connectingMessage => _widget.connectingMessage;
     
-    public UILauncher(GameObject canvasGO) : base(canvasGO) {
-    }
-
-    protected override void Init() {
-        nicknameField = canvasGO.transform.Find("NicknameField").GetComponent<InputField>();
-        settingsBtn = canvasGO.transform.Find("SettingsBtn").GetComponent<Button>();
-        quickplayBtn = canvasGO.transform.Find("QuickPlayBtn").GetComponent<Button>();
-        connectingMessage = canvasGO.transform.Find("ConnectingMessage").GetComponent<Text>();
+    public UILauncher(UILauncherWidget widget) : base(widget) {
     }
 }
