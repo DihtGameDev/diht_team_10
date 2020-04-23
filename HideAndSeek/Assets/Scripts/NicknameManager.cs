@@ -44,7 +44,7 @@ public class NicknameManager {
         _playersDict.Add(player, __nicknameRT);
         SetNickname(player, nickname);
     }
-
+        
     public void DeletePlayer(GameObject player) {
         if (_playersDict.ContainsKey(player)) {
             Object.Destroy(_playersDict[player].gameObject); // destroy text

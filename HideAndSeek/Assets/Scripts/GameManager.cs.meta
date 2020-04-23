@@ -4,9 +4,10 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - sunObj: {instanceID: 0}
-  - nicknameTextPrefab: {fileID: 3649851159907094752, guid: fb3a6fe42058f634baddb078c571687d,
+  - _nicknameTextPrefab: {fileID: 3649851159907094752, guid: fb3a6fe42058f634baddb078c571687d,
       type: 3}
+  - sunObj: {instanceID: 0}
+  - mainPlayer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
