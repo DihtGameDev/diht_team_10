@@ -10,13 +10,13 @@ public enum PlayerType {
 }
 
 public class GameManager : MonoBehaviourPunCallbacks {
-    public GameObject sunObj;
-    public UIGame uiGame;
-
     [SerializeField]
-    private GameObject nicknameTextPrefab;
+    private GameObject _nicknameTextPrefab;
 
     public static GameManager GAME_MANAGER;
+
+    public GameObject sunObj;
+    public UIGame uiGame;
 
     public GameObject mainPlayer;
     public PlayerType playerType;
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     protected void Start() {
         uiGame.moveJoystick.gameObject.SetActive(false);
-        nicknameManager = NicknameManager.GetInstance(GameObject.Find("Canvas"), nicknameTextPrefab);
+        nicknameManager = NicknameManager.GetInstance(GameObject.Find("Canvas"), _nicknameTextPrefab);
 
         if (!PhotonNetwork.IsConnected) {
             Debug.Log("Something went wrong, while loading this scene");

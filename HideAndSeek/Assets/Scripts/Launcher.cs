@@ -4,17 +4,17 @@ using Photon.Pun;
 using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks {
-    private UILauncher ui;
-    private bool connectedToRoom = false;
+    private UILauncher _ui;
+    private bool _connectedToRoom = false;
 
     protected void Awake() {
         // master will synchronize rooms
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        ui = new UILauncher(GameObject.Find("Canvas"));
-        ui.nicknameField.text = Settings.getInstance().nickname;
-        ui.quickplayBtn.onClick.AddListener(Connect);
-        ui.connectingMessage.gameObject.SetActive(false);
+        _ui = new UILauncher(GameObject.Find("Canvas"));
+        _ui.nicknameField.text = Settings.getInstance().nickname;
+        _ui.quickplayBtn.onClick.AddListener(Connect);
+        _ui.connectingMessage.gameObject.SetActive(false);
     }
 
     protected void Update() {
@@ -24,11 +24,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     public void Connect() {
-        Settings.getInstance().nickname = ui.nicknameField.text;
+        Settings.getInstance().nickname = _ui.nicknameField.text;
         Settings.save();
 
-        ui.connectingMessage.text = "Connecting...";
-        ui.connectingMessage.gameObject.SetActive(true);
+        _ui.connectingMessage.text = "Connecting...";
+        _ui.connectingMessage.gameObject.SetActive(true);
         if (PhotonNetwork.IsConnected) {
             Debug.Log("Connect(): isConnected");
             PhotonNetwork.JoinRoom("test");
@@ -69,7 +69,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnJoinedRoom() {
         Debug.Log("OnJoinedRoom(): " + PhotonNetwork.NickName);
-        connectedToRoom = true;
+        _connectedToRoom = true;
 
         /*
         if (PhotonNetwork.IsMasterClient) {

@@ -9,8 +9,8 @@ public class CameraController : MonoBehaviour {
     private Vector3 _deltaChasingObjPos;
     private float _cameraChasingLerp = 0.125f;
 
-    private Renderer fadedRenderer = null;
-    private GameObject fadedGameObject = null; // optimization
+    private Renderer _fadedRenderer = null;
+    private GameObject _fadedGameObject = null; // optimization
 
     private void Start() {
         // first variant
@@ -62,16 +62,16 @@ public class CameraController : MonoBehaviour {
         while (true) {
             Renderer r = _CheckOverlapping(dir, layerMask);
 
-            if (r != fadedRenderer) {
-                if (fadedRenderer != null) {
-                    fadedRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            if (r != _fadedRenderer) {
+                if (_fadedRenderer != null) {
+                    _fadedRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                 }
                 
                 if (r != null) {
                     r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
                 }
 
-                fadedRenderer = r;
+                _fadedRenderer = r;
             }
 
             yield return new WaitForSeconds(.2f);
@@ -83,14 +83,14 @@ public class CameraController : MonoBehaviour {
 
         if (Physics.Raycast(Camera.main.transform.position, dir, out hit, Mathf.Infinity, layerMask)) {
             Debug.DrawRay(transform.position, dir * hit.distance, Color.yellow);
-            if (hit.collider.gameObject == fadedGameObject) {
-                return fadedRenderer;
+            if (hit.collider.gameObject == _fadedGameObject) {
+                return _fadedRenderer;
             } else {
-                fadedGameObject = hit.collider.gameObject;
-                return fadedGameObject.GetComponentInChildren<Renderer>();
+                _fadedGameObject = hit.collider.gameObject;
+                return _fadedGameObject.GetComponentInChildren<Renderer>();
             }
         } else {
-            fadedGameObject = null;
+            _fadedGameObject = null;
         //    Debug.DrawRay(transform.position, dir * 10000, Color.white);
             return null;
         }

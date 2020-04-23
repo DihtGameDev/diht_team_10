@@ -29,8 +29,8 @@ public class Seeker : PlayerController {
     protected void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == Constants.HIDEMAN_TAG) {
             if (PhotonNetwork.IsMasterClient) {
-                PhotonView pv = other.gameObject.GetComponent<PhotonView>();
-                pv.RPC("KillHideman", RpcTarget.All, "" + pv.ViewID, PhotonNetwork.NickName); // we send all users that user with this viewId is die
+                PhotonView __pv = other.gameObject.GetComponent<PhotonView>();
+                __pv.RPC("KillHideman", RpcTarget.All, "" + __pv.ViewID, PhotonNetwork.NickName); // we send all users that user with this viewId is die
             }
         }
     }

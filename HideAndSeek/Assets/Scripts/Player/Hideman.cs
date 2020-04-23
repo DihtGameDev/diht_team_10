@@ -15,10 +15,10 @@ public class Hideman : PlayerController {
 
     [PunRPC]
     void DestroyObject(string viewId) {
-        foreach (var player in GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG)) {
-            if (player.GetComponent<PhotonView>().ViewID == System.Int32.Parse(viewId)) {
+        foreach (var __player in GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG)) {
+            if (__player.GetComponent<PhotonView>().ViewID == System.Int32.Parse(viewId)) {
                 //          _nicknameManager.DeletePlayer(player);
-                Destroy(player);
+                Destroy(__player);
             }
         }
     }
