@@ -6,43 +6,22 @@ public class CameraController : MonoBehaviour {
     [SerializeField]
     private GameObject _chasingObj;
 
-    private Vector3 _deltaChasingObjPos;
-    private float _cameraChasingLerp = 0.125f;
+    [SerializeField]
+    private CameraData cameraData;
 
     private Renderer _fadedRenderer = null;
     private GameObject _fadedGameObject = null; // optimization
 
     private void Start() {
-        // first variant
-        // transform.eulerAngles = new Vector3(33.09f, -15f, 0f);
-        // _deltaChasingObjPos = new Vector3(2.0f, 7.9f, -6f);
-
-        // second variant
-        //   transform.eulerAngles = new Vector3(55.14f, -15f, 0f);
-        //    _deltaChasingObjPos = new Vector3(2.0f, 12.6f, -6f);
-
-        // third variant
-      //   transform.eulerAngles = new Vector3(46.2f, -15f, 0f);
-      //   _deltaChasingObjPos = new Vector3(4.31f, 30f, -18.3f);
-
-        // fourth variant
-         transform.eulerAngles = new Vector3(46.2f, -15f, 0f);
-         _deltaChasingObjPos = new Vector3(3.89f, 18.6f, -13f);
-
-        // _deltaChasingObjPos = transform.position - _chasingObj.transform.position; 
-
-
+        transform.eulerAngles = cameraData.eulerAngles;
+        
         StartCoroutine("FadeOverlappingObjects");
     }
-
+    
     private void Update() {
         if (_chasingObj != null) {
-            transform.position = Vector3.Lerp(transform.position, _chasingObj.transform.position + _deltaChasingObjPos, _cameraChasingLerp);
-        } /*else {
-            GameObject player = GameObject.Find("MyPlayer");
-            if (player != null)
-                SetChasingObject(player);
-        }*/
+            transform.position = Vector3.Lerp(transform.position, _chasingObj.transform.position + cameraData.deltaChasingObjPos, cameraData.cameraChasingLerp);
+        }
     }
 
     public void SetChasingObject(GameObject chasingObj) {

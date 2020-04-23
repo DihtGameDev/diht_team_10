@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public PlayerType playerType;
     public NicknameManager nicknameManager;
 
+    public PlayerData playerData;
+
     protected void Awake() {
         GAME_MANAGER = this;
     }
@@ -33,7 +35,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         uiGame = new UIGame(_uiGameWidget);
 
         uiGame.moveJoystick.gameObject.SetActive(false);
-        nicknameManager = NicknameManager.GetInstance(GameObject.Find("Canvas"), _nicknameTextPrefab);
+        nicknameManager = NicknameManager.GetInstance(_uiGameWidget.gameObject, _nicknameTextPrefab);
 
         if (!PhotonNetwork.IsConnected) {
             Debug.Log("Something went wrong, while loading this scene");
@@ -61,9 +63,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
         CreatePlayer(playerType);
 
         if (playerType == PlayerType.SEEKER) { // i am seeker
-            mainPlayer.AddComponent<Seeker>();
+            mainPlayer.AddComponent<Seeker>().StartMovement(playerData);
         } else {
-            mainPlayer.AddComponent<Hideman>();
+            mainPlayer.AddComponent<Hideman>().StartMovement(playerData);
         }
         Camera.main.GetComponent<CameraController>().SetChasingObject(mainPlayer);
 

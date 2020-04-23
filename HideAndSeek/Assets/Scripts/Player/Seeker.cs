@@ -16,8 +16,6 @@ public class Seeker : PlayerController {
 
         _prevPos = transform.position;
         _animIsMovingId = Animator.StringToHash("IsMoving");
-
-        moveSpeed *= 2f; // seeker moves faster
     }
 
     protected new void Update() {
@@ -33,5 +31,10 @@ public class Seeker : PlayerController {
                 __pv.RPC("KillHideman", RpcTarget.All, "" + __pv.ViewID, PhotonNetwork.NickName); // we send all users that user with this viewId is die
             }
         }
+    }
+
+    public new void StartMovement(PlayerData playerData) {
+        base.StartMovement(playerData);
+        playerData.moveSpeed *= 2; // seeker moves faster
     }
 }

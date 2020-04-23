@@ -1771,6 +1771,7 @@ MonoBehaviour:
   sunObj: {fileID: 1987720774}
   mainPlayer: {fileID: 0}
   playerType: 0
+  playerData: {fileID: 11400000, guid: 3e55ba879aea78442b98c419158bc24a, type: 2}
 --- !u!4 &750663989
 Transform:
   m_ObjectHideFlags: 0
@@ -2752,6 +2753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chasingObj: {fileID: 0}
+  cameraData: {fileID: 11400000, guid: 5cca0f7e6873b39449b120056cfa5782, type: 2}
 --- !u!1 &1282515844
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,9 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - nicknameTextPrefab: {fileID: 3649851159907094752, guid: fb3a6fe42058f634baddb078c571687d,
-      type: 3}
   - _moveJoystick: {instanceID: 0}
+  - playerData: {fileID: 11400000, guid: 3e55ba879aea78442b98c419158bc24a, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
