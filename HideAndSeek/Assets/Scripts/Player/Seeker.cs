@@ -8,18 +8,21 @@ public class Seeker : PlayerController {
     private Animator _animator;
     private Vector3 _prevPos;
 
+    private int _animIsMovingId;
+
     protected new void Start() {
         base.Start();
         _animator = GetComponentInChildren<Animator>();
 
         _prevPos = transform.position;
+        _animIsMovingId = Animator.StringToHash("IsMoving");
 
         moveSpeed *= 2f; // seeker moves faster
     }
 
     protected new void Update() {
         float __deltaMagnitude = (transform.position - _prevPos).magnitude;
-        _animator.SetBool("IsMoving", __deltaMagnitude != 0f);
+        _animator.SetBool(_animIsMovingId, __deltaMagnitude != 0f);
         _prevPos = transform.position;
     }
 
