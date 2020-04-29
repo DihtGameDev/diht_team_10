@@ -79,6 +79,11 @@
      <Compile Include="Assets\ScriptableObjects\PlayerData.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\ExtentedPlayerPrefs.cs" />
+     <Compile Include="Assets\Scripts\FOV\FieldOfView.cs" />
+     <Compile Include="Assets\Scripts\FOV\FogCoverable.cs" />
+     <Compile Include="Assets\Scripts\FOV\FogProjector.cs" />
+     <Compile Include="Assets\Scripts\FOV\ForceAspect.cs" />
+     <Compile Include="Assets\Scripts\FOV\Solidify.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Launcher.cs" />
      <Compile Include="Assets\Scripts\Misc\Constants.cs" />
@@ -100,6 +105,8 @@
      <None Include="Assets\Photon\PhotonUnityNetworking\link.xml" />
      <None Include="Assets\Photon\PhotonLibs\Photon3Unity3D.xml" />
      <None Include="Assets\Photon\PhotonUnityNetworking\readme.txt" />
+     <None Include="Assets\Shaders\ProjectorFogOfWar.shader" />
+     <None Include="Assets\Shaders\MobileBlur.shader" />
      <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
