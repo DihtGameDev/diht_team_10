@@ -35,6 +35,5 @@ public class Seeker : PlayerController {
 
     public new void StartMovement(PlayerData playerData) {
         base.StartMovement(playerData);
-        playerData.moveSpeed *= 2; // seeker moves faster
     }
 }
