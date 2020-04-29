@@ -65,13 +65,15 @@ public class GameManager : MonoBehaviourPunCallbacks {
         playerType = ChooseTeam();
         CreatePlayer(playerType);
 
+        FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
+
         if (playerType == PlayerType.SEEKER) { // i am seeker
             mainPlayer.AddComponent<Seeker>().StartMovement(playerData);
         } else {
             mainPlayer.AddComponent<Hideman>().StartMovement(playerData);
+            fov.viewRadius *= 1.5f;
+            fov.viewAngle = 360f;
         }
-
-        Object.Instantiate(_fovPrefab, mainPlayer.transform);
         Camera.main.GetComponent<CameraController>().SetChasingObject(mainPlayer);
 
         SetNicknames();
