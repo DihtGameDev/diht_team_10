@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [SerializeField]
     private GameObject _nicknameTextPrefab;
 
+    [SerializeField]
+    private GameObject _fovPrefab;
+
     public static GameManager GAME_MANAGER;
 
     public GameObject sunObj;
@@ -67,6 +70,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
         } else {
             mainPlayer.AddComponent<Hideman>().StartMovement(playerData);
         }
+
+        Object.Instantiate(_fovPrefab, mainPlayer.transform);
         Camera.main.GetComponent<CameraController>().SetChasingObject(mainPlayer);
 
         SetNicknames();
@@ -100,7 +105,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public void CreatePlayer(PlayerType playerType) {
         if (playerType == PlayerType.SEEKER) {
-            sunObj.SetActive(false);
+       //     sunObj.SetActive(false);
             mainPlayer = PhotonNetwork.Instantiate("SeekerGhost", new Vector3(1f, 0f, 1f), Quaternion.identity, 0);
         } else {
             mainPlayer = PhotonNetwork.Instantiate("FixedHideman",

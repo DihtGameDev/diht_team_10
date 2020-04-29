@@ -34,6 +34,7 @@ public class FieldOfView : MonoBehaviour {
 
     public FogProjector fogProjector;
     public float updateDistance = 1;
+    public float fogUpdateTime = 0.5f;
     public Vector3 lastUpdatePos;
 
     void OnEnable() {
@@ -55,7 +56,7 @@ public class FieldOfView : MonoBehaviour {
 
     void LateUpdate() {
         DrawFieldOfView();
-        if (Vector3.Distance(transform.position, lastUpdatePos) > updateDistance || Time.time < .5f) {
+        if (Vector3.Distance(transform.position, lastUpdatePos) > updateDistance || Time.time < fogUpdateTime) {
             lastUpdatePos = transform.position;
             fogProjector.UpdateFog();
         }

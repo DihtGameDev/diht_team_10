@@ -107,7 +107,8 @@ GameObject:
   - component: {fileID: 8671586840825990758}
   - component: {fileID: 8671586840825990759}
   - component: {fileID: 8671586840825990756}
-  m_Layer: 0
+  - component: {fileID: 3097593671262619973}
+  m_Layer: 8
   m_Name: FixedHideman
   m_TagString: Hideman
   m_Icon: {fileID: 0}
@@ -209,3 +210,15 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
+--- !u!114 &3097593671262619973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8671586840825990763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7949cf195cc58499b885cc1044cb9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
