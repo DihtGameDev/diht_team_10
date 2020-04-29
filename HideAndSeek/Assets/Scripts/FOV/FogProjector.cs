@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class FogProjector : MonoBehaviour
-{
+public class FogProjector : MonoBehaviour {
     public RenderTexture fogTexture;
     RenderTexture projecTexture;
 
@@ -24,8 +23,7 @@ public class FogProjector : MonoBehaviour
     float blend;
     int blendNameId;
 
-    void OnEnable()
-    {
+    void OnEnable() {
         projector = GetComponent<Projector>();
 
         blurMaterial = new Material(blurShader);
@@ -52,8 +50,7 @@ public class FogProjector : MonoBehaviour
         UpdateFog();
     }
 
-    public void UpdateFog()
-    {
+    public void UpdateFog() {
         Graphics.Blit(projecTexture, oldTexture);
         Graphics.Blit(fogTexture, projecTexture);
 
@@ -73,8 +70,7 @@ public class FogProjector : MonoBehaviour
         RenderTexture.ReleaseTemporary(temp);
     }
 
-    IEnumerator Blend()
-    {
+    IEnumerator Blend() {
         blend = 0;
         projector.material.SetFloat(blendNameId, blend);
         while (blend < 1)

@@ -8,7 +8,7 @@ public class FogCoverable : MonoBehaviour {
 
     void Start() {
         renderers = GetComponentsInChildren<Renderer>();
-        FieldOfView.OnTargetsVisibilityChange += FieldOfViewOnTargetsVisibilityChange;
+        FieldOfView.OnTargetsVisibilityChange += FieldOfViewOnTargetsVisibilityChange;  // subscribe
     }
 
     void OnDestroy() {
