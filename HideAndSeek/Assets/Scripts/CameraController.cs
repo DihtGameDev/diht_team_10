@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour {
         StartCoroutine("FadeOverlappingObjects");
     }
     
-    private void Update() {
+    private void LateUpdate() {
         if (_chasingObj != null) {
             transform.position = Vector3.Lerp(transform.position, _chasingObj.transform.position + cameraData.deltaChasingObjPos, cameraData.cameraChasingLerp);
         }
