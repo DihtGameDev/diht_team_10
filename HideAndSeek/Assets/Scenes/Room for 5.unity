@@ -3688,6 +3688,11 @@ PrefabInstance:
       propertyPath: orthographic size
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 1054495544971845850, guid: 8ed00616a76bf1b4cbaf79b51163e6a4,
+        type: 3}
+      propertyPath: blurShader
+      value: 
+      objectReference: {fileID: 4800000, guid: a477412f0e6e3e14bbd54b4b2d549d98, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ed00616a76bf1b4cbaf79b51163e6a4, type: 3}
 --- !u!1 &1930314018

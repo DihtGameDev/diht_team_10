@@ -32,9 +32,11 @@ public class FieldOfView : MonoBehaviour {
     public static event TargetsVisibilityChange OnTargetsVisibilityChange;
 
     public FogProjector fogProjector;
+
     public float updateDistance = 1;
-    public float fogUpdateTime = 0.5f;
-    public Vector3 lastUpdatePos;
+    public float fogUpdateDeltaTime = 0.1f;
+
+    private float lastFogUpdateTime = 0f;
 
     void OnEnable() {
         viewMesh = new Mesh { name = "View Mesh" };
@@ -55,9 +57,9 @@ public class FieldOfView : MonoBehaviour {
 
     void LateUpdate() {
         DrawFieldOfView();
-        if (Vector3.Distance(transform.position, lastUpdatePos) > updateDistance || Time.time < fogUpdateTime) {
-            lastUpdatePos = transform.position;
+        if (Time.time - lastFogUpdateTime > fogUpdateDeltaTime) {
             fogProjector.UpdateFog();
+            lastFogUpdateTime = Time.time;
         }
     }
 
@@ -105,7 +107,7 @@ public class FieldOfView : MonoBehaviour {
             }
 
             viewPoints.Add(newViewCast.point); // points of collision
-            Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * viewRadius, Color.red);
+            //  Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * viewRadius, Color.red);
             oldViewCast = newViewCast;
         }
 

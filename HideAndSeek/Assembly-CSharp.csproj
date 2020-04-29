@@ -104,6 +104,7 @@
      <None Include="Assets\Photon\PhotonLibs\changes-library.txt" />
      <None Include="Assets\Photon\PhotonUnityNetworking\link.xml" />
      <None Include="Assets\Photon\PhotonLibs\Photon3Unity3D.xml" />
+     <None Include="Assets\Shaders\BlurAndFlares.shader" />
      <None Include="Assets\Photon\PhotonUnityNetworking\readme.txt" />
      <None Include="Assets\Shaders\ProjectorFogOfWar.shader" />
      <None Include="Assets\Shaders\MobileBlur.shader" />
