@@ -8,4 +8,6 @@ public class UIGameWidget : MonoBehaviour {
     public Joystick moveJoystick;
     public Text chatText;
     public Text respawnText;
+    public Text playerCounterText;
+    public Button disconnectBtn;
 }

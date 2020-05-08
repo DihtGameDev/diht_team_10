@@ -87,13 +87,17 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Launcher.cs" />
      <Compile Include="Assets\Scripts\Misc\Constants.cs" />
+     <Compile Include="Assets\Scripts\Misc\Debugger.cs" />
      <Compile Include="Assets\Scripts\Misc\FpsCounter.cs" />
+     <Compile Include="Assets\Scripts\Misc\ObjectsPool.cs" />
      <Compile Include="Assets\Scripts\Misc\Settings.cs" />
      <Compile Include="Assets\Scripts\NicknameManager.cs" />
+     <Compile Include="Assets\Scripts\Player\BaseAnimationPlayer.cs" />
+     <Compile Include="Assets\Scripts\Player\Controller.cs" />
      <Compile Include="Assets\Scripts\Player\Hideman.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerRPC.cs" />
      <Compile Include="Assets\Scripts\Player\Seeker.cs" />
+     <Compile Include="Assets\Scripts\RPC\PlayerRPC.cs" />
+     <Compile Include="Assets\Scripts\RPC\SkeletonRPC.cs" />
      <Compile Include="Assets\Scripts\Study\UIMessage.cs" />
      <Compile Include="Assets\Scripts\UI\UIBase.cs" />
      <Compile Include="Assets\Scripts\UI\UIGame.cs" />
@@ -110,31 +114,31 @@
      <None Include="Assets\Shaders\MobileBlur.shader" />
      <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
  <Reference Include="Unity.Timeline.Editor">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.VSCode.Editor">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Timeline">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
  </Reference>
  <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Rider.Editor">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -308,10 +312,10 @@
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
  </Reference>
  <Reference Include="Photon3Unity3D">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
  </Reference>
  <Reference Include="websocket-sharp">
- <HintPath>C:/Users/Egor/Documents/diht_team_10/HideAndSeek/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
+ <HintPath>C:/Users/Egor/Documents/HAS/diht_team_10/HideAndSeek/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.13f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

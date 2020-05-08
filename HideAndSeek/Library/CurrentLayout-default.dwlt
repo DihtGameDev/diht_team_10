@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 8}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 544}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 204, y: 344}
   m_MaxSize: {x: 4004, y: 8044}
   vertical: 1
-  controlID: 88
+  controlID: 99
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 494}
   m_MaxSize: {x: 18008, y: 14044}
   vertical: 1
-  controlID: 86
+  controlID: 97
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 494}
   m_MaxSize: {x: 10002, y: 14044}
   vertical: 1
-  controlID: 35
+  controlID: 36
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -199,7 +199,7 @@ MonoBehaviour:
     y: 0
     width: 1536
     height: 781
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 544}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &9
 MonoBehaviour:
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 494}
   m_MaxSize: {x: 18008, y: 14044}
   vertical: 0
-  controlID: 87
+  controlID: 98
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -630,7 +630,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 0633ffff4035ffff983affffb43affffd856fffff056ffffea58ffffa65bffffbc5bffffd463ffffea63ffff8292ffff9a92ffff7c98ffff789effff16a1ffff2ea1ffff00a5ffff00afffff10afffffb6b6fffffac0ffffa0d8ffffbae6ffffb6eaffff00ecffff086a0000e67c000082ad0000
+      m_ExpandedIDs: 2efbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -730,19 +730,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SkipHidden: 0
     m_SearchArea: 1
-    m_Folders: []
+    m_Folders:
+    - Assets/Animations
   m_ViewMode: 0
   m_StartGridSize: 64
   m_LastFolders: []
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\Egor\Documents\diht_team_10\HideAndSeek
+  m_LastProjectPath: C:\Users\Egor\Documents\HAS\diht_team_10\HideAndSeek
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 982c0000
     m_LastClickedID: 11416
-    m_ExpandedIDs: 000000005e36000030390000b43a0000183b00002a3c0000343c0000523c0000863d0000c83d0000
+    m_ExpandedIDs: 00000000022f0000043100009831000038320000d232000058330000c8340000d8380000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -770,7 +771,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff000000005e36000030390000b43a00002a3c0000c83d000080400000c2400000f4400000
+    m_ExpandedIDs: ffffffff00000000022f00009831000038320000d232000078340000c8340000d8380000e23b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -863,10 +864,10 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -255
-    m_HBaseRangeMax: 255
-    m_VBaseRangeMin: -192.5
-    m_VBaseRangeMax: 192.5
+    m_HBaseRangeMin: -768
+    m_HBaseRangeMax: 768
+    m_VBaseRangeMin: -432
+    m_VBaseRangeMax: 432
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -886,7 +887,7 @@ MonoBehaviour:
       y: 17
       width: 510
       height: 385
-    m_Scale: {x: 1, y: 1}
+    m_Scale: {x: 0.33203125, y: 0.33203125}
     m_Translation: {x: 255, y: 192.5}
     m_MarginLeft: 0
     m_MarginRight: 0
@@ -894,12 +895,12 @@ MonoBehaviour:
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -255
-      y: -192.5
-      width: 510
-      height: 385
+      x: -768
+      y: -579.7647
+      width: 1536
+      height: 1159.5294
     m_MinimalGUI: 1
-  m_defaultScale: 1
+  m_defaultScale: 0.33203125
   m_TargetTexture: {fileID: 0}
   m_CurrentColorSpace: 0
   m_LastWindowPixelSize: {x: 637.5, y: 502.5}
@@ -943,9 +944,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -27.167099, y: -6.2073283, z: 20.72155}
+    m_Target: {x: 12.20829, y: -0.3809471, z: 48.323914}
     speed: 2
-    m_Value: {x: -27.167099, y: -6.2073283, z: 20.72155}
+    m_Value: {x: 12.20829, y: -0.3809471, z: 48.323914}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -974,13 +975,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.27737907, y: 0.6453664, z: -0.27205116, w: -0.65781343}
+    m_Target: {x: -0.5151794, y: -0.36245278, z: 0.2543558, w: -0.733955}
     speed: 2
-    m_Value: {x: -0.27735588, y: 0.6453124, z: -0.27202842, w: -0.6577585}
+    m_Value: {x: -0.515136, y: -0.36242223, z: 0.25433436, w: -0.73389316}
   m_Size:
-    m_Target: 54.07488
+    m_Target: 44.706226
     speed: 2
-    m_Value: 54.07488
+    m_Value: 44.706226
   m_Ortho:
     m_Target: 0
     speed: 2

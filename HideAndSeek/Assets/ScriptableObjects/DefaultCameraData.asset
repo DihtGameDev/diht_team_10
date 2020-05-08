@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe564fbc6408e5d4595fe9726bbf4ffd, type: 3}
   m_Name: DefaultCameraData
   m_EditorClassIdentifier: 
-  deltaChasingObjPos: {x: 3.89, y: 18.6, z: -13}
+  deltaChasingObjPos: {x: 5.9, y: 25, z: -16.86}
   eulerAngles: {x: 46.2, y: -15, z: 0}
   cameraChasingLerp: 0.125

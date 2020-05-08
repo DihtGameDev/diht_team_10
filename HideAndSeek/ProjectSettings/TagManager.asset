@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Hideman
   - Seeker
+  - Arch
+  - Skeleton
+  - Grave
+  - OccGrave
   layers:
   - Default
   - TransparentFX
