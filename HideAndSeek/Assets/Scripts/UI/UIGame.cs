@@ -17,6 +17,18 @@ public class UIGame : UIBase<UIGameWidget> {
         disconnectBtn.onClick.AddListener(OnDisconnectClick);
     }
 
+    public void LoadingState() {
+        loadingScreenGO.SetActive(true);
+        playerCounterText.gameObject.SetActive(false);
+        moveJoystick.gameObject.SetActive(false);
+    }
+
+    public void PlayingState() {
+        loadingScreenGO.SetActive(false);
+        moveJoystick.gameObject.SetActive(true);
+        playerCounterText.gameObject.SetActive(true);
+    }
+
     public void OnDisconnectClick() {
         GameManager.GAME_MANAGER.Leave();
     }
@@ -31,16 +43,8 @@ public class UIGame : UIBase<UIGameWidget> {
         chatText.text = "";
     }
 
-    public void StartPlayerCounter() {
-        Debugger.Log("UIGAME StartPlayerCounter");
-        GameManager.GAME_MANAGER.StartCoroutine(ShowPlayersCountWithDelay(1f));
-    }
-
-    private IEnumerator ShowPlayersCountWithDelay(float delay) {
-        while (true) {
-            yield return new WaitForSeconds(delay);
-            playerCounterText.text = "Players: " + GameManager.GAME_MANAGER.PlayersInTheScene();
-        }
+    public void UpdatePlayerCounter() {
+        playerCounterText.text = "Players: " + GameManager.GAME_MANAGER.PlayersInTheScene();
     }
 
     public void StartRespawnTimer() {

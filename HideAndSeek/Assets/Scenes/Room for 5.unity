@@ -682,6 +682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 570aa29c893717446b21d2a8accf2dd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _fpsText: {fileID: 144590465}
 --- !u!1 &165195285
 GameObject:
   m_ObjectHideFlags: 0
@@ -4114,23 +4115,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1054495544971845853, guid: 8ed00616a76bf1b4cbaf79b51163e6a4,
-        type: 3}
-      propertyPath: m_OrthographicSize
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054495545006326401, guid: 8ed00616a76bf1b4cbaf79b51163e6a4,
-        type: 3}
-      propertyPath: orthographic size
-      value: 200
-      objectReference: {fileID: 0}
     - target: {fileID: 1054495544971845850, guid: 8ed00616a76bf1b4cbaf79b51163e6a4,
         type: 3}
-      propertyPath: blurShader
+      propertyPath: projector
       value: 
-      objectReference: {fileID: 4800000, guid: a477412f0e6e3e14bbd54b4b2d549d98, type: 3}
+      objectReference: {fileID: 1844454810}
+    - target: {fileID: 1054495544971845850, guid: 8ed00616a76bf1b4cbaf79b51163e6a4,
+        type: 3}
+      propertyPath: _projector
+      value: 
+      objectReference: {fileID: 1844454810}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ed00616a76bf1b4cbaf79b51163e6a4, type: 3}
+--- !u!119 &1844454810 stripped
+Projector:
+  m_CorrespondingSourceObject: {fileID: 1054495544971845853, guid: 8ed00616a76bf1b4cbaf79b51163e6a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1844454809}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1930314018
 GameObject:
   m_ObjectHideFlags: 0

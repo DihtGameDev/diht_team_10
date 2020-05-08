@@ -27,7 +27,6 @@ public class FieldOfView : MonoBehaviour {
 
     public MeshFilter viewMeshFilter;
     public bool debug;
-    Mesh viewMesh;
 
     public static event TargetsVisibilityChange OnTargetsVisibilityChange;
 
@@ -36,11 +35,12 @@ public class FieldOfView : MonoBehaviour {
     public float updateDistance = 1;
     public float fogUpdateDeltaTime = 0.1f;
 
-    private float lastFogUpdateTime = 0f;
+    private float _lastFogUpdateTime = 0f;
+    private Mesh _viewMesh;
 
     void OnEnable() {
-        viewMesh = new Mesh { name = "View Mesh" };
-        viewMeshFilter.mesh = viewMesh;
+        _viewMesh = new Mesh { name = "View Mesh" };
+        viewMeshFilter.mesh = _viewMesh;
 
         fogProjector = fogProjector ?? FindObjectOfType<FogProjector>();
 
@@ -57,9 +57,9 @@ public class FieldOfView : MonoBehaviour {
 
     void LateUpdate() {
         DrawFieldOfView();
-        if (Time.time - lastFogUpdateTime > fogUpdateDeltaTime) {
+        if (Time.time - _lastFogUpdateTime > fogUpdateDeltaTime) {
             fogProjector.UpdateFog();
-            lastFogUpdateTime = Time.time;
+            _lastFogUpdateTime = Time.time;
         }
     }
 
@@ -127,10 +127,10 @@ public class FieldOfView : MonoBehaviour {
             }
         }
 
-        viewMesh.Clear();
-        viewMesh.vertices = vertices;
-        viewMesh.triangles = triangles;
-        viewMesh.RecalculateNormals();
+        _viewMesh.Clear();
+        _viewMesh.vertices = vertices;
+        _viewMesh.triangles = triangles;
+        _viewMesh.RecalculateNormals();
     }
 
 

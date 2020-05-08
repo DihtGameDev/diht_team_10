@@ -47,15 +47,15 @@ public class GameManager : MonoBehaviourPunCallbacks {
     protected void Start() {
         uiGame = new UIGame(_uiGameWidget);
 
-        uiGame.loadingScreenGO.SetActive(true);  //  to do using states
-        uiGame.playerCounterText.gameObject.SetActive(false);
-        uiGame.moveJoystick.gameObject.SetActive(false);
+        uiGame.LoadingState();
+
         nicknameManager = NicknameManager.GetInstance(_uiGameWidget.gameObject, _nicknameTextPrefab);
 
         if (!PhotonNetwork.IsConnected) {
-            Debugger.Log("Something went wrong, while loading this scene");
+            Debugger.Log("Something went wrong, while loading this scene. Loading Launcher scene");
             SceneManager.LoadScene("Launcher");
         }
+
         Invoke("StartGame", 1f);
     }
 
@@ -64,20 +64,14 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     private void StartGame() {
-        Debugger.Log("GameManager, StartGame begin");
           if (PhotonNetwork.IsMasterClient) {
               StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
           }
 
         Respawn();
 
-        uiGame.loadingScreenGO.SetActive(false);
-        uiGame.moveJoystick.gameObject.SetActive(true);
-        uiGame.playerCounterText.gameObject.SetActive(true);
-
-        uiGame.StartPlayerCounter();
-
-        Debugger.Log("GameManager, StartGame end");
+        uiGame.PlayingState();
+        uiGame.UpdatePlayerCounter();
     }
 
     private void Respawn() {  // respawn after death
@@ -115,8 +109,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
         GameManager.GAME_MANAGER.uiGame.PrintInChat(newPlayer.NickName + " начал играть");
-
         StartCoroutine(SetNicknames(mainPlayer.tag == Constants.SEEKER_TAG ? PlayerType.SEEKER : PlayerType.HIDEMAN, 3f));
+        uiGame.UpdatePlayerCounter();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) {
@@ -135,6 +129,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
         if (PhotonNetwork.IsMasterClient) {
             StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
         }
+
+        uiGame.UpdatePlayerCounter();
     }
 
     public void CreatePlayer(PlayerType playerType, Vector3 spawnPos) {  // =(
@@ -180,7 +176,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     private IEnumerator CheckAndSpawnSkeletons(int maxSkeletons, float delay) {  // this function require that free graves count more than maxSkeletons
         yield return new WaitForSeconds(delay);
-        Debugger.Log("GameManager, CheckAndSpawnSkeletons");
 
         if (!PhotonNetwork.IsMasterClient) {
             yield break;

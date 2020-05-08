@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FogCoverable : MonoBehaviour {
-    Renderer[] renderers;
+    private Renderer[] _renderers;
 
     void Start() {
-        renderers = GetComponentsInChildren<Renderer>();
+        _renderers = GetComponentsInChildren<Renderer>();
         FieldOfView.OnTargetsVisibilityChange += FieldOfViewOnTargetsVisibilityChange;  // subscribe
     }
 
     void OnDestroy() {
-        FieldOfView.OnTargetsVisibilityChange -= FieldOfViewOnTargetsVisibilityChange;
+        FieldOfView.OnTargetsVisibilityChange -= FieldOfViewOnTargetsVisibilityChange;  // unsubscrive
     }
 
     void FieldOfViewOnTargetsVisibilityChange(List<Transform> newTargets) {
-        foreach (Renderer r in renderers) {
+        foreach (Renderer r in _renderers) {
             r.enabled = newTargets.Contains(transform);
         }
     }

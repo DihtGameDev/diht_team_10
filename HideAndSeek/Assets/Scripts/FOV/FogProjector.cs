@@ -2,68 +2,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class FogProjector : MonoBehaviour {
     public RenderTexture fogTexture;
-    RenderTexture projecTexture;
-
-    RenderTexture oldTexture;
-
     public Shader blurShader;
 
     [Range(1, 4)]
     public int upsample = 2;
 
-    Material blurMaterial;
-    public float blur=1;
-
-    Projector projector;
-
+    public float blur = 1;
     public float blendSpeed = 1;
-    float blend;
-    int blendNameId;
+
+    [SerializeField]
+    private Projector _projector;
+
+    private RenderTexture _projecTexture;
+    private RenderTexture _oldTexture;
+    private Material _blurMaterial;
+
+    private float _blend;
+    private int _blendNameId;
 
     void OnEnable() {
-        projector = GetComponent<Projector>();
+        _blurMaterial = new Material(blurShader);
+        _blurMaterial.SetVector("_Parameter", new Vector4(blur, -blur, 0, 0));
 
-        blurMaterial = new Material(blurShader);
-        blurMaterial.SetVector("_Parameter", new Vector4(blur, -blur, 0, 0));
-
-        projecTexture = new RenderTexture(
+        _projecTexture = new RenderTexture(
                             fogTexture.width * upsample,
                             fogTexture.height * upsample,
                             0,
                             fogTexture.format) {filterMode = FilterMode.Bilinear};
 
-        oldTexture = new RenderTexture(
+        _oldTexture = new RenderTexture(
                          fogTexture.width * upsample,
                          fogTexture.height * upsample,
                          0,
                          fogTexture.format) {filterMode = FilterMode.Bilinear};
 
-        projector.material.SetTexture("_FogTex", projecTexture);
-        projector.material.SetTexture("_OldFogTex", oldTexture);
-        blendNameId = Shader.PropertyToID("_Blend");
-        blend = 1;
-        projector.material.SetFloat(blendNameId, blend);
-        Graphics.Blit(fogTexture, projecTexture);
+        _projector.material.SetTexture("_FogTex", _projecTexture);
+        _projector.material.SetTexture("_OldFogTex", _oldTexture);
+        _blendNameId = Shader.PropertyToID("_Blend");
+        _blend = 1;
+        _projector.material.SetFloat(_blendNameId, _blend);
+        Graphics.Blit(fogTexture, _projecTexture);
         UpdateFog();
     }
 
     public void UpdateFog() {
-        Graphics.Blit(projecTexture, oldTexture);
-        Graphics.Blit(fogTexture, projecTexture);
+        Graphics.Blit(_projecTexture, _oldTexture);
+        Graphics.Blit(fogTexture, _projecTexture);
 
         RenderTexture temp = RenderTexture.GetTemporary(
-            projecTexture.width,
-            projecTexture.height,
+            _projecTexture.width,
+            _projecTexture.height,
             0,
-            projecTexture.format);
+            _projecTexture.format
+        );
 
         temp.filterMode = FilterMode.Bilinear;
 
-        Graphics.Blit(projecTexture, temp, blurMaterial, 1);
-        Graphics.Blit(temp, projecTexture, blurMaterial, 2);
+        Graphics.Blit(_projecTexture, temp, _blurMaterial, 1);
+        Graphics.Blit(temp, _projecTexture, _blurMaterial, 2);
 
         StartCoroutine(Blend());
 
@@ -71,12 +69,11 @@ public class FogProjector : MonoBehaviour {
     }
 
     IEnumerator Blend() {
-        blend = 0;
-        projector.material.SetFloat(blendNameId, blend);
-        while (blend < 1)
-        {
-            blend = Mathf.MoveTowards(blend, 1, blendSpeed * Time.deltaTime);
-            projector.material.SetFloat(blendNameId, blend);
+        _blend = 0;
+        _projector.material.SetFloat(_blendNameId, _blend);
+        while (_blend < 1) {
+            _blend = Mathf.MoveTowards(_blend, 1, blendSpeed * Time.deltaTime);
+            _projector.material.SetFloat(_blendNameId, _blend);
             yield return null;
         }
     }
