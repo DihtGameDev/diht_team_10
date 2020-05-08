@@ -43,7 +43,7 @@ public class Controller : MonoBehaviour {
                 }
 
                 transform.eulerAngles = new Vector3(0,
-                                                    Mathf.LerpAngle(transform.eulerAngles.y, __angle, playerData.lerpAngleCoeff),
+                                                    Mathf.LerpAngle(transform.eulerAngles.y, __angle, Time.deltaTime * playerData.lerpAngleCoeff),
                                                     0);
                 Vector3 __dir = Vector3.zero;
                 __dir.x = _moveJoystick.Direction.x;

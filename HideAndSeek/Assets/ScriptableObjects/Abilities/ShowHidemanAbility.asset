@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71cfe276e74a4144ba0e2252bce4cd1a, type: 3}
-  m_Name: HidemanPlayerData
+  m_Script: {fileID: 11500000, guid: e671b161b15cb87449bc13905065a116, type: 3}
+  m_Name: ShowHidemanAbility
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  lerpAngleCoeff: 3
-  viewRadius: 25
-  viewAngle: 360
+  cooldown: 20
+  markersDuration: 6
+  playerTag: Hideman
+  bordersCoeff: 0.8
+  _markerPrefab: {fileID: 7984337398809250644, guid: f694f3b5b45e1cb4682139f274710a9e,
+    type: 3}

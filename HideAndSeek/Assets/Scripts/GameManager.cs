@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public PlayerData seekerPlayerData;
     public PlayerData hidemanPlayerData;
 
+    public AbstractAbility ability;
+
     protected void Awake() {
         GAME_MANAGER = this;
     }
@@ -218,6 +220,17 @@ public class GameManager : MonoBehaviourPunCallbacks {
         __pv.RPC("OnPunPlayerLeave", RpcTarget.All, PhotonNetwork.NickName, isWinner);  // send all users, that i am leaving the game
         PhotonNetwork.SendAllOutgoingCommands();  // because rpc call has delay and after disconnect, message will not be sent
         PhotonNetwork.Disconnect();  // leaves the room and photon server 
+    }
+
+    public void UseAbility() {
+        uiGame.abilityBtn.interactable = false;
+        ability.UseAbility();
+        StartCoroutine(UnlockAbility(ability.Cooldown()));
+    }
+
+    public IEnumerator UnlockAbility(float delay) {
+        yield return new WaitForSeconds(delay);
+        uiGame.abilityBtn.interactable = true;
     }
 
     [PunRPC]

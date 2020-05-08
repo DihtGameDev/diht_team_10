@@ -12,9 +12,11 @@ public class UIGame : UIBase<UIGameWidget> {
     public Text playerCounterText => _widget.playerCounterText;
 
     public Button disconnectBtn => _widget.disconnectBtn;
+    public Button abilityBtn => _widget.abilityBtn;
 
     public UIGame(UIGameWidget gameWidget) : base(gameWidget) {
         disconnectBtn.onClick.AddListener(OnDisconnectClick);
+        abilityBtn.onClick.AddListener(GameManager.GAME_MANAGER.UseAbility);
     }
 
     public void LoadingState() {
@@ -27,6 +29,7 @@ public class UIGame : UIBase<UIGameWidget> {
         loadingScreenGO.SetActive(false);
         moveJoystick.gameObject.SetActive(true);
         playerCounterText.gameObject.SetActive(true);
+        abilityBtn.gameObject.SetActive(true);
     }
 
     public void OnDisconnectClick() {

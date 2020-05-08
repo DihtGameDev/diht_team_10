@@ -22,14 +22,9 @@ public class NicknameManager {
 
     public void UpdatePositions() {
         foreach (var player in _playersDict) {
-            Vector2 __viewportPosition = Camera.main.WorldToViewportPoint(player.Key.transform.position);
-            Vector2 __worldObject_ScreenPosition = new Vector2(
-                ((__viewportPosition.x * _canvasRect.sizeDelta.x) - (_canvasRect.sizeDelta.x * 0.5f)),
-                ((__viewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f))
-                );
-
-            __worldObject_ScreenPosition.y += 55f; // for above player position
-            player.Value.anchoredPosition = __worldObject_ScreenPosition;
+            Vector2 inRectPos = Misc.WorldToRectTransformPosition(player.Key.transform.position, _canvasRect);
+            inRectPos.y += 55f; // for above player position
+            player.Value.anchoredPosition = inRectPos;
         }
     }
 

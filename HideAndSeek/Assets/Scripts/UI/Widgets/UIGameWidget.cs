@@ -10,4 +10,5 @@ public class UIGameWidget : MonoBehaviour {
     public Text respawnText;
     public Text playerCounterText;
     public Button disconnectBtn;
+    public Button abilityBtn;
 }
