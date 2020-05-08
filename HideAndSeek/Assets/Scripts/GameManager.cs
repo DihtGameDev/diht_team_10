@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         if (!PhotonNetwork.IsConnected) {
             Debugger.Log("Something went wrong, while loading this scene");
-            //  SceneManager.LoadScene("Launcher");
+            SceneManager.LoadScene("Launcher");
         }
         Invoke("StartGame", 1f);
     }
@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     private void Respawn() {  // respawn after death
-        Debugger.Log("GameManager, Respawn begin");
+        Debugger.Log("GameManager, Respawn");
         CreatePlayer(PlayerType.SEEKER, Vector3.zero);
 
         if (archObject != null) {
@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         StartCoroutine(SetNicknames(PlayerType.SEEKER, 0.2f));
-        Debugger.Log("GameManager, Respawn end");
     }
 
     public IEnumerator BecomeSkeleton(Vector3 spawnPos) {
@@ -106,7 +105,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             archObject.SetActive(true);
         }
 
-        yield return new WaitForSeconds(0.001f); //yield return null;
+        yield return null;
     }
 
     private void SetFovSettings(FieldOfView fov, PlayerData playerData) {
@@ -212,27 +211,22 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnDisconnected(DisconnectCause cause) {
-        Debugger.Log("GameManager, OnDisconnect, mb here error");
+        Debugger.Log("GameManager, OnDisconnect");
         nicknameManager.Clear();
-        //       SceneManager.LoadScene("Launcher");
+        SceneManager.LoadScene("Launcher");
     }
 
     public void Leave() {
         Debugger.Log("GameManager, Leave");
-        /*    PhotonView __pv = GetComponent<PhotonView>();
-            print("before on pun player leave");
-            __pv.RPC("OnPunPlayerLeave", RpcTarget.All, PhotonNetwork.NickName, isWinner);  // send all users, that i am leaving the game
-            PhotonNetwork.SendAllOutgoingCommands();  // because rpc call has delay and after disconnect, message will not be sent
-            PhotonNetwork.Disconnect();  // leaves the room and photon server */
+
+        PhotonView __pv = GetComponent<PhotonView>();
+        __pv.RPC("OnPunPlayerLeave", RpcTarget.All, PhotonNetwork.NickName, isWinner);  // send all users, that i am leaving the game
+        PhotonNetwork.SendAllOutgoingCommands();  // because rpc call has delay and after disconnect, message will not be sent
+        PhotonNetwork.Disconnect();  // leaves the room and photon server 
     }
 
     [PunRPC]
     private void OnPunPlayerLeave(string nickname, bool isWinner) {
-        Debugger.Log("GameManager, OnPunPlayerLeave");
-        if (isWinner) {
-            uiGame.PrintInChat(nickname + " освободился");
-        } else {
-            uiGame.PrintInChat(nickname + " OnPunPlayerLeave");
-        }
+        uiGame.PrintInChat(nickname + (isWinner ? " освободился" : " покинул игру"));
     }
 }
