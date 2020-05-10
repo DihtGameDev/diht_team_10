@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Settings {
     public string nickname = "";
+    public string hidemanAbility = Constants.AbilitiesTags.Hideman.SURGE;
+    public string seekerAbility = Constants.AbilitiesTags.Seeker.FLARE;
 
     private static Settings _settings;
 

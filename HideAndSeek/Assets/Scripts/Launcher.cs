@@ -22,15 +22,15 @@ public class Launcher : MonoBehaviourPunCallbacks {
         PhotonNetwork.AutomaticallySyncScene = true;
 
         _launcherUI = new UILauncher(_uiLauncherWidget);
-        _launcherUI.InitState();
+        _launcherUI.SetScreen(UILauncher.Screen.INIT);
     }
 
     protected void Update() {
     }
 
     public void Connect() {
-        SaveNickname(_launcherUI.nicknameField.text);
-        _launcherUI.ConnectState();
+        SaveNickname(_launcherUI.initScreen.nicknameField.text);
+        _launcherUI.initScreen.ConnectingState();
 
         // connecting to a photon server
         if (PhotonNetwork.IsConnected) {  // if for some reason i'm alreader connected
@@ -80,5 +80,9 @@ public class Launcher : MonoBehaviourPunCallbacks {
             PhotonNetwork.LoadLevel("Room for 5");
             //  StartCoroutine(WaitForPlayers(5, 0.2f));
         }
+    }
+
+    public void ChangeScreen(UILauncher.Screen screen) {
+        _launcherUI.SetScreen(screen);
     }
 }

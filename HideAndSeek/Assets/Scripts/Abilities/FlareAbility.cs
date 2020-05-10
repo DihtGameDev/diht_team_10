@@ -6,12 +6,15 @@ using UnityEngine;
 public class FlareAbility : AbstractAbility {
     public float cooldown = 8;
     public float flareSpeed = 10f;
+    public float flareRadius = 20f;
     public float flareDuration = 4f;
 
     public static string FLARE_TYPE_OP = "FlareAbility";
 
     [SerializeField]
     private GameObject _flarePrefab;
+
+    private FieldOfView _flareFov;
 
     protected void OnEnable() {
     }
@@ -32,6 +35,12 @@ public class FlareAbility : AbstractAbility {
             flareObj.transform.position = GameManager.GAME_MANAGER.mainPlayer.transform.position;
             flareObj.transform.eulerAngles = GameManager.GAME_MANAGER.mainPlayer.transform.eulerAngles;
         }
+
+        if (_flareFov == null) {
+            _flareFov = flareObj.GetComponentInChildren<FieldOfView>();
+        }
+
+        _flareFov.viewRadius = flareRadius;
 
         GameManager.GAME_MANAGER.StartCoroutine(FlareMovement(flareObj));
     }

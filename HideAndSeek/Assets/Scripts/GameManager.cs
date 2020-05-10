@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             playerController.StartMovement(seekerPlayerData);
             SetFovSettings(fov, seekerPlayerData);
 
-            ability = seekerAbilitiesDict.Get(Constants.AbilitiesTags.Seeker.FLARE);
+            ability = seekerAbilitiesDict.Get(Settings.getInstance().seekerAbility);
         } else {
             mainPlayer = PhotonNetwork.Instantiate("Skeleton", spawnPos, Quaternion.identity, 0);
             FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
@@ -167,7 +167,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             playerController.StartMovement(hidemanPlayerData);
             SetFovSettings(fov, hidemanPlayerData);
 
-            ability = hidemanAbilitiesDict.Get(Constants.AbilitiesTags.Hideman.INVISIBLE);
+            ability = hidemanAbilitiesDict.Get(Settings.getInstance().hidemanAbility);
         }
 
 
