@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Hideman
   - Seeker
+  - Arch
+  - Skeleton
+  - Grave
+  - OccGrave
+  - Test
   layers:
   - Default
   - TransparentFX
@@ -17,7 +22,7 @@ TagManager:
   - 
   - Player
   - Obstacle
-  - 
+  - Vision
   - 
   - 
   - 

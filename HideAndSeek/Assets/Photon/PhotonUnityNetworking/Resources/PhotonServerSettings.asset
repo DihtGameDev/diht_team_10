@@ -39,6 +39,10 @@ MonoBehaviour:
   - Destroy
   - DestroyObject
   - KillHideman
+  - DestroyLyingSkeleton
+  - DestroyThisPUNObject
+  - OnPunPlayerLeave
+  - BecomeInvisibleForTime
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

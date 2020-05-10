@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e671b161b15cb87449bc13905065a116, type: 3}
+  m_Name: ShowHidemanAbility
+  m_EditorClassIdentifier: 
+  cooldown: 20
+  markersDuration: 6
+  playerTag: Hideman
+  bordersCoeff: 0.8
+  _markerPrefab: {fileID: 7984337398809250644, guid: f694f3b5b45e1cb4682139f274710a9e,
+    type: 3}
