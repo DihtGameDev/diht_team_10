@@ -30,17 +30,29 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public GameObject archObject;
 
+    [HideInInspector]
     public bool isWinner = false;
 
     [HideInInspector]
     public GameObject mainPlayer;
 
+    [HideInInspector]
     public NicknameManager nicknameManager;
 
     public PlayerData seekerPlayerData;
     public PlayerData hidemanPlayerData;
 
     public AbstractAbility ability;
+
+    public AbilitiesDict seekerAbilitiesDict;  // setted in inspector
+    public AbilitiesDict hidemanAbilitiesDict;  // setted in inspector
+
+    public CameraController cameraController; // for setting chasing obj from anywhere
+
+    [HideInInspector]
+    public Controller playerController; // optimization for setting additional moveSpeed from anywhere
+    [HideInInspector]
+    public PhotonView photonViewMainPlayer; // --||--
 
     protected void Awake() {
         GAME_MANAGER = this;
@@ -139,22 +151,33 @@ public class GameManager : MonoBehaviourPunCallbacks {
         if (playerType == PlayerType.SEEKER) {
             mainPlayer = PhotonNetwork.Instantiate("SeekerGhost", spawnPos, Quaternion.identity, 0);
             FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
-            Controller playerController = mainPlayer.AddComponent<Controller>();
+            playerController = mainPlayer.AddComponent<Controller>();
 
             mainPlayer.AddComponent<Seeker>();
             playerController.StartMovement(seekerPlayerData);
             SetFovSettings(fov, seekerPlayerData);
+
+            ability = seekerAbilitiesDict.Get(Constants.AbilitiesTags.Seeker.FLARE);
         } else {
             mainPlayer = PhotonNetwork.Instantiate("Skeleton", spawnPos, Quaternion.identity, 0);
             FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
-            Controller playerController = mainPlayer.AddComponent<Controller>();
+            playerController = mainPlayer.AddComponent<Controller>();
 
             mainPlayer.AddComponent<Hideman>();
             playerController.StartMovement(hidemanPlayerData);
             SetFovSettings(fov, hidemanPlayerData);
+
+            ability = hidemanAbilitiesDict.Get(Constants.AbilitiesTags.Hideman.INVISIBLE);
         }
 
-        Camera.main.GetComponent<CameraController>().SetChasingObject(mainPlayer);
+
+        //  otherwise the player starts blinking when there are several fov on the scene
+        mainPlayer.layer = 0;
+        mainPlayer.GetComponent<FogCoverable>().enabled = false;
+
+        photonViewMainPlayer = mainPlayer.GetComponent<PhotonView>();
+
+        cameraController.SetChasingObject(mainPlayer);
 
         mainPlayer.name = "MyPlayer";
     }

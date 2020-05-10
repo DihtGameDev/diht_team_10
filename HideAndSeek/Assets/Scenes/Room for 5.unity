@@ -257,11 +257,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 78
       objectReference: {fileID: 0}
-    - target: {fileID: 8170153791668043265, guid: 0d230cc8be529a542a08cb878ab14b18,
-        type: 3}
-      propertyPath: background
-      value: 
-      objectReference: {fileID: 17089801}
     - target: {fileID: 8170153791961219456, guid: 0d230cc8be529a542a08cb878ab14b18,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -272,6 +267,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 42.666668
       objectReference: {fileID: 0}
+    - target: {fileID: 8170153791668043265, guid: 0d230cc8be529a542a08cb878ab14b18,
+        type: 3}
+      propertyPath: background
+      value: 
+      objectReference: {fileID: 17089801}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
 --- !u!224 &17089801 stripped
@@ -2445,6 +2445,23 @@ MonoBehaviour:
   seekerPlayerData: {fileID: 11400000, guid: 3e55ba879aea78442b98c419158bc24a, type: 2}
   hidemanPlayerData: {fileID: 11400000, guid: 690a5dc1a847dd445ae1bc56b8b2ac30, type: 2}
   ability: {fileID: 11400000, guid: b9b903fd31a8e234bb4305cb2e9581b6, type: 2}
+  seekerAbilitiesDict:
+    dict:
+    - abilityTag: ShowAllHideman
+      ability: {fileID: 11400000, guid: b9b903fd31a8e234bb4305cb2e9581b6, type: 2}
+    - abilityTag: Invisible
+      ability: {fileID: 11400000, guid: 8a8d22ea7bbbfd047a2f4a539381bc80, type: 2}
+    - abilityTag: Flare
+      ability: {fileID: 11400000, guid: 2110d848d66a19348a18dce7100dc59d, type: 2}
+  hidemanAbilitiesDict:
+    dict:
+    - abilityTag: Surge
+      ability: {fileID: 11400000, guid: 50fa3f806d013874bb7cdd5845038eb2, type: 2}
+    - abilityTag: Invisible
+      ability: {fileID: 11400000, guid: 8a8d22ea7bbbfd047a2f4a539381bc80, type: 2}
+  cameraController: {fileID: 1279252852}
+  playerController: {fileID: 0}
+  photonViewMainPlayer: {fileID: 0}
 --- !u!4 &750663989
 Transform:
   m_ObjectHideFlags: 0

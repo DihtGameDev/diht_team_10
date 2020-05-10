@@ -1,7 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using Photon.Pun;
 
 public class PlayerRPC : MonoBehaviour {
+
+    private List<MeshRenderer> _renderers = new List<MeshRenderer>();
+
+    protected void Start() {
+        MeshRenderer[] allRenderers = GetComponentsInChildren<MeshRenderer>();
+
+        foreach (var renderer in allRenderers) {
+            if (renderer.GetComponent<FieldOfView>() == null) { // we don't hide fov
+                _renderers.Add(renderer);
+            }
+        }
+    }
 
     [PunRPC]
     void DestroyThisPUNObject() {
@@ -21,5 +35,23 @@ public class PlayerRPC : MonoBehaviour {
         }
 
         GameManager.GAME_MANAGER.uiGame.PrintInChat(killerNickname + " убил " + victimName);
+    }
+
+    [PunRPC]
+    void BecomeInvisibleForTime(float timeSec) {
+        Debugger.Log("become invisible for: " + name);
+        foreach (var render in _renderers) {
+            render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+        }
+
+        StartCoroutine(BecomeVisible(timeSec));
+    }
+
+    private IEnumerator BecomeVisible(float delaySec) {
+        yield return new WaitForSeconds(delaySec);
+        Debugger.Log("Stop invisible: " + delaySec);
+        foreach (var render in _renderers) {
+            render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
     }
 }

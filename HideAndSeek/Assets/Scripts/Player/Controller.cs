@@ -9,6 +9,8 @@ public class Controller : MonoBehaviour {
 
     private CharacterController _controller;
 
+    private float additionalMoveSpeed;
+
     public PlayerData playerData;
 
     public float movementAngle = 90f;
@@ -48,10 +50,14 @@ public class Controller : MonoBehaviour {
                 Vector3 __dir = Vector3.zero;
                 __dir.x = _moveJoystick.Direction.x;
                 __dir.z = _moveJoystick.Direction.y;
-                _controller.Move(__dir * playerData.moveSpeed * Time.deltaTime);
+                _controller.Move(__dir * (playerData.moveSpeed + additionalMoveSpeed)* Time.deltaTime);
             }
 
             yield return null;
         }
+    }
+
+    public void SetAdditionalMoveSpeed(float additionalMoveSpeed) {
+        this.additionalMoveSpeed = additionalMoveSpeed; 
     }
 }

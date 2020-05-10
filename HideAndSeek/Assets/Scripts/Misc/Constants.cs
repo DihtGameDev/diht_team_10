@@ -26,4 +26,17 @@ public static class Constants {
         new Vector3(65, 0, 85),
         new Vector3(65, 0, -85)
     };
+
+    public static class AbilitiesTags {
+        public static class Seeker {
+            public const string SHOW_ALL_HIDEMAN = "ShowAllHideman";
+            public const string INVISIBLE = "Invisible";
+            public const string FLARE = "Flare";
+        }
+
+        public static class Hideman {
+            public const string SURGE = "Surge";
+            public const string INVISIBLE = "Invisible";
+        }
+    }
 }
