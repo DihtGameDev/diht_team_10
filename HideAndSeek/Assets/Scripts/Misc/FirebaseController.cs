@@ -7,17 +7,12 @@ using Firebase.Unity.Editor;
 using System;
 using System.Threading.Tasks;
 
-public class FirebaseController : MonoBehaviour {
+public class FirebaseController : SingletonGameObject<FirebaseController> {
     private FirebaseApp _app;
     private DatabaseReference _databaseRef;
     private static readonly string _databaseURL = "https://goty-277103.firebaseio.com/";
 
-    public static FirebaseController instance;
-
-    protected void Awake() {
-        instance = this;
-        DontDestroyOnLoad(instance);
-
+    protected void Start() {
         InitFirebase();
     }
 
