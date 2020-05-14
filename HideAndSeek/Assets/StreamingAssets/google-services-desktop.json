@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "888559705781",
+    "firebase_url": "https://goty-277103.firebaseio.com",
+    "project_id": "goty-277103",
+    "storage_bucket": "goty-277103.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888559705781:android:09691ea7d58247396da8fc",
+        "android_client_info": {
+          "package_name": "ru.EDDev.GOTY"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "888559705781-dtdc1smrmglc65a8ohrtciuveb5j503u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvA8yASTz6KVjPDn0CPGk13kmM6xl9rkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "888559705781-dtdc1smrmglc65a8ohrtciuveb5j503u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
