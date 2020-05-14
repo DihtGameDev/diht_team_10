@@ -11,4 +11,19 @@ public class Misc {
             );
         return rectPosition;
     }
+
+    public static IEnumerator WaitAndDo(float delay, System.Action action) {
+        yield return new WaitForSeconds(delay);
+        action();
+    }
+
+    public static IEnumerator WaitWhile(System.Func<bool> waitCondition, System.Action action) {
+        Debugger.Log("waitCondition: " + waitCondition());
+        while (waitCondition()) {
+            Debugger.Log("waitCondition: " + waitCondition());
+            yield return null;
+        }
+
+        action();
+    }
 }

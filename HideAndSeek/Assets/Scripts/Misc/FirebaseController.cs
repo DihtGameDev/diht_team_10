@@ -7,40 +7,21 @@ using Firebase.Unity.Editor;
 using System;
 using System.Threading.Tasks;
 
+public enum AnalyticsType {
+    LAUNCH_GAME, START_PLAY, WORKSHOP
+}
+
 public class FirebaseController : SingletonGameObject<FirebaseController> {
     private FirebaseApp _app;
-    private DatabaseReference _databaseRef;
+    private DatabaseReference _databaseRoot;
     private static readonly string _databaseURL = "https://goty-277103.firebaseio.com/";
 
     protected void Start() {
         InitFirebase();
+        IncrementAnalyticsData(AnalyticsType.LAUNCH_GAME);
     }
 
     protected void Update() {
-    }
-
-    public void GetValue() {
-        instance._databaseRef.Child("ASD").GetValueAsync().ContinueWith(task => {
-
-            if (task.IsFaulted) {
-                Debug.LogError("fail while getting value from db");
-                return;
-            }
-
-            DataSnapshot snapshot = task.Result;
-            Dictionary<string, System.Object> d = snapshot.Value as Dictionary<string, System.Object>;
-
-            Debugger.Log("Получено значения: |" + d["field1"].ToString() + "|" + d["field2"].ToString());
-        });
-    }
-
-    public void SetValue(int value) {
-        instance._databaseRef.Child("game_launches").SetValueAsync("" + value).ContinueWith(task => {
-            if (task.IsFaulted) {
-                Debug.LogError("fail while setting value to db");
-                return;
-            }
-        });
     }
 
     private void InitFirebase() {
@@ -49,8 +30,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
             if (dependencyStatus == Firebase.DependencyStatus.Available) {
                 _app = Firebase.FirebaseApp.DefaultInstance;
                 _app.SetEditorDatabaseUrl(_databaseURL);
-                _databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
-                UpdateLauchesCount();
+                _databaseRoot = FirebaseDatabase.DefaultInstance.RootReference;
             } else {
                 UnityEngine.Debug.LogError(System.String.Format(
                   "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
@@ -58,14 +38,36 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         });
     }
 
-    private void UpdateLauchesCount() {
-        instance._databaseRef.Child("game_launches").GetValueAsync().ContinueWith(task => {
+    private void IncrementAnalyticsData(AnalyticsType type) {
+        StartCoroutine(Misc.WaitWhile(
+                () => { return instance._databaseRoot == null; },  // wait condition
+                () => {
+                    switch (type) {
+                        case AnalyticsType.LAUNCH_GAME: {
+                            IncrementAnalyticsData("game_launches");
+                            break;
+                        }
+                        case AnalyticsType.START_PLAY: {
+                            IncrementAnalyticsData("game_start_play");
+                            break;
+                        }
+                        case AnalyticsType.WORKSHOP: {
+                            IncrementAnalyticsData("workshop_launches");
+                            break;
+                        }
+                    }
+                }
+        ));
+    }
+
+    private void IncrementAnalyticsData(string firebaseKey) {
+        instance._databaseRoot.Child(firebaseKey).GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted) {
-                Debug.LogError("fail while update launches count value from db");
+                Debug.LogError("fail while incrementing analytics data");
                 return;
             }
-            int launches = Convert.ToInt32(task.Result.Value);
-            instance._databaseRef.Child("game_launches").SetValueAsync(launches + 1);
+            int val = Convert.ToInt32(task.Result.Value);
+            instance._databaseRoot.Child(firebaseKey).SetValueAsync(val + 1);
         });
     }
 }
