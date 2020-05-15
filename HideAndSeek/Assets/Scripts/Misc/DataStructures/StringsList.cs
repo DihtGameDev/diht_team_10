@@ -26,6 +26,17 @@ public class StringsList { // simple strings list, because collection not workin
         }
     }
 
+    public bool Contains(string value) {
+        for (int i = 0; i < size; ++i) {
+            Debugger.Log("Constains: " + buffer[i]);
+            if (buffer[i] == value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void Append(string value) {
         ReserveIfNeeds();
         buffer[size] = value;

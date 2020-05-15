@@ -510,9 +510,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Surge
+    - m_Text: H_Surge
       m_Image: {fileID: 0}
-    - m_Text: Invisible
+    - m_Text: H_Invisible
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1208,11 +1208,13 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Flare
+    - m_Text: S_Flare
       m_Image: {fileID: 0}
-    - m_Text: Invisible
+    - m_Text: S_Surge
       m_Image: {fileID: 0}
-    - m_Text: ShowAllHideman
+    - m_Text: S_Invisible
+      m_Image: {fileID: 0}
+    - m_Text: S_ShowAllHideman
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2559,7 +2561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1196590853
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2971,7 +2973,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Surge
+  m_Text: H_Surge
 --- !u!222 &1578462687
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3432,7 +3434,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1897083953
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4127,7 +4129,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Flare
+  m_Text: S_Flare
 --- !u!222 &2125148330
 CanvasRenderer:
   m_ObjectHideFlags: 0

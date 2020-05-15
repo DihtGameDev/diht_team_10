@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Settings {
     public string nickname = "";
-    public string hidemanAbility = Constants.AbilitiesTags.Hideman.SURGE;
-    public string seekerAbility = Constants.AbilitiesTags.Seeker.FLARE;
+    public string hidemanAbility = Constants.AbilitiesTags.Hideman.DEFAULT;
+    public string seekerAbility = Constants.AbilitiesTags.Seeker.DEFAULT;
     public string firebaseUserId = "";
     public FirebaseGameData firebaseGameData = new FirebaseGameData();
 

@@ -11,6 +11,10 @@ public enum AnalyticsType {
     LAUNCH_GAME, START_PLAY, PLAYED_MORE_2_MINS, WORKSHOP
 }
 
+public class ReadyState {
+    public bool isReady = false;
+}
+
 [System.Serializable]
 public class FirebaseGameData {
     public int coins = 0;
@@ -41,55 +45,15 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     public void SetFirebaseGameDataToPlayerPrefs(string firebaseUserId) {
         OnGettingFirebaseData(
             firebaseUserId,
-            (firebaseGameData) => { Settings.getInstance().SetFirebaseGameData(_firebaseGameData);
-        });
-        instance._databaseRoot.Child("users").Child(firebaseUserId).GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted) {
-                Debug.LogError("fail while settings firebase game data");
-                return;
-            }
-
-            Dictionary<string, object> result = task.Result.Value as Dictionary<string, object>; // coins {abilities -> seeker -> ability-num. abilities -> hideman -> ability-num.}
-
-            if (result == null) { // this value never setted before
-                Debugger.Log("this userId not exists in firebasa, therefore i will create it");
-                SetDefaultUserDataToFirebase(firebaseUserId);
-            } else {
-                _firebaseGameData.coins = Convert.ToInt32(result["coins"]);
-
-                result = result["abilities"] as Dictionary<string, object>;
-
-                var seekerAbilities = result["seeker"] as Dictionary<string, object>;
-                var hidemanAbilities = result["hideman"] as Dictionary<string, object>;
-
-                string[] abilityTags = new string[seekerAbilities.Count + hidemanAbilities.Count];
-
-                // adding seeker abilities
-                foreach (var abilityAndLevel in seekerAbilities) {
-                    int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
-                    if (abilityValue > 0) {
-                        _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
-                    }
-                }
-
-                // adding hideman ability
-                foreach (var abilityAndLevel in hidemanAbilities) {
-                    int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
-                    if (abilityValue > 0) {
-                        _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
-                    }
-                }
-
-                Settings.getInstance().SetFirebaseGameData(_firebaseGameData);
-            }
-        });
+            (firebaseGameData) => { Settings.getInstance().SetFirebaseGameData(_firebaseGameData); }
+        );
     }
 
     public void SetDefaultUserDataToFirebase(string firebaseUserId) {
         DatabaseReference userReference = instance._databaseRoot.Child("users").Child(firebaseUserId);
         userReference.Child("coins").SetValueAsync(0);
-        userReference.Child("abilities").Child("seeker").Child(Constants.AbilitiesTags.Seeker.FLARE).SetValueAsync(1);
-        userReference.Child("abilities").Child("hideman").Child(Constants.AbilitiesTags.Hideman.SURGE).SetValueAsync(1);
+        userReference.Child("abilities").Child("seeker").Child(Constants.AbilitiesTags.Seeker.DEFAULT).SetValueAsync(1);
+        userReference.Child("abilities").Child("hideman").Child(Constants.AbilitiesTags.Hideman.DEFAULT).SetValueAsync(1);
     }
 
     private void InitFirebase() {
@@ -134,8 +98,42 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     }
 
     // check if we have this abilities, and if we havn't, we set default abilities
-    public void CheckAndResetAbility() {
+    public ReadyState CheckAndResetAbilities() {
+        ReadyState readyState = new ReadyState();
+        OnGettingFirebaseData(
+            Settings.getInstance().firebaseUserId,
+            (firebaseGameData) => {
+                if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().hidemanAbility)) {
+                    Settings.getInstance().hidemanAbility = Constants.AbilitiesTags.Hideman.DEFAULT;
+                }
 
+                if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().seekerAbility)) {
+                    Settings.getInstance().seekerAbility = Constants.AbilitiesTags.Seeker.DEFAULT;
+                }
+
+                Settings.getInstance().save();
+
+                readyState.isReady = true;
+            } 
+        );
+
+        return readyState;
+    }
+
+    public ReadyState AddCoins(int addedCoins) {
+        ReadyState readyState = new ReadyState();
+
+        OnGettingFirebaseData(
+            Settings.getInstance().firebaseUserId,
+            (firebaseGameData) => {
+                DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
+                userReference.Child("coins").SetValueAsync(firebaseGameData.coins + addedCoins);
+
+                readyState.isReady = true;
+            }
+        );
+
+        return readyState;
     }
 
     private void OnGettingFirebaseData(string firebaseUserId, System.Action<FirebaseGameData> action) {

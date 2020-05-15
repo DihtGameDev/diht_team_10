@@ -25,8 +25,6 @@ public class Launcher : MonoBehaviourPunCallbacks {
         _launcherUI.SetScreen(UILauncher.Screen.INIT);
 
         CheckAndSetUserIdWithFirebase();
-
-        StartCoroutine(Misc.LoopWithDelay(2f, () => { print(Settings.getResettedInstance().firebaseGameData.coins); }));
     }
 
     protected void Update() {
@@ -93,9 +91,14 @@ public class Launcher : MonoBehaviourPunCallbacks {
         Debugger.Log("OnJoinedRoom(): " + PhotonNetwork.NickName);
         Debugger.Log("Launcher, Before LoadScene");
         if (PhotonNetwork.IsMasterClient) {  // if i am master, i load scene, otherwise, another master will do it for me
-            Debugger.Log("load the Room for 5");
-            PhotonNetwork.LoadLevel("Room for 5");
-            //  StartCoroutine(WaitForPlayers(5, 0.2f));
+            ReadyState readyState = FirebaseController.instance.CheckAndResetAbilities();
+            StartCoroutine(Misc.WaitWhile(
+                () => { return readyState.isReady == false; },
+                () => {
+                    Debugger.Log("load the Room for 5");
+                    PhotonNetwork.LoadLevel("Room for 5");
+                }
+            ));
         }
     }
 

@@ -26,6 +26,8 @@ public class AbilitiesScreen : AbstractScreen {
         settingsInstance.hidemanAbility = hidemanDropdown.options[hidemanDropdown.value].text;  // заглушка, чтобы потестить
         settingsInstance.seekerAbility = seekerDropwdown.options[seekerDropwdown.value].text;
         settingsInstance.save();
+
+        FirebaseController.instance.CheckAndResetAbilities(); // if we have cheaters
     }
 
     public override void OnEnable() {

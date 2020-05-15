@@ -14,6 +14,8 @@ public static class Constants {
 
     public const float SPAWN_SKELETONS_DELAY = 2f;
 
+    public const int ADDED_COINS_AFTER_WIN = 100;
+
     public const string PLAYER_TAG = "Player";
     public const string SEEKER_TAG = "Seeker";
     public const string HIDEMAN_TAG = "Hideman";
@@ -31,13 +33,15 @@ public static class Constants {
 
     public static class AbilitiesTags {
         public static class Seeker {
-            public const string SURGE = "S_Surge";
-            public const string SHOW_ALL_HIDEMAN = "S_ShowAllHideman";
-            public const string INVISIBLE = "S_Invisible";
+            public const string DEFAULT = "S_Flare";
             public const string FLARE = "S_Flare";
+            public const string SURGE = "S_Surge";
+            public const string INVISIBLE = "S_Invisible";
+            public const string SHOW_ALL_HIDEMAN = "S_ShowAllHideman";
         }
 
         public static class Hideman {
+            public const string DEFAULT = "H_Surge";
             public const string SURGE = "H_Surge";
             public const string INVISIBLE = "H_Invisible";
         }

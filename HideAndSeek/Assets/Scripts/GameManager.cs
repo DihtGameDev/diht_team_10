@@ -243,8 +243,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public override void OnDisconnected(DisconnectCause cause) {
         Debugger.Log("GameManager, OnDisconnect");
-        nicknameManager.Clear();
-        SceneManager.LoadScene("Launcher");
     }
 
     public void Leave() {
@@ -254,6 +252,15 @@ public class GameManager : MonoBehaviourPunCallbacks {
         __pv.RPC("OnPunPlayerLeave", RpcTarget.All, PhotonNetwork.NickName, isWinner);  // send all users, that i am leaving the game
         PhotonNetwork.SendAllOutgoingCommands();  // because rpc call has delay and after disconnect, message will not be sent
         PhotonNetwork.Disconnect();  // leaves the room and photon server 
+
+        ReadyState readyState = FirebaseController.instance.AddCoins(Constants.ADDED_COINS_AFTER_WIN);
+        StartCoroutine(Misc.WaitWhile(
+            () => { return readyState.isReady == false; },
+            () => {
+                nicknameManager.Clear();
+                SceneManager.LoadScene("Launcher");
+            }
+            ));
     }
 
     public void UseAbility() {

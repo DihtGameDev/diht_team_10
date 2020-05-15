@@ -2447,17 +2447,19 @@ MonoBehaviour:
   ability: {fileID: 11400000, guid: b9b903fd31a8e234bb4305cb2e9581b6, type: 2}
   seekerAbilitiesDict:
     dict:
-    - abilityTag: ShowAllHideman
+    - abilityTag: S_ShowAllHideman
       ability: {fileID: 11400000, guid: b9b903fd31a8e234bb4305cb2e9581b6, type: 2}
-    - abilityTag: Invisible
+    - abilityTag: S_Invisible
       ability: {fileID: 11400000, guid: 8a8d22ea7bbbfd047a2f4a539381bc80, type: 2}
-    - abilityTag: Flare
+    - abilityTag: S_Flare
       ability: {fileID: 11400000, guid: 2110d848d66a19348a18dce7100dc59d, type: 2}
+    - abilityTag: S_Surge
+      ability: {fileID: 11400000, guid: 50fa3f806d013874bb7cdd5845038eb2, type: 2}
   hidemanAbilitiesDict:
     dict:
-    - abilityTag: Surge
+    - abilityTag: H_Surge
       ability: {fileID: 11400000, guid: 50fa3f806d013874bb7cdd5845038eb2, type: 2}
-    - abilityTag: Invisible
+    - abilityTag: H_Invisible
       ability: {fileID: 11400000, guid: 8a8d22ea7bbbfd047a2f4a539381bc80, type: 2}
   cameraController: {fileID: 1279252852}
   playerController: {fileID: 0}
