@@ -71,6 +71,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         Invoke("StartGame", 1f);
+
+        UpdateAnalytics();
     }
 
     protected void Update() {
@@ -97,6 +99,15 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         StartCoroutine(SetNicknames(PlayerType.SEEKER, 0.2f));
+    }
+
+    private void UpdateAnalytics() {
+        FirebaseController.instance.IncrementAnalyticsData(AnalyticsType.START_PLAY);
+        StartCoroutine(Misc.WaitAndDo(
+            120f, // 120 sec in 2 minutes
+            () => {
+                FirebaseController.instance.IncrementAnalyticsData(AnalyticsType.PLAYED_MORE_2_MINS);
+            }));
     }
 
     public IEnumerator BecomeSkeleton(Vector3 spawnPos) {

@@ -7,6 +7,8 @@ public static class Constants {
         public const string SETTINGS = "settings";
     }
 
+    public const int USER_ID_LENGTH = 40;
+
     public const int RESPAWN_TIME = 10;
     public const int MAX_SKELETONS_IN_SCENE = 1;
 
@@ -29,14 +31,15 @@ public static class Constants {
 
     public static class AbilitiesTags {
         public static class Seeker {
-            public const string SHOW_ALL_HIDEMAN = "ShowAllHideman";
-            public const string INVISIBLE = "Invisible";
-            public const string FLARE = "Flare";
+            public const string SURGE = "S_Surge";
+            public const string SHOW_ALL_HIDEMAN = "S_ShowAllHideman";
+            public const string INVISIBLE = "S_Invisible";
+            public const string FLARE = "S_Flare";
         }
 
         public static class Hideman {
-            public const string SURGE = "Surge";
-            public const string INVISIBLE = "Invisible";
+            public const string SURGE = "H_Surge";
+            public const string INVISIBLE = "H_Invisible";
         }
     }
 }

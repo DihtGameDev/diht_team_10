@@ -16,9 +16,6 @@ public class InitLauncherScreen : AbstractScreen {
         setAbilities.onClick.AddListener(delegate {
             Launcher.LAUNCHER.ChangeScreen(UILauncher.Screen.SET_ABILITIES);
         });
-        settingsBtn.onClick.AddListener(() => {
-            FirebaseController.instance.GetValue();
-        });
     }
 
     public void ConnectingState() {

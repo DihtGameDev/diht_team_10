@@ -25,6 +25,7 @@ public class AbilitiesScreen : AbstractScreen {
         Settings settingsInstance = Settings.getInstance();
         settingsInstance.hidemanAbility = hidemanDropdown.options[hidemanDropdown.value].text;  // заглушка, чтобы потестить
         settingsInstance.seekerAbility = seekerDropwdown.options[seekerDropwdown.value].text;
+        settingsInstance.save();
     }
 
     public override void OnEnable() {

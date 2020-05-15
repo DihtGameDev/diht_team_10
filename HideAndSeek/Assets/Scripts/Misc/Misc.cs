@@ -12,16 +12,22 @@ public class Misc {
         return rectPosition;
     }
 
+    public static IEnumerator LoopWithDelay(float iterationDelay, System.Action action) {
+        while (true) {
+            action();
+            yield return new WaitForSeconds(iterationDelay);
+        }
+    }
+
     public static IEnumerator WaitAndDo(float delay, System.Action action) {
         yield return new WaitForSeconds(delay);
+        Debugger.Log("ACTION");
         action();
     }
 
-    public static IEnumerator WaitWhile(System.Func<bool> waitCondition, System.Action action) {
-        Debugger.Log("waitCondition: " + waitCondition());
+    public static IEnumerator WaitWhile(System.Func<bool> waitCondition, System.Action action, float checkDelay=0) {
         while (waitCondition()) {
-            Debugger.Log("waitCondition: " + waitCondition());
-            yield return null;
+            yield return new WaitForSeconds(checkDelay);
         }
 
         action();

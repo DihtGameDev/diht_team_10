@@ -23,6 +23,10 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
         _launcherUI = new UILauncher(_uiLauncherWidget);
         _launcherUI.SetScreen(UILauncher.Screen.INIT);
+
+        CheckAndSetUserIdWithFirebase();
+
+        StartCoroutine(Misc.LoopWithDelay(2f, () => { print(Settings.getResettedInstance().firebaseGameData.coins); }));
     }
 
     protected void Update() {
@@ -42,9 +46,22 @@ public class Launcher : MonoBehaviourPunCallbacks {
         }
     }
 
+    private void CheckAndSetUserIdWithFirebase() {
+        Settings settings = Settings.getInstance();
+        
+        if (settings.firebaseUserId == "") {
+            settings.firebaseUserId = RandomStringGenerator.Generate(Constants.USER_ID_LENGTH);
+            settings.save();
+        }
+        StartCoroutine(Misc.WaitWhile(
+            () => { return FirebaseController.instance.isReady == false; },
+            () => { FirebaseController.instance.SetFirebaseGameDataToPlayerPrefs(settings.firebaseUserId); }
+        ));
+    }
+
     private void SaveNickname(string nickname) {
         Settings.getInstance().nickname = nickname;
-        Settings.save();
+        Settings.getInstance().save();
     }
 
     public override void OnConnectedToMaster() {
