@@ -16,6 +16,15 @@ public class InitLauncherScreen : AbstractScreen {
         setAbilities.onClick.AddListener(delegate {
             Launcher.LAUNCHER.ChangeScreen(UILauncher.Screen.SET_ABILITIES);
         });
+        settingsBtn.onClick.AddListener(delegate {
+            Debugger.Log("SignUp");
+            AuthState authState = 
+                FirebaseController.instance.SignUpNewUser("test@phystech.edu", "testPass",
+                (user) => {
+                    FirebaseController.instance.
+                        MoveFirebaseGameDataToNewFirebaseUserId(Settings.getInstance().firebaseUserId, user.UserId);
+                });
+        });
     }
 
     public void ConnectingState() {

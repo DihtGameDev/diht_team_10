@@ -8,4 +8,8 @@ public class Debugger {  // for logcat debugging
     public static void Log(string message) {
         Debug.Log(DEBUG_PREFIX + message);
     }
+
+    public static void LogError(string message) {
+        Debug.LogError(DEBUG_PREFIX + message);
+    }
 }
