@@ -79,7 +79,7 @@ public class FieldOfView : MonoBehaviour {
             }
         }
 
-        if (OnTargetsVisibilityChange != null) OnTargetsVisibilityChange(visibleTargets);
+        OnTargetsVisibilityChange?.Invoke(visibleTargets);
     }
 
     void DrawFieldOfView() {
