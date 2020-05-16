@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [SerializeField]
     private GameObject _archPrefab;
 
-    public static GameManager GAME_MANAGER;
+    public static GameManager instance;
 
     public ObjectsPool objectsPool = new ObjectsPool();
 
@@ -49,13 +49,15 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public CameraController cameraController; // for setting chasing obj from anywhere
 
+    public event System.Action<int> OnPlayersCountChanged;
+
     [HideInInspector]
     public Controller playerController; // optimization for setting additional moveSpeed from anywhere
     [HideInInspector]
     public PhotonView photonViewMainPlayer; // --||--
 
     protected void Awake() {
-        GAME_MANAGER = this;
+        instance = this;
     }
 
     protected void Start() {
@@ -87,7 +89,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         Respawn();
 
         uiGame.PlayingState();
-        uiGame.UpdatePlayerCounter();
+        uiGame.SetPlayersCounter(PlayersInTheScene());
     }
 
     private void Respawn() {  // respawn after death
@@ -104,7 +106,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     private void UpdateAnalytics() {
         FirebaseController.instance.IncrementAnalyticsData(AnalyticsType.START_PLAY);
         StartCoroutine(Misc.WaitAndDo(
-            120f, // 120 sec in 2 minutes
+            120f, // 120 sec it's 2 minutes
             () => {
                 FirebaseController.instance.IncrementAnalyticsData(AnalyticsType.PLAYED_MORE_2_MINS);
             }));
@@ -133,9 +135,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
-        GameManager.GAME_MANAGER.uiGame.PrintInChat(newPlayer.NickName + " начал играть");
+        GameManager.instance.uiGame.PrintInChat(newPlayer.NickName + " начал играть");
         StartCoroutine(SetNicknames(mainPlayer.tag == Constants.SEEKER_TAG ? PlayerType.SEEKER : PlayerType.HIDEMAN, 3f));
-        uiGame.UpdatePlayerCounter();
+        OnPlayersCountChanged(PlayersInTheScene());
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) {
@@ -155,7 +157,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
         }
 
-        uiGame.UpdatePlayerCounter();
+        OnPlayersCountChanged(PlayersInTheScene());
     }
 
     public void CreatePlayer(PlayerType playerType, Vector3 spawnPos) {  // =(

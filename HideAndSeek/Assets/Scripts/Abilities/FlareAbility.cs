@@ -23,17 +23,17 @@ public class FlareAbility : AbstractAbility {
         Debugger.Log("UseAbility");
 
         // flare instantiation
-        GameObject flareObj = GameManager.GAME_MANAGER.objectsPool.Get(FLARE_TYPE_OP);
+        GameObject flareObj = GameManager.instance.objectsPool.Get(FLARE_TYPE_OP);
         if (flareObj == null) {
             flareObj = Instantiate(
                 _flarePrefab,
-                GameManager.GAME_MANAGER.mainPlayer.transform.position,
-                Quaternion.Euler(GameManager.GAME_MANAGER.mainPlayer.transform.eulerAngles)
+                GameManager.instance.mainPlayer.transform.position,
+                Quaternion.Euler(GameManager.instance.mainPlayer.transform.eulerAngles)
             );
         } else {
             // otherwise flare start moving from previous position and rotation
-            flareObj.transform.position = GameManager.GAME_MANAGER.mainPlayer.transform.position;
-            flareObj.transform.eulerAngles = GameManager.GAME_MANAGER.mainPlayer.transform.eulerAngles;
+            flareObj.transform.position = GameManager.instance.mainPlayer.transform.position;
+            flareObj.transform.eulerAngles = GameManager.instance.mainPlayer.transform.eulerAngles;
         }
 
         if (_flareFov == null) {
@@ -42,7 +42,7 @@ public class FlareAbility : AbstractAbility {
 
         _flareFov.viewRadius = flareRadius;
 
-        GameManager.GAME_MANAGER.StartCoroutine(FlareMovement(flareObj));
+        GameManager.instance.StartCoroutine(FlareMovement(flareObj));
     }
 
     public IEnumerator FlareMovement(GameObject flareObject) {
@@ -50,7 +50,7 @@ public class FlareAbility : AbstractAbility {
 
         float startTime = Time.time;
 
-        GameManager.GAME_MANAGER.cameraController.SetChasingObject(flareObject);
+        GameManager.instance.cameraController.SetChasingObject(flareObject);
 
         while (Time.time - startTime < flareDuration) {
             flareObject.transform.localPosition +=
@@ -58,13 +58,13 @@ public class FlareAbility : AbstractAbility {
             yield return null;
         }
 
-        GameManager.GAME_MANAGER.cameraController.SetChasingObject(GameManager.GAME_MANAGER.mainPlayer);
+        GameManager.instance.cameraController.SetChasingObject(GameManager.instance.mainPlayer);
 
         DestroyFlare(flareObject);
     }
 
     private void DestroyFlare(GameObject flareObject) {
-        GameManager.GAME_MANAGER.objectsPool.Add(FLARE_TYPE_OP, flareObject);
+        GameManager.instance.objectsPool.Add(FLARE_TYPE_OP, flareObject);
     }
 
     override public float Cooldown() {

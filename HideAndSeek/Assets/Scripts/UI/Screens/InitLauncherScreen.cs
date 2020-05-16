@@ -23,9 +23,9 @@ public class InitLauncherScreen : AbstractScreen {
         connectingMessage.text = "Connecting...";
     }
 
-    public override void OnEnable() {
+    public override void OnEnableScreen() {
     }
 
-    public override void OnDisable() {
+    public override void OnDisableScreen() {
     }
 }

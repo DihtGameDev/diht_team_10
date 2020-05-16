@@ -34,7 +34,7 @@ public class Seeker : BaseAnimationPlayer {
 
     private void BecomeSkeleton() {
         Camera.main.GetComponent<CameraController>().SetChasingObject(null);
-        GameManager.GAME_MANAGER.StartCoroutine(GameManager.GAME_MANAGER.BecomeSkeleton(transform.position));
+        GameManager.instance.StartCoroutine(GameManager.instance.BecomeSkeleton(transform.position));
         GetComponent<PhotonView>().RPC("DestroyThisPUNObject", RpcTarget.All); // we send all players that this object they should destroy nickname for this object
         PhotonNetwork.SendAllOutgoingCommands();  // for instant sending previous message, otherwise players will reference to null
         PhotonNetwork.Destroy(gameObject); // destroy this seeker

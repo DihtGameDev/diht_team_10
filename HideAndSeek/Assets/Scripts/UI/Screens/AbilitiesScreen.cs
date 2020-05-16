@@ -12,23 +12,28 @@ public class AbilitiesScreen : AbstractScreen {
     public Button signUpBtn;
     public InputField emailField;
     public InputField passwordField;
+    public Text coinsText;
 
     protected void Start() {
-        hidemanDropdown.onValueChanged.AddListener(delegate {
+        Debugger.Log("coins Subscribe");
+        FirebaseController.instance.OnGettingFirebaseData += UpdateCoinsFromFirebaseGameData;
+
+        hidemanDropdown.onValueChanged.AddListener((value) => {
                 SetAbilities();
             });
-        seekerDropwdown.onValueChanged.AddListener(delegate {
+        seekerDropwdown.onValueChanged.AddListener((value) => {
             SetAbilities();
         });
-        backBtn.onClick.AddListener(delegate {
+        backBtn.onClick.AddListener(() => {
             Launcher.LAUNCHER.ChangeScreen(UILauncher.Screen.INIT);
         });
-        signInBtn.onClick.AddListener(delegate {
+        signInBtn.onClick.AddListener(() => {
             Debugger.Log("SignIn");
             AuthState authState =
                 FirebaseController.instance.auth.SignInExistingUser(emailField.text, passwordField.text,
                     (user) => {
                         Settings.getInstance().firebaseUserId = user.UserId;
+                        Settings.getInstance().email = emailField.text;
                         Settings.getInstance().save();
                         FirebaseController.instance.SetFirebaseGameDataToPlayerPrefs(user.UserId);
                     },
@@ -37,13 +42,14 @@ public class AbilitiesScreen : AbstractScreen {
                     }
                 );
         });
-        signUpBtn.onClick.AddListener(delegate {
+        signUpBtn.onClick.AddListener(() => {
             Debugger.Log("SignUp");
             AuthState authState =
                 FirebaseController.instance.auth.SignUpNewUser(emailField.text, passwordField.text,
                     (user) => {
                         FirebaseController.instance.MoveFirebaseGameDataToNewFirebaseUserId(Settings.getInstance().firebaseUserId, user.UserId);
                         Settings.getInstance().firebaseUserId = user.UserId;
+                        Settings.getInstance().email = emailField.text;
                         Settings.getInstance().save();
                         FirebaseController.instance.SetFirebaseGameDataToPlayerPrefs(user.UserId);
                     },
@@ -52,6 +58,17 @@ public class AbilitiesScreen : AbstractScreen {
                     }
                 );
         });
+    }
+
+    public void Destroy() {
+        Debugger.Log("coins Unsubscribe");
+        FirebaseController.instance.OnGettingFirebaseData -= UpdateCoinsFromFirebaseGameData;
+    }
+
+    public override void OnEnableScreen() {
+    }
+
+    public override void OnDisableScreen() {
     }
 
     private void SetAbilities() {
@@ -63,9 +80,8 @@ public class AbilitiesScreen : AbstractScreen {
         FirebaseController.instance.CheckAndResetAbilities(); // if we have cheaters
     }
 
-    public override void OnEnable() {
-    }
-
-    public override void OnDisable() {
+    public void UpdateCoinsFromFirebaseGameData(FirebaseGameData firebaseGameData) {
+        Debugger.Log("Inside UdpateCoinsFromFirebaseGameData coins: " + firebaseGameData.coins);
+        coinsText.text = "coins: " + firebaseGameData.coins;
     }
 }

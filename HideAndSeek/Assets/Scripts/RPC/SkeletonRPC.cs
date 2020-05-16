@@ -9,6 +9,6 @@ public class SkeletonRPC : MonoBehaviour {
         if (PhotonNetwork.IsMasterClient) {
             PhotonNetwork.Destroy(gameObject);
         }
-        GameManager.GAME_MANAGER.uiGame.PrintInChat(killerNickname + " захватил тело");
+        GameManager.instance.uiGame.PrintInChat(killerNickname + " захватил тело");
     }
 }

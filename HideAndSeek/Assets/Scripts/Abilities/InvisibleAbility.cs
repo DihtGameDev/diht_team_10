@@ -12,7 +12,7 @@ public class InvisibleAbility : AbstractAbility {
 
     override public void UseAbility() {
         Debugger.Log("UseAbility");
-        GameManager.GAME_MANAGER.photonViewMainPlayer.RPC("BecomeInvisibleForTime", Photon.Pun.RpcTarget.All, invisibleDurationSec);
+        GameManager.instance.photonViewMainPlayer.RPC("BecomeInvisibleForTime", Photon.Pun.RpcTarget.All, invisibleDurationSec);
     }
 
     override public float Cooldown() {

@@ -33,6 +33,8 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     private static readonly string _databaseURL = "https://goty-277103.firebaseio.com/";
     private FirebaseGameData _firebaseGameData = new FirebaseGameData(); // optimization
 
+    public event Action<FirebaseGameData> OnGettingFirebaseData;
+
     public FbAuth auth;
     public bool isReady = false;
 
@@ -45,7 +47,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     }
 
     public void SetFirebaseGameDataToPlayerPrefs(string firebaseUserId) {
-        OnGettingFirebaseData(
+        GetFirebaseDataAsync(
             firebaseUserId,
             (firebaseGameData) => { Settings.getInstance().SetFirebaseGameData(_firebaseGameData); }
         );
@@ -59,7 +61,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     }
 
     public void MoveFirebaseGameDataToNewFirebaseUserId(string oldFirebaseUserId, string newFirebaseUserId) {
-        OnGettingFirebaseData(
+        GetFirebaseDataAsync(
             oldFirebaseUserId,
             (firebaseData) => {
                 DatabaseReference userReference = instance._databaseRoot.Child("users").Child(newFirebaseUserId);
@@ -120,7 +122,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     // check if we have this abilities, and if we havn't, we set default abilities
     public ReadyState CheckAndResetAbilities() {
         ReadyState readyState = new ReadyState();
-        OnGettingFirebaseData(
+        GetFirebaseDataAsync(
             Settings.getInstance().firebaseUserId,
             (firebaseGameData) => {
                 if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().hidemanAbility)) {
@@ -143,7 +145,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     public ReadyState AddCoins(int addedCoins) {
         ReadyState readyState = new ReadyState();
 
-        OnGettingFirebaseData(
+        GetFirebaseDataAsync(
             Settings.getInstance().firebaseUserId,
             (firebaseGameData) => {
                 DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
@@ -156,7 +158,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         return readyState;
     }
 
-    private void OnGettingFirebaseData(string firebaseUserId, System.Action<FirebaseGameData> action) {
+    private void GetFirebaseDataAsync(string firebaseUserId, System.Action<FirebaseGameData> action) {
         instance._databaseRoot.Child("users").Child(firebaseUserId).GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted) {
                 Debug.LogError("fail while settings firebase game data");
@@ -169,6 +171,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                 Debugger.Log("this userId not exists in firebasa, therefore i will create it");
                 SetDefaultUserDataToFirebase(firebaseUserId);
             } else {
+                Debugger.Log("I get firebase data");
                 _firebaseGameData.coins = Convert.ToInt32(result["coins"]);
 
                 result = result["abilities"] as Dictionary<string, object>;
@@ -193,6 +196,8 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                         _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
                     }
                 }
+
+                OnGettingFirebaseData?.Invoke(_firebaseGameData);
 
                 action(_firebaseGameData);
             }

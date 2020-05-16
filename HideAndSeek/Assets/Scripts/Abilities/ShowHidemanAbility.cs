@@ -49,7 +49,7 @@ public class ShowHidemanAbility : AbstractAbility {
                 _markers[i].GetComponent<RectTransform>().anchoredPosition = inRectPos;
                 Vector3 delta =
                     Camera.main.WorldToScreenPoint(playerPos) -
-                    Camera.main.WorldToScreenPoint(GameManager.GAME_MANAGER.mainPlayer.transform.position);
+                    Camera.main.WorldToScreenPoint(GameManager.instance.mainPlayer.transform.position);
 
                 _markers[i].transform.eulerAngles = Vector3.forward * (CalculateAngle(delta, Vector3.up));
             }
@@ -58,7 +58,7 @@ public class ShowHidemanAbility : AbstractAbility {
         }
 
         foreach (var marker in _markers) {
-            GameManager.GAME_MANAGER.objectsPool.Add(MARKER_TYPE, marker);
+            GameManager.instance.objectsPool.Add(MARKER_TYPE, marker);
         }
 
         _markers.Clear();
@@ -69,14 +69,14 @@ public class ShowHidemanAbility : AbstractAbility {
         _players = GameObject.FindGameObjectsWithTag(playerTag);
 
         for (int i = 0; i < _players.Length; ++i) {
-            GameObject marker = GameManager.GAME_MANAGER.objectsPool.Get(MARKER_TYPE);
+            GameObject marker = GameManager.instance.objectsPool.Get(MARKER_TYPE);
             if (marker == null) {
                 marker = GameObject.Instantiate(_markerPrefab, GameObject.Find("Canvas").transform);
             }
             _markers.Add(marker);
         }
 
-        GameManager.GAME_MANAGER.StartCoroutine(UpdateMarkersPos());
+        GameManager.instance.StartCoroutine(UpdateMarkersPos());
     }
 
     override public float Cooldown() {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Settings {
     public string nickname = "";
+    public string email = "";
     public string hidemanAbility = Constants.AbilitiesTags.Hideman.DEFAULT;
     public string seekerAbility = Constants.AbilitiesTags.Seeker.DEFAULT;
     public string firebaseUserId = "";

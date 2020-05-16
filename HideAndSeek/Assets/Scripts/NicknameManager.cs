@@ -42,7 +42,7 @@ public class NicknameManager {
             return;
         }
 
-        GameObject nicknameObject = GameManager.GAME_MANAGER.objectsPool.Get(NICKNAME_TYPE);
+        GameObject nicknameObject = GameManager.instance.objectsPool.Get(NICKNAME_TYPE);
 
         if (nicknameObject == null) {
             nicknameObject = GameObject.Instantiate(_nicknamePrefab, _canvasRect.transform);
@@ -55,7 +55,7 @@ public class NicknameManager {
     public void DeletePlayer(GameObject player) {
         if (_playersDict.ContainsKey(player)) {
             if (_playersDict[player].gameObject != null) {
-                GameManager.GAME_MANAGER.objectsPool.Add(NICKNAME_TYPE, _playersDict[player].gameObject);
+                GameManager.instance.objectsPool.Add(NICKNAME_TYPE, _playersDict[player].gameObject);
             }
             _playersDict.Remove(player);
         }
@@ -71,7 +71,7 @@ public class NicknameManager {
 
     public void Clear() {
         foreach (var player in _playersDict) {
-            GameManager.GAME_MANAGER.objectsPool.Add(NICKNAME_TYPE, player.Value.gameObject);
+            GameManager.instance.objectsPool.Add(NICKNAME_TYPE, player.Value.gameObject);
         }
         _playersDict.Clear();
     }

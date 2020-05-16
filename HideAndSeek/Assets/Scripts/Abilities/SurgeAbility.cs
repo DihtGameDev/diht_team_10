@@ -13,8 +13,8 @@ public class SurgeAbility : AbstractAbility {
 
     override public void UseAbility() {
         Debugger.Log("UseAbility");
-        GameManager.GAME_MANAGER.playerController.SetAdditionalMoveSpeed(additionalMoveSpeed);
-        GameManager.GAME_MANAGER.StartCoroutine(EndSurge());
+        GameManager.instance.playerController.SetAdditionalMoveSpeed(additionalMoveSpeed);
+        GameManager.instance.StartCoroutine(EndSurge());
     }
 
     override public float Cooldown() {
@@ -23,6 +23,6 @@ public class SurgeAbility : AbstractAbility {
 
     private IEnumerator EndSurge() {
         yield return new WaitForSeconds(surgeDuration);
-        GameManager.GAME_MANAGER.playerController.SetAdditionalMoveSpeed(0f);
+        GameManager.instance.playerController.SetAdditionalMoveSpeed(0f);
     }
 }
