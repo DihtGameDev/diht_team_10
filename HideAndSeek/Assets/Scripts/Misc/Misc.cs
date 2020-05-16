@@ -21,7 +21,6 @@ public class Misc {
 
     public static IEnumerator WaitAndDo(float delay, System.Action action) {
         yield return new WaitForSeconds(delay);
-        Debugger.Log("ACTION");
         action();
     }
 

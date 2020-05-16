@@ -12,14 +12,6 @@ public enum AnalyticsType {
     LAUNCH_GAME, START_PLAY, PLAYED_MORE_2_MINS, WORKSHOP
 }
 
-public enum AuthStates {
-    NULL, SUCCESS, CANCELED, IS_FAULTED
-}
-
-public class AuthState {
-    public AuthStates state = AuthStates.NULL;
-}
-
 public class ReadyState {
     public bool isReady = false;
 }
@@ -37,11 +29,11 @@ public class FirebaseGameData {
 
 public class FirebaseController : SingletonGameObject<FirebaseController> {
     private FirebaseApp _app;
-    private FirebaseAuth _auth;
     private DatabaseReference _databaseRoot;
     private static readonly string _databaseURL = "https://goty-277103.firebaseio.com/";
     private FirebaseGameData _firebaseGameData = new FirebaseGameData(); // optimization
 
+    public FbAuth auth;
     public bool isReady = false;
 
     protected void Start() {
@@ -90,41 +82,13 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                 _app = Firebase.FirebaseApp.DefaultInstance;
                 _app.SetEditorDatabaseUrl(_databaseURL);
                 _databaseRoot = FirebaseDatabase.DefaultInstance.RootReference;
-                _auth = FirebaseAuth.DefaultInstance;
+                auth = new FbAuth(FirebaseAuth.DefaultInstance);
                 isReady = true;
             } else {
                 UnityEngine.Debug.LogError(System.String.Format(
                   "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
             }
         });
-    }
-
-    public AuthState SignUpNewUser(string email, string password, Action<FirebaseUser> onSuccessAction=null) {
-        AuthState authState = new AuthState();
-
-        _auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
-            if (task.IsCanceled) {
-                Debugger.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
-                authState.state = AuthStates.CANCELED;
-                return;
-            }
-            if (task.IsFaulted) {
-                Debugger.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                authState.state = AuthStates.IS_FAULTED;
-                return;
-            }
-
-            // Firebase user has been created.
-            Firebase.Auth.FirebaseUser newUser = task.Result;
-            Debug.LogFormat("Firebase user created successfully: {0} ({1})",
-                newUser.DisplayName, newUser.UserId);
-
-            onSuccessAction?.Invoke(newUser);  // if onSuccessAction not null
-
-            authState.state = AuthStates.SUCCESS;
-        });
-
-        return authState;
     }
 
     public void IncrementAnalyticsData(AnalyticsType type) {
@@ -190,24 +154,6 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         );
 
         return readyState;
-    }
-
-    private void OnGettingFirebaseSnapshot(string firebaseUserId, System.Action<object> successAction, System.Action noneResultAction) {
-        instance._databaseRoot.Child("users").Child(firebaseUserId).GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted) {
-                Debug.LogError("fail while getting firebase snapshot");
-                return;
-            }
-
-            object result = task.Result;
-
-            if (result == null) { // this value never setted before
-                Debugger.Log("this userId not exists in firebase");
-                noneResultAction();
-            } else {
-                successAction(result);
-            }
-        });
     }
 
     private void OnGettingFirebaseData(string firebaseUserId, System.Action<FirebaseGameData> action) {
