@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "EnemyAIData/Default", fileName = "DefaultEnemyAI")]
 public class EnemyAIData : ScriptableObject {
     [Range(0, 360)]
-    public float viewAngle = 90f;
+    public float viewAngle = 120f;
     public float viewRadius = 20f;
 
     public float lerpAngleCoeff = 3f;

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1236726613876483024}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: seeker1-body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1236726614032834787}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: seeker1-head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6076209681173566569}
   - component: {fileID: 6076209681173566570}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: light_for_face
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6076209681393855653}
   - component: {fileID: 6076209681393855654}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: light_under_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 6085692359973180753}
   - component: {fileID: 8848276771390723890}
   - component: {fileID: 1789945512580550563}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   - component: {fileID: 6076209681688870724}
   - component: {fileID: 6076209681688870723}
   - component: {fileID: 6076209681688870722}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: eye (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 6076209682259514563}
   - component: {fileID: 6076209682259514562}
   - component: {fileID: 6076209682259514561}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: mouth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 198450502}
   - component: {fileID: 1458996280497432518}
   - component: {fileID: 5304544300585045291}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: SeekerGhost
   m_TagString: Seeker
   m_Icon: {fileID: 0}
@@ -688,7 +688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6076209682857742341}
   - component: {fileID: 6076209682857742342}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,7 +781,7 @@ GameObject:
   - component: {fileID: 6076209683062886980}
   - component: {fileID: 6076209683062886979}
   - component: {fileID: 6076209683062886978}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -873,7 +873,7 @@ GameObject:
   - component: {fileID: 8739063016281125851}
   - component: {fileID: 8288772897790781192}
   - component: {fileID: 730992445993061368}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: model_head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -951,7 +951,7 @@ GameObject:
   - component: {fileID: 8739063016678715624}
   - component: {fileID: 8288772898205180987}
   - component: {fileID: 730992445864200395}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: model_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

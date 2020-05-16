@@ -10,6 +10,7 @@ TagManager:
   - Skeleton
   - Grave
   - OccGrave
+  - AI
   - Test
   layers:
   - Default
@@ -24,9 +25,9 @@ TagManager:
   - Obstacle
   - Vision
   - EnemyAI
-  - 
-  - 
-  - 
+  - Hideman
+  - Seeker
+  - LyingSkeleton
   - 
   - 
   - 

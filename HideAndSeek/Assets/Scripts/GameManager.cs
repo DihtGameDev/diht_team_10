@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             SceneManager.LoadScene("Launcher");
         }
 
-        Invoke("StartGame", 1f);
+        StartCoroutine(Misc.WaitAndDo(1f, StartGame));
 
         UpdateAnalytics();
     }
@@ -82,9 +82,11 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     private void StartGame() {
-          if (PhotonNetwork.IsMasterClient) {
-              StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
-          }
+        SpawnAIEnemies(Constants.AI_ENEMIES_PER_PLAYER);
+
+        if (PhotonNetwork.IsMasterClient) {
+            SpawnSkeletons();
+        }
 
         Respawn();
 
@@ -110,6 +112,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
             () => {
                 FirebaseController.instance.IncrementAnalyticsData(AnalyticsType.PLAYED_MORE_2_MINS);
             }));
+    }
+
+    public void SpawnSkeletons() {
+        StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
     }
 
     public IEnumerator BecomeSkeleton(Vector3 spawnPos) {
@@ -154,7 +160,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         if (PhotonNetwork.IsMasterClient) {
-            StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
+            SpawnSkeletons();
         }
 
         OnPlayersCountChanged(PlayersInTheScene());
@@ -183,9 +189,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             ability = hidemanAbilitiesDict.Get(Settings.getInstance().hidemanAbility);
         }
 
-
         //  otherwise the player starts blinking when there are several fov on the scene
-        mainPlayer.layer = 0;
         mainPlayer.GetComponent<FogCoverable>().enabled = false;
 
         photonViewMainPlayer = mainPlayer.GetComponent<PhotonView>();
@@ -205,6 +209,12 @@ public class GameManager : MonoBehaviourPunCallbacks {
             );
 
         nicknameManager.AddAllPlayers(__allies);
+    }
+
+    private void SpawnAIEnemies(int aiEnemiesCount) {
+        for (int i = 0; i < aiEnemiesCount; ++i) {
+            PhotonNetwork.Instantiate("EnemyAISeeker", Vector3.zero, Quaternion.identity, 0).SetActive(true);
+        }
     }
 
     public int PlayersInTheScene() {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 921fb019d0fb31d43b919c45276c2c50, type: 3}
   m_Name: DefaultEnemyAI
   m_EditorClassIdentifier: 
-  viewAngle: 90
+  viewAngle: 120
   viewRadius: 20
   lerpAngleCoeff: 3
   addingAngleWhenCame: 120
@@ -20,7 +20,7 @@ MonoBehaviour:
   maxPathfinderRadius: 80
   targetMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 4096
   obstacleMask:
     serializedVersion: 2
     m_Bits: 512

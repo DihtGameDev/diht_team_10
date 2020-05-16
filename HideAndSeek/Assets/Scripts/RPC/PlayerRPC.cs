@@ -35,6 +35,10 @@ public class PlayerRPC : MonoBehaviour {
         }
 
         GameManager.instance.uiGame.PrintInChat(killerNickname + " убил " + victimName);
+
+        if (PhotonNetwork.IsMasterClient) {
+            GameManager.instance.SpawnSkeletons();
+        }
     }
 
     [PunRPC]

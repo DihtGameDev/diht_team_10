@@ -11,8 +11,9 @@ public static class Constants {
 
     public const int RESPAWN_TIME = 10;
     public const int MAX_SKELETONS_IN_SCENE = 1;
+    public const int AI_ENEMIES_PER_PLAYER = 2;
 
-    public const float SPAWN_SKELETONS_DELAY = 2f;
+    public const float SPAWN_SKELETONS_DELAY = 4f;
 
     public const int ADDED_COINS_AFTER_WIN = 100;
 
@@ -23,6 +24,7 @@ public static class Constants {
     public const string GRAVE_TAG = "Grave";
     public const string OCCUPIED_GRAVE_TAG = "OccGrave";
     public const string ARCH_TAG = "Arch";
+    public const string AI_TAG = "AI";
 
     public static Vector3[] GRAVE_SPAWN_POSITIONS = {
         new Vector3(-65, 0, 85),

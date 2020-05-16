@@ -23,13 +23,13 @@ public class Seeker : BaseAnimationPlayer {
     }
 
     private void OnHidemanHitted(GameObject hidemanObj) {
-        PhotonView __pv = hidemanObj.GetComponent<PhotonView>();  // send message on this photonview hit.gameObject object, i.e. same photon view
-        __pv.RPC("KillHideman", RpcTarget.All, PhotonNetwork.NickName, __pv.Owner.NickName); // we send all users that user with this nickname killed by this user
+        PhotonView pv = hidemanObj.GetComponent<PhotonView>();  // send message on this photonview hit.gameObject object, i.e. same photon view
+        pv.RPC("KillHideman", RpcTarget.All, PhotonNetwork.NickName + "_AI", pv.Owner.NickName); // we send all users that user with this nickname killed by this user
     }
 
     private void OnSkeletonHitted(GameObject skeletonObj) {
-        PhotonView __pv = skeletonObj.GetComponent<PhotonView>();
-        __pv.RPC("DestroyLyingSkeleton", RpcTarget.All, PhotonNetwork.NickName);  // master will destroy skeleton, other print in chat about capture
+        PhotonView pv = skeletonObj.GetComponent<PhotonView>();
+        pv.RPC("DestroyLyingSkeleton", RpcTarget.All, PhotonNetwork.NickName);  // master will destroy skeleton, other print in chat about capture
     }
 
     private void BecomeSkeleton() {

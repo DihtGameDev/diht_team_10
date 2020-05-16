@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Photon.Pun;
 
 
 public class EnemyAI : MonoBehaviour {
@@ -118,6 +119,12 @@ public class EnemyAI : MonoBehaviour {
     }
 
     protected void OnTriggerEnter(Collider other) {
-        print("BOOM " + other.name);
+        switch (other.gameObject.tag) {
+            case Constants.HIDEMAN_TAG: {
+                PhotonView pv = other.GetComponent<PhotonView>();  // send message on this photonview hit.gameObject object, i.e. same photon view
+                pv.RPC("KillHideman", RpcTarget.All, PhotonNetwork.NickName + "_AI", pv.Owner.NickName); // we send all users that user with this nickname killed by this user
+                break;
+            }
+        }
     }
 }

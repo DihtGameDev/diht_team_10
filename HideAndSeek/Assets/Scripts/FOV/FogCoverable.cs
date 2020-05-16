@@ -12,12 +12,12 @@ public class FogCoverable : MonoBehaviour {
     }
 
     void OnDestroy() {
-        FieldOfView.OnTargetsVisibilityChange -= FieldOfViewOnTargetsVisibilityChange;  // unsubscrive
+        FieldOfView.OnTargetsVisibilityChange -= FieldOfViewOnTargetsVisibilityChange;  // unsubscribe
     }
 
-    void FieldOfViewOnTargetsVisibilityChange(List<Transform> newTargets) {
+    void FieldOfViewOnTargetsVisibilityChange(List<Transform> visibleTargets) {
         foreach (Renderer r in _renderers) {
-            r.enabled = newTargets.Contains(transform);
+            r.enabled = visibleTargets.Contains(transform);
         }
     }
 }
