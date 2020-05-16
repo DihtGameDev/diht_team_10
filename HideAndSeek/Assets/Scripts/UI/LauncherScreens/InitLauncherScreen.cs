@@ -5,15 +5,18 @@ using UnityEngine.UI;
 
 public class InitLauncherScreen : AbstractScreen {
     public InputField nicknameField;
+
     public Button settingsBtn;
     public Button quickplayBtn;
-    public Text connectingMessage;
     public Button setAbilities;
+
+    public Text connectingMessage;
 
     protected void Start() {
         nicknameField.text = Settings.getInstance().nickname;
+
         quickplayBtn.onClick.AddListener(Launcher.LAUNCHER.Connect);
-        setAbilities.onClick.AddListener(delegate {
+        setAbilities.onClick.AddListener(() => {
             Launcher.LAUNCHER.ChangeScreen(UILauncher.Screen.SET_ABILITIES);
         });
     }
