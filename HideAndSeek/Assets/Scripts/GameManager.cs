@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [SerializeField]
     private GameObject _archPrefab;
 
-    public static GameManager GAME_MANAGER;
+    public static GameManager instance;
 
     public ObjectsPool objectsPool = new ObjectsPool();
 
@@ -49,46 +49,57 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public CameraController cameraController; // for setting chasing obj from anywhere
 
+    public event System.Action<int> OnPlayersCountChanged;
+
+    [SerializeField]
+    private EnemyAIData _enemyAiDataPrefab;
+
     [HideInInspector]
     public Controller playerController; // optimization for setting additional moveSpeed from anywhere
     [HideInInspector]
     public PhotonView photonViewMainPlayer; // --||--
 
     protected void Awake() {
-        GAME_MANAGER = this;
-    }
+        instance = this;
 
-    protected void Start() {
         uiGame = new UIGame(_uiGameWidget);
 
         uiGame.LoadingState();
 
-        nicknameManager = NicknameManager.GetInstance(_uiGameWidget.gameObject, _nicknameTextPrefab);
+        Debugger.OnLog += uiGame.PrintInChat;
 
+        nicknameManager = NicknameManager.GetInstance(_uiGameWidget.gameObject, _nicknameTextPrefab);
+    }
+
+    protected void Start() {
         if (!PhotonNetwork.IsConnected) {
             Debugger.Log("Something went wrong, while loading this scene. Loading Launcher scene");
             SceneManager.LoadScene("Launcher");
         }
 
-        Invoke("StartGame", 1f);
+        StartCoroutine(Misc.WaitAndDo(1f, StartGame));
+
+        UpdateAnalytics();
     }
 
-    protected void Update() {
+    protected void LateUpdate() {
         nicknameManager.UpdatePositions();
     }
 
     private void StartGame() {
-          if (PhotonNetwork.IsMasterClient) {
-              StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
-          }
+        SpawnAIEnemies(Constants.AI_ENEMIES_PER_PLAYER);
+
+        if (PhotonNetwork.IsMasterClient) {
+            SpawnLyingSkeletonsIfNeeds();
+        }
 
         Respawn();
 
         uiGame.PlayingState();
-        uiGame.UpdatePlayerCounter();
+        uiGame.SetPlayersCounter(PlayersInTheScene());
     }
 
-    private void Respawn() {  // respawn after death
+    private void Respawn() {
         Debugger.Log("GameManager, Respawn");
         CreatePlayer(PlayerType.SEEKER, Vector3.zero);
 
@@ -96,7 +107,20 @@ public class GameManager : MonoBehaviourPunCallbacks {
             archObject.SetActive(false);
         }
 
-        StartCoroutine(SetNicknames(PlayerType.SEEKER, 0.2f));
+        nicknameManager.SetVisiblePlayerType(PlayerType.SEEKER);
+    }
+
+    private void UpdateAnalytics() {
+        FirebaseController.instance.IncrementAnalyticsData(AnalyticsType.START_PLAY);
+        StartCoroutine(Misc.WaitAndDo(
+            120f, // 120 sec it's 2 minutes
+            () => {
+                FirebaseController.instance.IncrementAnalyticsData(AnalyticsType.PLAYED_MORE_2_MINS);
+            }));
+    }
+
+    public void SpawnLyingSkeletonsIfNeeds() {
+        StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
     }
 
     public IEnumerator BecomeSkeleton(Vector3 spawnPos) {
@@ -104,7 +128,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         yield return new WaitForSeconds(0.3f);
         CreatePlayer(PlayerType.HIDEMAN, spawnPos);
 
-        StartCoroutine(SetNicknames(PlayerType.HIDEMAN, 0.2f));
+        nicknameManager.SetVisiblePlayerType(PlayerType.HIDEMAN);
 
         if (archObject == null) {
             int randIndex = Random.Range(0, Constants.GRAVE_SPAWN_POSITIONS.Length);
@@ -122,29 +146,16 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
-        GameManager.GAME_MANAGER.uiGame.PrintInChat(newPlayer.NickName + " начал играть");
-        StartCoroutine(SetNicknames(mainPlayer.tag == Constants.SEEKER_TAG ? PlayerType.SEEKER : PlayerType.HIDEMAN, 3f));
-        uiGame.UpdatePlayerCounter();
+        GameManager.instance.uiGame.PrintInChatAndClear(newPlayer.NickName + " начал играть");
+        OnPlayersCountChanged(PlayersInTheScene());
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) {
-        foreach (var __player in GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG)) {
-            if (__player.GetComponent<PhotonView>().Owner == null) {
-                nicknameManager.DeletePlayer(__player);
-            }
-        }
-
-        foreach (var __player in GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG)) {
-            if (__player.GetComponent<PhotonView>().Owner == null) {
-                nicknameManager.DeletePlayer(__player);
-            }
-        }
-
         if (PhotonNetwork.IsMasterClient) {
-            StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
+            SpawnLyingSkeletonsIfNeeds();
         }
 
-        uiGame.UpdatePlayerCounter();
+        OnPlayersCountChanged(PlayersInTheScene());
     }
 
     public void CreatePlayer(PlayerType playerType, Vector3 spawnPos) {  // =(
@@ -157,7 +168,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             playerController.StartMovement(seekerPlayerData);
             SetFovSettings(fov, seekerPlayerData);
 
-            ability = seekerAbilitiesDict.Get(Constants.AbilitiesTags.Seeker.FLARE);
+            ability = seekerAbilitiesDict.Get(Settings.getInstance().seekerAbility);
         } else {
             mainPlayer = PhotonNetwork.Instantiate("Skeleton", spawnPos, Quaternion.identity, 0);
             FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
@@ -167,12 +178,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
             playerController.StartMovement(hidemanPlayerData);
             SetFovSettings(fov, hidemanPlayerData);
 
-            ability = hidemanAbilitiesDict.Get(Constants.AbilitiesTags.Hideman.INVISIBLE);
+            ability = hidemanAbilitiesDict.Get(Settings.getInstance().hidemanAbility);
         }
 
-
         //  otherwise the player starts blinking when there are several fov on the scene
-        mainPlayer.layer = 0;
         mainPlayer.GetComponent<FogCoverable>().enabled = false;
 
         photonViewMainPlayer = mainPlayer.GetComponent<PhotonView>();
@@ -180,18 +189,24 @@ public class GameManager : MonoBehaviourPunCallbacks {
         cameraController.SetChasingObject(mainPlayer);
 
         mainPlayer.name = "MyPlayer";
+        uiGame.abilityBtn.interactable = true;
     }
 
-    private IEnumerator SetNicknames(PlayerType myType, float delay) {
-        yield return new WaitForSeconds(delay);
+    private void PrintGameObjectsTagWithPrefix(string prefix) {
+        FogCoverable[] objects = GameObject.FindObjectsOfType<FogCoverable>();
+        Debugger.Log("PrintGameObjectsTagWithPrefix: " + prefix);
+        for (int i = 0; i < objects.Length; ++i) {
+            if (objects[i].name.Contains(prefix)) {
+                Debugger.Log("TAG: " + objects[i].tag);
+            }
+        }
+    }
 
-        var __allies = GameObject.FindGameObjectsWithTag(
-            myType == PlayerType.SEEKER ?
-            Constants.SEEKER_TAG :
-            Constants.HIDEMAN_TAG
-            );
-
-        nicknameManager.AddAllPlayers(__allies);
+    private void SpawnAIEnemies(int aiEnemiesCount) {
+        for (int i = 0; i < aiEnemiesCount; ++i) {
+            GameObject seekerAI = PhotonNetwork.Instantiate("EnemyAISeeker", Vector3.zero, Quaternion.identity, 0);
+            seekerAI.AddComponent<EnemyAI>().SetEnemyAIData(_enemyAiDataPrefab);
+        }
     }
 
     public int PlayersInTheScene() {
@@ -232,8 +247,18 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public override void OnDisconnected(DisconnectCause cause) {
         Debugger.Log("GameManager, OnDisconnect");
-        nicknameManager.Clear();
-        SceneManager.LoadScene("Launcher");
+
+        if (isWinner) {
+            ReadyState readyState = FirebaseController.instance.AddCoins(Constants.ADDED_COINS_AFTER_WIN);
+            StartCoroutine(Misc.WaitWhile(
+                () => { return readyState.isReady == false; },
+                () => {
+                    LoadLauncherScene();
+                }
+            ));
+        } else {
+            LoadLauncherScene();
+        }
     }
 
     public void Leave() {
@@ -256,8 +281,14 @@ public class GameManager : MonoBehaviourPunCallbacks {
         uiGame.abilityBtn.interactable = true;
     }
 
+    private void LoadLauncherScene() {
+        nicknameManager.Clear();
+        Debugger.OnLog -= uiGame.PrintInChat;
+        SceneManager.LoadScene("Launcher");
+    }
+
     [PunRPC]
     private void OnPunPlayerLeave(string nickname, bool isWinner) {
-        uiGame.PrintInChat(nickname + (isWinner ? " освободился" : " покинул игру"));
+        uiGame.PrintInChatAndClear(nickname + (isWinner ? " освободился" : " покинул игру"));
     }
 }

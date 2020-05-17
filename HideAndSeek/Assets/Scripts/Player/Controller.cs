@@ -20,6 +20,7 @@ public class Controller : MonoBehaviour {
 
     protected void Start() {
         _controller = GetComponent<CharacterController>();
+        StartMovement(playerData);  // delete after testing
     }
 
     public void StartMovement(PlayerData playerData) { // =(
@@ -29,6 +30,7 @@ public class Controller : MonoBehaviour {
 
     private IEnumerator TrySetJoystick(float delay) {
         do {
+            print("TrySetJoystick");
             _moveJoystick = GameObject.Find("Canvas")
                         .GetComponentInChildren<Joystick>();
             yield return new WaitForSeconds(delay);
@@ -39,18 +41,18 @@ public class Controller : MonoBehaviour {
     private IEnumerator Move() {
         while (true) {
             if (_moveJoystick.Direction != Vector2.zero) {
-                float __angle = Mathf.Rad2Deg * Mathf.Atan(_moveJoystick.Direction.x / _moveJoystick.Direction.y);
+                float angle = Mathf.Rad2Deg * Mathf.Atan(_moveJoystick.Direction.x / _moveJoystick.Direction.y);
                 if (_moveJoystick.Direction.y < 0) {
-                    __angle -= 180f;
+                    angle -= 180f;
                 }
 
                 transform.eulerAngles = new Vector3(0,
-                                                    Mathf.LerpAngle(transform.eulerAngles.y, __angle, Time.deltaTime * playerData.lerpAngleCoeff),
+                                                    Mathf.LerpAngle(transform.eulerAngles.y, angle, Time.deltaTime * playerData.lerpAngleCoeff),
                                                     0);
-                Vector3 __dir = Vector3.zero;
-                __dir.x = _moveJoystick.Direction.x;
-                __dir.z = _moveJoystick.Direction.y;
-                _controller.Move(__dir * (playerData.moveSpeed + additionalMoveSpeed)* Time.deltaTime);
+                Vector3 dir = Vector3.zero;
+                dir.x = _moveJoystick.Direction.x;
+                dir.z = _moveJoystick.Direction.y;
+                _controller.Move(dir * (playerData.moveSpeed + additionalMoveSpeed)* Time.deltaTime);
             }
 
             yield return null;

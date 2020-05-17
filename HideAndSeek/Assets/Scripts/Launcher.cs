@@ -14,6 +14,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     protected void Awake() {
         LAUNCHER = this;
+
         Debugger.Log("Launcher, Awake");
     }
 
@@ -22,15 +23,17 @@ public class Launcher : MonoBehaviourPunCallbacks {
         PhotonNetwork.AutomaticallySyncScene = true;
 
         _launcherUI = new UILauncher(_uiLauncherWidget);
-        _launcherUI.InitState();
+        _launcherUI.SetScreen(UILauncher.Screen.INIT);
+
+        CheckAndSetUserIdWithFirebase();
     }
 
     protected void Update() {
     }
 
     public void Connect() {
-        SaveNickname(_launcherUI.nicknameField.text);
-        _launcherUI.ConnectState();
+        SaveNickname(_launcherUI.initScreen.nicknameField.text);
+        _launcherUI.initScreen.ConnectingState();
 
         // connecting to a photon server
         if (PhotonNetwork.IsConnected) {  // if for some reason i'm alreader connected
@@ -42,9 +45,22 @@ public class Launcher : MonoBehaviourPunCallbacks {
         }
     }
 
+    private void CheckAndSetUserIdWithFirebase() {
+        Settings settings = Settings.getInstance();
+        
+        if (settings.firebaseUserId == "") {
+            settings.firebaseUserId = RandomStringGenerator.Generate(Constants.USER_ID_LENGTH);
+            settings.save();
+        }
+        StartCoroutine(Misc.WaitWhile(
+            () => { return FirebaseController.instance.isReady == false; },
+            () => { FirebaseController.instance.SetFirebaseGameDataToPlayerPrefs(settings.firebaseUserId); }
+        ));
+    }
+
     private void SaveNickname(string nickname) {
         Settings.getInstance().nickname = nickname;
-        Settings.save();
+        Settings.getInstance().save();
     }
 
     public override void OnConnectedToMaster() {
@@ -76,9 +92,18 @@ public class Launcher : MonoBehaviourPunCallbacks {
         Debugger.Log("OnJoinedRoom(): " + PhotonNetwork.NickName);
         Debugger.Log("Launcher, Before LoadScene");
         if (PhotonNetwork.IsMasterClient) {  // if i am master, i load scene, otherwise, another master will do it for me
-            Debugger.Log("load the Room for 5");
-            PhotonNetwork.LoadLevel("Room for 5");
-            //  StartCoroutine(WaitForPlayers(5, 0.2f));
+            ReadyState readyState = FirebaseController.instance.CheckAndResetAbilities();
+            StartCoroutine(Misc.WaitWhile(
+                () => { return readyState.isReady == false; },
+                () => {
+                    Debugger.Log("load the Room for 5");
+                    PhotonNetwork.LoadLevel("Room for 5");
+                }
+            ));
         }
+    }
+
+    public void ChangeScreen(UILauncher.Screen screen) {
+        _launcherUI.SetScreen(screen);
     }
 }

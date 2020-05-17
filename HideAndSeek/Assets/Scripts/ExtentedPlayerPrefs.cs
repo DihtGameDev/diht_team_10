@@ -2,7 +2,13 @@
 
 public static class ExtentedPlayerPrefs {
     public static void SetObject<T>(string key, T obj) {
-        PlayerPrefs.SetString(key, JsonUtility.ToJson(obj));
+        UnityMainThreadDispatcher.instance.Enqueue(Misc.WaitAndDo( // you can't set player prefs from non-main thread
+            0f,
+            () => {
+                PlayerPrefs.SetString(key, JsonUtility.ToJson(obj));
+                PlayerPrefs.Save();
+            }
+        ));
     }
 
     public static T GetObject<T>(string key, T defaultObj=null) where T : class {

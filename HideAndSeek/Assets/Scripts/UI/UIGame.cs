@@ -16,7 +16,13 @@ public class UIGame : UIBase<UIGameWidget> {
 
     public UIGame(UIGameWidget gameWidget) : base(gameWidget) {
         disconnectBtn.onClick.AddListener(OnDisconnectClick);
-        abilityBtn.onClick.AddListener(GameManager.GAME_MANAGER.UseAbility);
+        abilityBtn.onClick.AddListener(GameManager.instance.UseAbility);
+
+        GameManager.instance.OnPlayersCountChanged += SetPlayersCounter;
+    }
+
+    ~UIGame() {
+        GameManager.instance.OnPlayersCountChanged -= SetPlayersCounter;
     }
 
     public void LoadingState() {
@@ -33,25 +39,27 @@ public class UIGame : UIBase<UIGameWidget> {
     }
 
     public void OnDisconnectClick() {
-        GameManager.GAME_MANAGER.Leave();
+        GameManager.instance.Leave();
     }
 
     public void PrintInChat(string message) {
+        PrintInChatAndClear(message, 0f);
+    }
+
+    public void PrintInChatAndClear(string message, float clearDelay=0f) {
         chatText.text = chatText.text + "\n" + message;
-        GameManager.GAME_MANAGER.StartCoroutine(ClearChat());
+
+        if (clearDelay != 0f) {
+            GameManager.instance.StartCoroutine(Misc.WaitAndDo(clearDelay, () => { chatText.text = ""; }));
+        }
     }
 
-    private IEnumerator ClearChat() {
-        yield return new WaitForSeconds(7f);
-        chatText.text = "";
-    }
-
-    public void UpdatePlayerCounter() {
-        playerCounterText.text = "Players: " + GameManager.GAME_MANAGER.PlayersInTheScene();
+    public void SetPlayersCounter(int playersCount) {
+        playerCounterText.text = "Players: " + playersCount;
     }
 
     public void StartRespawnTimer() {
-        GameManager.GAME_MANAGER.StartCoroutine(RespawnTick());
+        GameManager.instance.StartCoroutine(RespawnTick());
     }
 
     private IEnumerator RespawnTick() {
