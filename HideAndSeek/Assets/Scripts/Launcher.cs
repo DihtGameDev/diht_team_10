@@ -14,6 +14,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     protected void Awake() {
         LAUNCHER = this;
+
         Debugger.Log("Launcher, Awake");
     }
 

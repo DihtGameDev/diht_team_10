@@ -564,6 +564,7 @@ GameObject:
   - component: {fileID: 198450502}
   - component: {fileID: 1458996280497432518}
   - component: {fileID: 5304544300585045291}
+  - component: {fileID: -5863726103359164530}
   m_Layer: 13
   m_Name: SeekerGhost
   m_TagString: Seeker
@@ -676,6 +677,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1319482099da6cd41a480c72a0bb8dd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5863726103359164530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6076209682703165015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee4cb341bdba34045b054af60ed6d93e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6076209682857742340

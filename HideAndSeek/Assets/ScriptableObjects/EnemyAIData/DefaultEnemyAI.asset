@@ -17,7 +17,7 @@ MonoBehaviour:
   lerpAngleCoeff: 3
   addingAngleWhenCame: 120
   minPathfinderRadius: 10
-  maxPathfinderRadius: 80
+  maxPathfinderRadius: 100
   targetMask:
     serializedVersion: 2
     m_Bits: 4096

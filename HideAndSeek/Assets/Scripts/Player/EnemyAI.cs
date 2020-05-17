@@ -24,11 +24,26 @@ public class EnemyAI : MonoBehaviour {
     public bool hasGoal = false;
 
     protected void Start() {
-        StartCoroutine(Misc.LoopWithDelay(checkVisibleTargetsDelay, TargetSetting));
+        tag = Constants.ENEMY_SEEKER_AI_TAG;
+        
+        if (_agent == null) {
+            _agent = GetComponent<NavMeshAgent>();
+        }
+
+        StartCoroutine(Misc.WaitWhile(
+            () => { return (_agent == null && enemyAIData == null); },
+            () => { StartCoroutine(Misc.LoopWithDelay(checkVisibleTargetsDelay, TargetSetting)); },
+            0.5f
+        ));
+        
     }
 
     protected void Update() {
         AIMovement();
+    }
+
+    public void SetEnemyAIData(EnemyAIData data) {
+        enemyAIData = data;
     }
 
     private void TargetSetting() {

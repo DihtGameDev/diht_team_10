@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public event System.Action<int> OnPlayersCountChanged;
 
+    [SerializeField]
+    private EnemyAIData _enemyAiDataPrefab;
+
     [HideInInspector]
     public Controller playerController; // optimization for setting additional moveSpeed from anywhere
     [HideInInspector]
@@ -58,15 +61,17 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     protected void Awake() {
         instance = this;
-    }
 
-    protected void Start() {
         uiGame = new UIGame(_uiGameWidget);
 
         uiGame.LoadingState();
 
-        nicknameManager = NicknameManager.GetInstance(_uiGameWidget.gameObject, _nicknameTextPrefab);
+        Debugger.OnLog += uiGame.PrintInChat;
 
+        nicknameManager = NicknameManager.GetInstance(_uiGameWidget.gameObject, _nicknameTextPrefab);
+    }
+
+    protected void Start() {
         if (!PhotonNetwork.IsConnected) {
             Debugger.Log("Something went wrong, while loading this scene. Loading Launcher scene");
             SceneManager.LoadScene("Launcher");
@@ -77,7 +82,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         UpdateAnalytics();
     }
 
-    protected void Update() {
+    protected void LateUpdate() {
         nicknameManager.UpdatePositions();
     }
 
@@ -85,7 +90,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         SpawnAIEnemies(Constants.AI_ENEMIES_PER_PLAYER);
 
         if (PhotonNetwork.IsMasterClient) {
-            SpawnSkeletons();
+            SpawnLyingSkeletonsIfNeeds();
         }
 
         Respawn();
@@ -94,7 +99,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         uiGame.SetPlayersCounter(PlayersInTheScene());
     }
 
-    private void Respawn() {  // respawn after death
+    private void Respawn() {
         Debugger.Log("GameManager, Respawn");
         CreatePlayer(PlayerType.SEEKER, Vector3.zero);
 
@@ -102,7 +107,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             archObject.SetActive(false);
         }
 
-        StartCoroutine(SetNicknames(PlayerType.SEEKER, 0.2f));
+        nicknameManager.SetVisiblePlayerType(PlayerType.SEEKER);
     }
 
     private void UpdateAnalytics() {
@@ -114,7 +119,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             }));
     }
 
-    public void SpawnSkeletons() {
+    public void SpawnLyingSkeletonsIfNeeds() {
         StartCoroutine(CheckAndSpawnSkeletons(Constants.MAX_SKELETONS_IN_SCENE, Constants.SPAWN_SKELETONS_DELAY));
     }
 
@@ -123,7 +128,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         yield return new WaitForSeconds(0.3f);
         CreatePlayer(PlayerType.HIDEMAN, spawnPos);
 
-        StartCoroutine(SetNicknames(PlayerType.HIDEMAN, 0.2f));
+        nicknameManager.SetVisiblePlayerType(PlayerType.HIDEMAN);
 
         if (archObject == null) {
             int randIndex = Random.Range(0, Constants.GRAVE_SPAWN_POSITIONS.Length);
@@ -141,26 +146,13 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
-        GameManager.instance.uiGame.PrintInChat(newPlayer.NickName + " начал играть");
-        StartCoroutine(SetNicknames(mainPlayer.tag == Constants.SEEKER_TAG ? PlayerType.SEEKER : PlayerType.HIDEMAN, 3f));
+        GameManager.instance.uiGame.PrintInChatAndClear(newPlayer.NickName + " начал играть");
         OnPlayersCountChanged(PlayersInTheScene());
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) {
-        foreach (var __player in GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG)) {
-            if (__player.GetComponent<PhotonView>().Owner == null) {
-                nicknameManager.DeletePlayer(__player);
-            }
-        }
-
-        foreach (var __player in GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG)) {
-            if (__player.GetComponent<PhotonView>().Owner == null) {
-                nicknameManager.DeletePlayer(__player);
-            }
-        }
-
         if (PhotonNetwork.IsMasterClient) {
-            SpawnSkeletons();
+            SpawnLyingSkeletonsIfNeeds();
         }
 
         OnPlayersCountChanged(PlayersInTheScene());
@@ -197,23 +189,23 @@ public class GameManager : MonoBehaviourPunCallbacks {
         cameraController.SetChasingObject(mainPlayer);
 
         mainPlayer.name = "MyPlayer";
+        uiGame.abilityBtn.interactable = true;
     }
 
-    private IEnumerator SetNicknames(PlayerType myType, float delay) {
-        yield return new WaitForSeconds(delay);
-
-        var __allies = GameObject.FindGameObjectsWithTag(
-            myType == PlayerType.SEEKER ?
-            Constants.SEEKER_TAG :
-            Constants.HIDEMAN_TAG
-            );
-
-        nicknameManager.AddAllPlayers(__allies);
+    private void PrintGameObjectsTagWithPrefix(string prefix) {
+        FogCoverable[] objects = GameObject.FindObjectsOfType<FogCoverable>();
+        Debugger.Log("PrintGameObjectsTagWithPrefix: " + prefix);
+        for (int i = 0; i < objects.Length; ++i) {
+            if (objects[i].name.Contains(prefix)) {
+                Debugger.Log("TAG: " + objects[i].tag);
+            }
+        }
     }
 
     private void SpawnAIEnemies(int aiEnemiesCount) {
         for (int i = 0; i < aiEnemiesCount; ++i) {
-            PhotonNetwork.Instantiate("EnemyAISeeker", Vector3.zero, Quaternion.identity, 0).SetActive(true);
+            GameObject seekerAI = PhotonNetwork.Instantiate("EnemyAISeeker", Vector3.zero, Quaternion.identity, 0);
+            seekerAI.AddComponent<EnemyAI>().SetEnemyAIData(_enemyAiDataPrefab);
         }
     }
 
@@ -255,6 +247,18 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public override void OnDisconnected(DisconnectCause cause) {
         Debugger.Log("GameManager, OnDisconnect");
+
+        if (isWinner) {
+            ReadyState readyState = FirebaseController.instance.AddCoins(Constants.ADDED_COINS_AFTER_WIN);
+            StartCoroutine(Misc.WaitWhile(
+                () => { return readyState.isReady == false; },
+                () => {
+                    LoadLauncherScene();
+                }
+            ));
+        } else {
+            LoadLauncherScene();
+        }
     }
 
     public void Leave() {
@@ -264,15 +268,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
         __pv.RPC("OnPunPlayerLeave", RpcTarget.All, PhotonNetwork.NickName, isWinner);  // send all users, that i am leaving the game
         PhotonNetwork.SendAllOutgoingCommands();  // because rpc call has delay and after disconnect, message will not be sent
         PhotonNetwork.Disconnect();  // leaves the room and photon server 
-
-        ReadyState readyState = FirebaseController.instance.AddCoins(Constants.ADDED_COINS_AFTER_WIN);
-        StartCoroutine(Misc.WaitWhile(
-            () => { return readyState.isReady == false; },
-            () => {
-                nicknameManager.Clear();
-                SceneManager.LoadScene("Launcher");
-            }
-            ));
     }
 
     public void UseAbility() {
@@ -286,8 +281,14 @@ public class GameManager : MonoBehaviourPunCallbacks {
         uiGame.abilityBtn.interactable = true;
     }
 
+    private void LoadLauncherScene() {
+        nicknameManager.Clear();
+        Debugger.OnLog -= uiGame.PrintInChat;
+        SceneManager.LoadScene("Launcher");
+    }
+
     [PunRPC]
     private void OnPunPlayerLeave(string nickname, bool isWinner) {
-        uiGame.PrintInChat(nickname + (isWinner ? " освободился" : " покинул игру"));
+        uiGame.PrintInChatAndClear(nickname + (isWinner ? " освободился" : " покинул игру"));
     }
 }

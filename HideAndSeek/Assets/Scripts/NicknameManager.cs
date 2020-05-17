@@ -5,11 +5,15 @@ using UnityEngine.UI;
 using Photon.Pun;
 
 public class NicknameManager {
-    private Dictionary<GameObject, RectTransform> _playersDict = new Dictionary<GameObject, RectTransform>();
+    private Dictionary<GameObject, RectTransform> _hidemansDict = new Dictionary<GameObject, RectTransform>();
+    private Dictionary<GameObject, RectTransform> _seekersDict = new Dictionary<GameObject, RectTransform>();
+
     private RectTransform _canvasRect;
     private GameObject _nicknamePrefab;
 
-    public const string NICKNAME_TYPE = "nickname";
+    private PlayerType _visiblePlayerType = PlayerType.SEEKER;
+
+    public const string NICKNAME_PO_TYPE = "nickname"; // pool objects type
 
     private NicknameManager(GameObject canvasGO, GameObject nicknamePrefab) {
         _canvasRect = canvasGO.GetComponent<RectTransform>();
@@ -21,58 +25,69 @@ public class NicknameManager {
     }
 
     public void UpdatePositions() {
-        foreach (var player in _playersDict) {
+        var visiblePlayers = GetDictFromForPlayerType(_visiblePlayerType);
+
+        foreach (var player in visiblePlayers) {
             Vector2 inRectPos = Misc.WorldToRectTransformPosition(player.Key.transform.position, _canvasRect);
             inRectPos.y += 55f; // for above player position
             player.Value.anchoredPosition = inRectPos;
         }
     }
 
-    public void SetNickname(GameObject player, string nickname) {
-        _playersDict[player].GetComponent<Text>().text = nickname;
-    }
+    public void SetVisiblePlayerType(PlayerType type) {
+        if (_visiblePlayerType != type) { // disable old and enable new drawing when switching type
+            foreach (var pair in GetDictFromForPlayerType(_visiblePlayerType)) {
+                pair.Value.gameObject.SetActive(false);
+            }
 
-    public void AddPlayer(GameObject player, string nickname="bot") {
-        PhotonView pv = player.GetComponent<PhotonView>();
-        if (pv != null) {
-            nickname = player.GetComponent<PhotonView>().Owner.NickName;
+            foreach (var pair in GetDictFromForPlayerType(type)) {
+                pair.Value.gameObject.SetActive(true);
+            }
         }
 
-        if (_playersDict.ContainsKey(player)) {
+        _visiblePlayerType = type;
+    }
+
+    public void AddPlayer(GameObject player, PlayerType playerType, string nickname) {
+        var suitableDict = GetDictFromForPlayerType(playerType);
+
+        if (suitableDict.ContainsKey(player)) {
             return;
         }
 
-        GameObject nicknameObject = GameManager.instance.objectsPool.Get(NICKNAME_TYPE);
+        GameObject nicknameObject = GameManager.instance.objectsPool.Get(NICKNAME_PO_TYPE);
 
-        if (nicknameObject == null) {
+        if (nicknameObject == null) { // if objects pool is empty, we instantiate
             nicknameObject = GameObject.Instantiate(_nicknamePrefab, _canvasRect.transform);
         }
 
-        _playersDict.Add(player, nicknameObject.GetComponent<RectTransform>());
-        SetNickname(player, nickname);
+        suitableDict.Add(player, nicknameObject.GetComponent<RectTransform>());
+
+        suitableDict[player].GetComponent<Text>().text = nickname;
     }
         
-    public void DeletePlayer(GameObject player) {
-        if (_playersDict.ContainsKey(player)) {
-            if (_playersDict[player].gameObject != null) {
-                GameManager.instance.objectsPool.Add(NICKNAME_TYPE, _playersDict[player].gameObject);
-            }
-            _playersDict.Remove(player);
-        }
-    }
+    public void DeletePlayer(GameObject player, PlayerType playerType) {
+        var suitableDict = GetDictFromForPlayerType(playerType);
 
-    public void AddAllPlayers(GameObject[] players) {
-        Clear();
-
-        foreach (var player in players) {
-            AddPlayer(player.gameObject);
+        if (suitableDict.ContainsKey(player)) {
+            GameManager.instance.objectsPool.Add(NICKNAME_PO_TYPE, suitableDict[player].gameObject);
+            suitableDict.Remove(player);
         }
     }
 
     public void Clear() {
-        foreach (var player in _playersDict) {
-            GameManager.instance.objectsPool.Add(NICKNAME_TYPE, player.Value.gameObject);
+        foreach (var player in _hidemansDict) {
+            GameManager.instance.objectsPool.Add(NICKNAME_PO_TYPE, player.Value.gameObject);
         }
-        _playersDict.Clear();
+        foreach (var player in _seekersDict) {
+            GameManager.instance.objectsPool.Add(NICKNAME_PO_TYPE, player.Value.gameObject);
+        }
+
+        _hidemansDict.Clear();
+        _seekersDict.Clear();
+    }
+
+    private Dictionary<GameObject, RectTransform> GetDictFromForPlayerType(PlayerType type) {
+        return type == PlayerType.SEEKER ? _seekersDict : _hidemansDict;
     }
 }

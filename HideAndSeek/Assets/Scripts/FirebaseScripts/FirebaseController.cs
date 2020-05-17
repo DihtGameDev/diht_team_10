@@ -150,7 +150,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
             (firebaseGameData) => {
                 DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
                 userReference.Child("coins").SetValueAsync(firebaseGameData.coins + addedCoins);
-
+                Debugger.Log("Coins added: " + addedCoins);
                 readyState.isReady = true;
             }
         );
@@ -161,7 +161,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     private void GetFirebaseDataAsync(string firebaseUserId, System.Action<FirebaseGameData> action) {
         instance._databaseRoot.Child("users").Child(firebaseUserId).GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted) {
-                Debug.LogError("fail while settings firebase game data");
+                Debugger.Log("fail while settings firebase game data");
                 return;
             }
 

@@ -43,13 +43,15 @@ public class UIGame : UIBase<UIGameWidget> {
     }
 
     public void PrintInChat(string message) {
-        chatText.text = chatText.text + "\n" + message;
-        GameManager.instance.StartCoroutine(ClearChat());
+        PrintInChatAndClear(message, 0f);
     }
 
-    private IEnumerator ClearChat() {
-        yield return new WaitForSeconds(7f);
-        chatText.text = "";
+    public void PrintInChatAndClear(string message, float clearDelay=0f) {
+        chatText.text = chatText.text + "\n" + message;
+
+        if (clearDelay != 0f) {
+            GameManager.instance.StartCoroutine(Misc.WaitAndDo(clearDelay, () => { chatText.text = ""; }));
+        }
     }
 
     public void SetPlayersCounter(int playersCount) {

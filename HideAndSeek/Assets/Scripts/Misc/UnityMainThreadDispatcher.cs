@@ -8,6 +8,13 @@ public class UnityMainThreadDispatcher : SingletonGameObject<UnityMainThreadDisp
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
+    public new void Awake() {
+        base.Awake();
+
+        Debugger.OnLog += (message) => { Debug.Log(message); };
+        Debugger.OnErrorLog += (message) => { Debug.LogError(message); };
+    }
+
     public void Update() {
         lock (_executionQueue) {
             while (_executionQueue.Count > 0) {

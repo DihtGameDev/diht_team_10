@@ -19,13 +19,10 @@ public class PlayerRPC : MonoBehaviour {
 
     [PunRPC]
     void DestroyThisPUNObject() {
-        GameManager.instance.nicknameManager.DeletePlayer(gameObject);
     }
 
     [PunRPC]
     void KillHideman(string killerNickname, string victimName) {
-        GameManager.instance.nicknameManager.DeletePlayer(gameObject);
-
         if (gameObject == GameManager.instance.mainPlayer) {  // this is mine hideman
             Camera.main.GetComponent<CameraController>().SetChasingObject(null);
             GameManager.instance.uiGame.StartRespawnTimer();
@@ -34,10 +31,10 @@ public class PlayerRPC : MonoBehaviour {
             PhotonNetwork.Destroy(gameObject);
         }
 
-        GameManager.instance.uiGame.PrintInChat(killerNickname + " убил " + victimName);
+        GameManager.instance.uiGame.PrintInChatAndClear(killerNickname + " убил " + victimName);
 
         if (PhotonNetwork.IsMasterClient) {
-            GameManager.instance.SpawnSkeletons();
+            GameManager.instance.SpawnLyingSkeletonsIfNeeds();
         }
     }
 

@@ -2462,6 +2462,7 @@ MonoBehaviour:
     - abilityTag: H_Invisible
       ability: {fileID: 11400000, guid: 8a8d22ea7bbbfd047a2f4a539381bc80, type: 2}
   cameraController: {fileID: 1279252852}
+  _enemyAiDataPrefab: {fileID: 11400000, guid: 91ca9b107a2d14c4b836f00b716ab864, type: 2}
   playerController: {fileID: 0}
   photonViewMainPlayer: {fileID: 0}
 --- !u!4 &750663989
@@ -4239,9 +4240,9 @@ RectTransform:
   m_Father: {fileID: 2032130114}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 97, y: -25}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -97, y: 30}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1350202475

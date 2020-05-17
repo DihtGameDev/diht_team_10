@@ -24,7 +24,7 @@ public static class Constants {
     public const string GRAVE_TAG = "Grave";
     public const string OCCUPIED_GRAVE_TAG = "OccGrave";
     public const string ARCH_TAG = "Arch";
-    public const string AI_TAG = "AI";
+    public const string ENEMY_SEEKER_AI_TAG = "AI";
 
     public static Vector3[] GRAVE_SPAWN_POSITIONS = {
         new Vector3(-65, 0, 85),
@@ -48,4 +48,73 @@ public static class Constants {
             public const string INVISIBLE = "H_Invisible";
         }
     }
+
+    public static string[] HARDCODED_NICKNAMES_LIST = {
+        "3D Waffle",
+        "Hightower",
+        "Papa Smurf",
+        "57 Pixels",
+        "Hog Butcher",
+        "Pepper Legs",
+        "101",
+        "Houston",
+        "Pinball Wizard",
+        "Accidental Genius",
+        "Hyper",
+        "Pluto",
+        "Alpha",
+        "Jester",
+        "Pogue",
+        "Airport Hobo",
+        "Jigsaw",
+        "Prometheus",
+        "Bearded Angler",
+        "Joker's Grin",
+        "Psycho Thinker",
+        "Beetle King",
+        "Judge",
+        "Pusher",
+        "Bitmap",
+        "Junkyard Dog",
+        "Riff Raff",
+        "Blister",
+        "K-9",
+        "Roadblock",
+        "Bowie",
+        "Keystone",
+        "Rooster",
+        "Bowler",
+        "Kickstart",
+        "Sandbox",
+        "Breadmaker",
+        "Kill Switch",
+        "Scrapper",
+        "Broomspun",
+        "Kingfisher",
+        "Screwtape",
+        "Buckshot",
+        "Kitchen",
+        "Sexual Chocolate",
+        "Bugger",
+        "Knuckles",
+        "Shadow Chaser",
+        "Cabbie",
+        "Lady Killer",
+        "Sherwood Gladiator",
+        "Candy Butcher",
+        "Liquid Science",
+        "Shooter",
+        "Capital F",
+        "Little Cobra",
+        "Sidewalk Enforcer",
+        "Captain Peroxide",
+        "Little General",
+        "Skull Crusher",
+        "Osprey",
+        "Zero Charisma",
+        "Highlander Monk",
+        "Overrun",
+        "Zesty Dragon",
+        "Zod"
+    };
 }
