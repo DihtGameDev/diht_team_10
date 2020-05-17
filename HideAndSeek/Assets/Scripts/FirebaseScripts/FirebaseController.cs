@@ -148,10 +148,15 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         GetFirebaseDataAsync(
             Settings.getInstance().firebaseUserId,
             (firebaseGameData) => {
-                DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
-                userReference.Child("coins").SetValueAsync(firebaseGameData.coins + addedCoins);
-                Debugger.Log("Coins added: " + addedCoins);
-                readyState.isReady = true;
+                UnityMainThreadDispatcher.instance.Enqueue(Misc.WaitAndDo( // you can't use this from non-main thread, therefore we register this in main thread
+                    0,
+                    () => {
+                        DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
+                        userReference.Child("coins").SetValueAsync(firebaseGameData.coins + addedCoins);
+                        Debugger.Log("Coins added: " + addedCoins);
+                        readyState.isReady = true;
+                    }));
+                
             }
         );
 
@@ -168,10 +173,9 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
             Dictionary<string, object> result = task.Result.Value as Dictionary<string, object>; // coins {abilities -> seeker -> ability-num. abilities -> hideman -> ability-num.}
 
             if (result == null) { // this value never setted before
-                Debugger.Log("this userId not exists in firebasa, therefore i will create it");
+                Debugger.Log("this userId not exists in firebase, therefore i will create it");
                 SetDefaultUserDataToFirebase(firebaseUserId);
             } else {
-                Debugger.Log("I get firebase data");
                 _firebaseGameData.coins = Convert.ToInt32(result["coins"]);
 
                 result = result["abilities"] as Dictionary<string, object>;
