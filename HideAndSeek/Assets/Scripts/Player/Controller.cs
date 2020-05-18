@@ -20,7 +20,6 @@ public class Controller : MonoBehaviour {
 
     protected void Start() {
         _controller = GetComponent<CharacterController>();
-        StartMovement(playerData);  // delete after testing
     }
 
     public void StartMovement(PlayerData playerData) { // =(
@@ -30,7 +29,6 @@ public class Controller : MonoBehaviour {
 
     private IEnumerator TrySetJoystick(float delay) {
         do {
-            print("TrySetJoystick");
             _moveJoystick = GameObject.Find("Canvas")
                         .GetComponentInChildren<Joystick>();
             yield return new WaitForSeconds(delay);

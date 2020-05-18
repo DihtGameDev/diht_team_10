@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 2096975981236493624}
   - component: {fileID: 2096975981236493626}
   - component: {fileID: 221960358256320876}
+  - component: {fileID: 3640915627283815433}
   m_Layer: 12
   m_Name: Skeleton
   m_TagString: Hideman
@@ -177,6 +178,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1319482099da6cd41a480c72a0bb8dd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3640915627283815433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586076218094442547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee4cb341bdba34045b054af60ed6d93e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &586076218311522096

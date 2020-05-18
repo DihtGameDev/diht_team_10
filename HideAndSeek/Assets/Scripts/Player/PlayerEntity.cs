@@ -4,8 +4,9 @@ using UnityEngine;
 using Photon.Pun;
 
 public class PlayerEntity : MonoBehaviour {
-    protected void Start() {
+    protected void OnEnable() {
         GameManager.instance.nicknameManager.AddPlayer(gameObject, GetMyPlayerType(), GetNickname());
+        Debugger.Log("Created entity with name: " + name);
     }
 
     protected void OnDisable() {  // photon doesn't invoke destroy, only OnDisable

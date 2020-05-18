@@ -96,7 +96,7 @@ MonoBehaviour:
   viewDepth: 1.5
   targetMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 30976
   obstacleMask:
     serializedVersion: 2
     m_Bits: 512

@@ -122,25 +122,21 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     // check if we have this abilities, and if we havn't, we set default abilities
     public ReadyState CheckAndResetAbilities() {
         ReadyState readyState = new ReadyState();
+
         GetFirebaseDataAsync(
             Settings.getInstance().firebaseUserId,
             (firebaseGameData) => {
-                UnityMainThreadDispatcher.instance.Enqueue(
-                    () => {
-                        if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().hidemanAbility)) {
-                            Settings.getInstance().hidemanAbility = Constants.AbilitiesTags.Hideman.DEFAULT;
-                        }
+                if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().hidemanAbility)) {
+                    Settings.getInstance().hidemanAbility = Constants.AbilitiesTags.Hideman.DEFAULT;
+                }
 
-                        if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().seekerAbility)) {
-                            Settings.getInstance().seekerAbility = Constants.AbilitiesTags.Seeker.DEFAULT;
-                        }
+                if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().seekerAbility)) {
+                    Settings.getInstance().seekerAbility = Constants.AbilitiesTags.Seeker.DEFAULT;
+                }
 
-                        Settings.getInstance().save();
+                Settings.getInstance().save();
 
-                        readyState.isReady = true;
-                    }
-                );
-                
+                readyState.isReady = true;
             } 
         );
 
@@ -153,22 +149,17 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         GetFirebaseDataAsync(
             Settings.getInstance().firebaseUserId,
             (firebaseGameData) => {
-                UnityMainThreadDispatcher.instance.Enqueue( // you can't use this from non-main thread, therefore we register this in main thread
-                    () => {
-                        DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
-                        userReference.Child("coins").SetValueAsync(firebaseGameData.coins + addedCoins);
-                        Debugger.Log("Coins added: " + addedCoins);
-                        readyState.isReady = true;
-                    }
-                );
-                
+                DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
+                userReference.Child("coins").SetValueAsync(firebaseGameData.coins + addedCoins);
+                Debugger.Log("Coins added: " + addedCoins);
+                readyState.isReady = true;
             }
         );
 
         return readyState;
     }
 
-    private void GetFirebaseDataAsync(string firebaseUserId, System.Action<FirebaseGameData> action) {
+    private void GetFirebaseDataAsync(string firebaseUserId, System.Action<FirebaseGameData> actionInvokedInMainThread) {
         instance._databaseRoot.Child("users").Child(firebaseUserId).GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted) {
                 Debugger.Log("fail while settings firebase game data");
@@ -210,7 +201,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
 
                         OnGettingFirebaseData?.Invoke(_firebaseGameData);
 
-                        action(_firebaseGameData);
+                        actionInvokedInMainThread(_firebaseGameData);
                     }    
                 );
             }

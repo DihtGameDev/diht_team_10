@@ -70,7 +70,9 @@ public class NicknameManager {
         var suitableDict = GetDictFromForPlayerType(playerType);
 
         if (suitableDict.ContainsKey(player)) {
-            GameManager.instance.objectsPool.Add(NICKNAME_PO_TYPE, suitableDict[player].gameObject);
+            if (suitableDict[player] != null && suitableDict[player].gameObject != null) {
+                GameManager.instance.objectsPool.Add(NICKNAME_PO_TYPE, suitableDict[player].gameObject);
+            }
             suitableDict.Remove(player);
         }
     }
