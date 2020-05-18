@@ -3226,7 +3226,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1196590853
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4422,7 +4422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1897083953
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4462,8 +4462,8 @@ MonoBehaviour:
   nicknameField: {fileID: 683271988}
   settingsBtn: {fileID: 928659084}
   quickplayBtn: {fileID: 531742712}
-  connectingMessage: {fileID: 632195697}
   setAbilities: {fileID: 21916112}
+  connectingMessage: {fileID: 632195697}
 --- !u!1 &1920121718
 GameObject:
   m_ObjectHideFlags: 0

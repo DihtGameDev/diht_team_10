@@ -125,17 +125,22 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         GetFirebaseDataAsync(
             Settings.getInstance().firebaseUserId,
             (firebaseGameData) => {
-                if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().hidemanAbility)) {
-                    Settings.getInstance().hidemanAbility = Constants.AbilitiesTags.Hideman.DEFAULT;
-                }
+                UnityMainThreadDispatcher.instance.Enqueue(
+                    () => {
+                        if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().hidemanAbility)) {
+                            Settings.getInstance().hidemanAbility = Constants.AbilitiesTags.Hideman.DEFAULT;
+                        }
 
-                if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().seekerAbility)) {
-                    Settings.getInstance().seekerAbility = Constants.AbilitiesTags.Seeker.DEFAULT;
-                }
+                        if (!firebaseGameData.abilityTags.Contains(Settings.getInstance().seekerAbility)) {
+                            Settings.getInstance().seekerAbility = Constants.AbilitiesTags.Seeker.DEFAULT;
+                        }
 
-                Settings.getInstance().save();
+                        Settings.getInstance().save();
 
-                readyState.isReady = true;
+                        readyState.isReady = true;
+                    }
+                );
+                
             } 
         );
 
@@ -148,14 +153,14 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         GetFirebaseDataAsync(
             Settings.getInstance().firebaseUserId,
             (firebaseGameData) => {
-                UnityMainThreadDispatcher.instance.Enqueue(Misc.WaitAndDo( // you can't use this from non-main thread, therefore we register this in main thread
-                    0,
+                UnityMainThreadDispatcher.instance.Enqueue( // you can't use this from non-main thread, therefore we register this in main thread
                     () => {
                         DatabaseReference userReference = instance._databaseRoot.Child("users").Child(Settings.getInstance().firebaseUserId);
                         userReference.Child("coins").SetValueAsync(firebaseGameData.coins + addedCoins);
                         Debugger.Log("Coins added: " + addedCoins);
                         readyState.isReady = true;
-                    }));
+                    }
+                );
                 
             }
         );
@@ -176,34 +181,38 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                 Debugger.Log("this userId not exists in firebase, therefore i will create it");
                 SetDefaultUserDataToFirebase(firebaseUserId);
             } else {
-                _firebaseGameData.coins = Convert.ToInt32(result["coins"]);
+                UnityMainThreadDispatcher.instance.Enqueue(
+                    () => {
+                        _firebaseGameData.coins = Convert.ToInt32(result["coins"]);
 
-                result = result["abilities"] as Dictionary<string, object>;
+                        result = result["abilities"] as Dictionary<string, object>;
 
-                var seekerAbilities = result["seeker"] as Dictionary<string, object>;
-                var hidemanAbilities = result["hideman"] as Dictionary<string, object>;
+                        var seekerAbilities = result["seeker"] as Dictionary<string, object>;
+                        var hidemanAbilities = result["hideman"] as Dictionary<string, object>;
 
-                string[] abilityTags = new string[seekerAbilities.Count + hidemanAbilities.Count];
+                        string[] abilityTags = new string[seekerAbilities.Count + hidemanAbilities.Count];
 
-                // adding seeker abilities
-                foreach (var abilityAndLevel in seekerAbilities) {
-                    int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
-                    if (abilityValue > 0) {
-                        _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
-                    }
-                }
+                        // adding seeker abilities
+                        foreach (var abilityAndLevel in seekerAbilities) {
+                            int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
+                            if (abilityValue > 0) {
+                                _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
+                            }
+                        }
 
-                // adding hideman ability
-                foreach (var abilityAndLevel in hidemanAbilities) {
-                    int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
-                    if (abilityValue > 0) {
-                        _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
-                    }
-                }
+                        // adding hideman ability
+                        foreach (var abilityAndLevel in hidemanAbilities) {
+                            int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
+                            if (abilityValue > 0) {
+                                _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
+                            }
+                        }
 
-                OnGettingFirebaseData?.Invoke(_firebaseGameData);
+                        OnGettingFirebaseData?.Invoke(_firebaseGameData);
 
-                action(_firebaseGameData);
+                        action(_firebaseGameData);
+                    }    
+                );
             }
         });
     }
@@ -214,8 +223,12 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                 Debug.LogError("fail while incrementing analytics data");
                 return;
             }
-            int val = Convert.ToInt32(task.Result.Value);
-            instance._databaseRoot.Child(firebaseKey).SetValueAsync(val + 1);
+            UnityMainThreadDispatcher.instance.Enqueue(
+                () => {
+                    int val = Convert.ToInt32(task.Result.Value);
+                    instance._databaseRoot.Child(firebaseKey).SetValueAsync(val + 1);
+                }    
+            );
         });
     }
 }
