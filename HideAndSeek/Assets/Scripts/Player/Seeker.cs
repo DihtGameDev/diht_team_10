@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Seeker : BaseAnimationPlayer {
+public class Seeker : MonoBehaviour {
     void OnControllerColliderHit(ControllerColliderHit hit) {
         switch (hit.gameObject.tag) {
             case Constants.HIDEMAN_TAG: {

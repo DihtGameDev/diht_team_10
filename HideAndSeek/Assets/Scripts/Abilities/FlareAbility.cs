@@ -20,8 +20,6 @@ public class FlareAbility : AbstractAbility {
     }
 
     override public void UseAbility() {
-        Debugger.Log("UseAbility");
-
         // flare instantiation
         GameObject flareObj = GameManager.instance.objectsPool.Get(FLARE_TYPE_OP);
         if (flareObj == null) {
@@ -52,7 +50,13 @@ public class FlareAbility : AbstractAbility {
 
         GameManager.instance.cameraController.SetChasingObject(flareObject);
 
+        bool cameraOnPlayer = false;
+
         while (Time.time - startTime < flareDuration) {
+            if (cameraOnPlayer == false && Input.GetMouseButton(0)) {
+                GameManager.instance.cameraController.SetChasingObject(GameManager.instance.mainPlayer);
+                cameraOnPlayer = true;
+            }
             flareObject.transform.localPosition +=
                 flareObject.transform.TransformDirection(Vector3.forward) * Time.deltaTime * flareSpeed;  // move toward local z-axis
             yield return null;

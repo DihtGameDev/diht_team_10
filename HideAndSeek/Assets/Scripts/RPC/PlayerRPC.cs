@@ -7,6 +7,10 @@ public class PlayerRPC : MonoBehaviour {
 
     private List<MeshRenderer> _renderers = new List<MeshRenderer>();
 
+    [Header("Set in inspector")]
+    public ParticleSystem surgePS; // setted in inspector
+    public ParticleSystem invisiblePS; // setted in inspector
+
     protected void Start() {
         MeshRenderer[] allRenderers = GetComponentsInChildren<MeshRenderer>();
 
@@ -54,5 +58,12 @@ public class PlayerRPC : MonoBehaviour {
         foreach (var render in _renderers) {
             render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
+    }
+
+    [PunRPC]
+    void UsedSurgeAbilityParticleSystem(float surgeDuration) {
+        var main = surgePS.main;
+        main.duration = surgeDuration * 0.7f;
+        surgePS.Play();
     }
 }

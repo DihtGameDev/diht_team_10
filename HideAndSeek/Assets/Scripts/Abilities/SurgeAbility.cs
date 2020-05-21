@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [CreateAssetMenu(menuName = "Abilities/SurgeAbility", fileName = "SurgeAbility")]
 public class SurgeAbility : AbstractAbility {
@@ -13,6 +14,7 @@ public class SurgeAbility : AbstractAbility {
 
     override public void UseAbility() {
         Debugger.Log("UseAbility");
+        GameManager.instance.mainPlayer.GetComponent<PhotonView>().RPC("UsedSurgeAbilityParticleSystem", RpcTarget.All, surgeDuration);
         GameManager.instance.playerController.SetAdditionalMoveSpeed(additionalMoveSpeed);
         GameManager.instance.StartCoroutine(EndSurge());
     }

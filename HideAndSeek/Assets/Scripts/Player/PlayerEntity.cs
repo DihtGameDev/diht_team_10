@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerEntity : MonoBehaviour {
+public class PlayerEntity : BaseAnimationPlayer {
     protected void OnEnable() {
         PlayerType myType = InstantiatePlayer();
         GameManager.instance.nicknameManager.AddPlayer(gameObject, myType, GetNickname());
