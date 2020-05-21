@@ -96,8 +96,8 @@ public class Launcher : MonoBehaviourPunCallbacks {
             StartCoroutine(Misc.WaitWhile(
                 () => { return readyState.isReady == false; },
                 () => {
-                    Debugger.Log("load the Room for 5");
-                    PhotonNetwork.LoadLevel("Room for 5");
+                    Debugger.Log("load the game scene");
+                    SceneLoader.LoadSceneOnce(Constants.SceneName.GAME_SCENE);
                 }
             ));
         }

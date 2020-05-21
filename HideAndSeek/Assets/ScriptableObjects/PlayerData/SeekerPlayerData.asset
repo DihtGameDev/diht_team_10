@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71cfe276e74a4144ba0e2252bce4cd1a, type: 3}
   m_Name: SeekerPlayerData
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 10
   lerpAngleCoeff: 3
   viewRadius: 20
-  viewAngle: 110
+  viewAngle: 160

@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     protected void Start() {
         if (!PhotonNetwork.IsConnected) {
             Debugger.Log("Something went wrong, while loading this scene. Loading Launcher scene");
-            SceneManager.LoadScene("Launcher");
+            LoadLauncherScene();
         }
 
         StartCoroutine(Misc.WaitAndDo(1f, StartGame));
@@ -106,8 +106,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
         if (archObject != null) {
             archObject.SetActive(false);
         }
-
-        nicknameManager.SetVisiblePlayerType(PlayerType.SEEKER);
     }
 
     private void UpdateAnalytics() {
@@ -127,8 +125,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
         Debugger.Log("GameManager, BecomeSkeleton");
         yield return new WaitForSeconds(0.3f);
         CreatePlayer(PlayerType.HIDEMAN, spawnPos);
-
-        nicknameManager.SetVisiblePlayerType(PlayerType.HIDEMAN);
 
         if (archObject == null) {
             int randIndex = Random.Range(0, Constants.GRAVE_SPAWN_POSITIONS.Length);
@@ -180,6 +176,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
             ability = hidemanAbilitiesDict.Get(Settings.getInstance().hidemanAbility);
         }
+
+        nicknameManager.SetVisiblePlayerType(playerType);
 
         //  otherwise the player starts blinking when there are several fov on the scene
         mainPlayer.GetComponent<FogCoverable>().enabled = false;
@@ -284,7 +282,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     private void LoadLauncherScene() {
         nicknameManager.Clear();
         Debugger.OnLog -= uiGame.PrintInChat;
-        SceneManager.LoadScene("Launcher");
+        SceneLoader.LoadSceneOnce(Constants.SceneName.LAUNCHER);
     }
 
     [PunRPC]

@@ -7,6 +7,11 @@ public static class Constants {
         public const string SETTINGS = "settings";
     }
 
+    public static class SceneName {
+        public const string LAUNCHER = "Launcher";
+        public const string GAME_SCENE = "Room for 5";
+    }
+
     public const int USER_ID_LENGTH = 40;
 
     public const int RESPAWN_TIME = 10;

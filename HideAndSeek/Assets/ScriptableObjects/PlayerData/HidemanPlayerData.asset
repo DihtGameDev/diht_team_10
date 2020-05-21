@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71cfe276e74a4144ba0e2252bce4cd1a, type: 3}
   m_Name: HidemanPlayerData
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 7
   lerpAngleCoeff: 3
   viewRadius: 25
   viewAngle: 360
