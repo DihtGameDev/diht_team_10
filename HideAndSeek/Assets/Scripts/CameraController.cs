@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CameraController : MonoBehaviour {
     [SerializeField]
@@ -11,6 +11,13 @@ public class CameraController : MonoBehaviour {
 
     private Renderer _fadedRenderer = null;
     private GameObject _fadedGameObject = null; // optimization
+
+    public float alphaModelWhileOverlapping = 0.1f;
+
+
+    [Header("Set in inspector")]
+    public Shader transparentShader;  // set in inspector
+    public Shader standartOpaqueShader;  // set in inspector
 
     private void Start() {
         transform.eulerAngles = cameraData.eulerAngles;
@@ -43,11 +50,11 @@ public class CameraController : MonoBehaviour {
 
             if (r != _fadedRenderer) {
                 if (_fadedRenderer != null) {
-                    _fadedRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                    EnableRenderer(_fadedRenderer);
                 }
                 
                 if (r != null) {
-                    r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+                    DisableRenderer(r);
                 }
 
                 _fadedRenderer = r;
@@ -73,5 +80,32 @@ public class CameraController : MonoBehaviour {
         //    Debug.DrawRay(transform.position, dir * 10000, Color.white);
             return null;
         }
+    }
+
+    private void EnableRenderer(Renderer renderer) {
+        renderer.materials = SetShaderAndChangeColorForMaterials(renderer.materials, standartOpaqueShader, false);
+        //  renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+    } 
+
+    private void DisableRenderer(Renderer renderer) {
+        renderer.materials = SetShaderAndChangeColorForMaterials(renderer.materials, transparentShader, true);
+        //renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+    }
+
+    private Material[] SetShaderAndChangeColorForMaterials(Material[] materials, Shader shader, bool isTransparent) {
+        foreach (var material in materials) {
+            if (material.shader.Equals(shader)) {  // optimization
+                continue;
+            } 
+
+            if (isTransparent) {
+                Color currTintColor = material.GetColor("_Color");
+                currTintColor.a = alphaModelWhileOverlapping;
+                material.SetColor("_Color", currTintColor);
+            }
+            material.shader = shader;
+        }
+
+        return materials;
     }
 }
