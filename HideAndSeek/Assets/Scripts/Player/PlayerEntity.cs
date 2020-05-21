@@ -5,17 +5,20 @@ using Photon.Pun;
 
 public class PlayerEntity : MonoBehaviour {
     protected void OnEnable() {
-        GameManager.instance.nicknameManager.AddPlayer(gameObject, GetMyPlayerType(), GetNickname());
-        Debugger.Log("Created entity with name: " + name);
+        PlayerType myType = InstantiatePlayer();
+        GameManager.instance.nicknameManager.AddPlayer(gameObject, myType, GetNickname());
     }
 
     protected void OnDisable() {  // photon doesn't invoke destroy, only OnDisable
-        GameManager.instance?.nicknameManager?.DeletePlayer(gameObject, GetMyPlayerType());
+        GameManager.instance?.nicknameManager?.DeletePlayer(gameObject, InstantiatePlayer());
     }
 
-    private PlayerType GetMyPlayerType() {
+    private PlayerType InstantiatePlayer() {
         switch (tag) {
             case Constants.ENEMY_SEEKER_AI_TAG: {
+                if (PhotonNetwork.IsMasterClient) {
+                    GameManager.instance.AddEnemyAIScriptToObject(gameObject);
+                }
                 return PlayerType.SEEKER;
             }
             case Constants.SEEKER_TAG: {

@@ -16,6 +16,7 @@ public static class Constants {
 
     public const int RESPAWN_TIME = 10;
     public const int MAX_SKELETONS_IN_SCENE = 1;
+    public const int MAX_PLAYERS_IN_SCENE = 5;
     public const int AI_ENEMIES_PER_PLAYER = 2;
 
     public const float SPAWN_SKELETONS_DELAY = 4f;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -43,6 +44,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public PlayerData hidemanPlayerData;
 
     public AbstractAbility ability;
+
+    [SerializeField]
+    private NavMeshSurface _navMeshSurface; // setted in inspector
 
     public AbilitiesDict seekerAbilitiesDict;  // setted in inspector
     public AbilitiesDict hidemanAbilitiesDict;  // setted in inspector
@@ -87,13 +91,12 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     private void StartGame() {
-        SpawnAIEnemies(Constants.AI_ENEMIES_PER_PLAYER);
+        Respawn();
 
         if (PhotonNetwork.IsMasterClient) {
+            SpawnAIEnemiesIfNeeds();
             SpawnLyingSkeletonsIfNeeds();
         }
-
-        Respawn();
 
         uiGame.PlayingState();
         uiGame.SetPlayersCounter(PlayersInTheScene());
@@ -142,16 +145,35 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
+        base.OnPlayerEnteredRoom(newPlayer);
+
+        Debugger.Log("OnPlayerEnteredRoom");
+
+        if (PhotonNetwork.IsMasterClient) {
+            DestroyAIEnemySeeker();
+        }
+
         GameManager.instance.uiGame.PrintInChatAndClear(newPlayer.NickName + " начал играть");
         OnPlayersCountChanged(PlayersInTheScene());
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer) {
+        base.OnPlayerLeftRoom(otherPlayer);
+
         if (PhotonNetwork.IsMasterClient) {
+            SpawnAIEnemiesIfNeeds();
             SpawnLyingSkeletonsIfNeeds();
         }
 
         OnPlayersCountChanged(PlayersInTheScene());
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient) {
+        base.OnMasterClientSwitched(newMasterClient);
+
+        if (newMasterClient == PhotonNetwork.LocalPlayer) {
+            SetAIScriptToAIEnemies();
+        }
     }
 
     public void CreatePlayer(PlayerType playerType, Vector3 spawnPos) {  // =(
@@ -200,10 +222,25 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
     }
 
-    private void SpawnAIEnemies(int aiEnemiesCount) {
-        for (int i = 0; i < aiEnemiesCount; ++i) {
+    private void DestroyAIEnemySeeker() {
+        PhotonNetwork.Destroy(GameObject.FindGameObjectWithTag(Constants.ENEMY_SEEKER_AI_TAG));
+    }
+
+    private void SetAIScriptToAIEnemies() {
+        GameObject[] aiSeekerObjects = GameObject.FindGameObjectsWithTag(Constants.ENEMY_SEEKER_AI_TAG);
+
+        for (int i = 0; i < aiSeekerObjects.Length; ++i) {
+            if (aiSeekerObjects[i].GetComponent<EnemyAI>() == null) {
+                AddEnemyAIScriptToObject(aiSeekerObjects[i]);
+            }
+        }
+    }
+
+    private void SpawnAIEnemiesIfNeeds() {
+        int missingAIEnemiesNum = Constants.MAX_PLAYERS_IN_SCENE - GetPlayersCountInTheScene();
+
+        for (int i = 0; i < missingAIEnemiesNum; ++i) {
             GameObject seekerAI = PhotonNetwork.Instantiate("EnemyAISeeker", Vector3.zero, Quaternion.identity, 0);
-            seekerAI.AddComponent<EnemyAI>().SetEnemyAIData(_enemyAiDataPrefab);
         }
     }
 
@@ -279,10 +316,24 @@ public class GameManager : MonoBehaviourPunCallbacks {
         uiGame.abilityBtn.interactable = true;
     }
 
+    public void AddEnemyAIScriptToObject(GameObject enemyAIObject) {
+        enemyAIObject.AddComponent<EnemyAI>().SetEnemyAIData(_enemyAiDataPrefab);
+    }
+
     private void LoadLauncherScene() {
         nicknameManager.Clear();
         Debugger.OnLog -= uiGame.PrintInChat;
         SceneLoader.LoadSceneOnce(Constants.SceneName.LAUNCHER);
+    }
+
+    private int GetPlayersCountInTheScene() {
+        int count =
+            GameObject.FindGameObjectsWithTag(Constants.ENEMY_SEEKER_AI_TAG).Length +
+            GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG).Length +
+            GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG).Length;
+
+        Debugger.Log("count: " + count);
+        return count;
     }
 
     [PunRPC]
