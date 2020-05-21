@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 921fb019d0fb31d43b919c45276c2c50, type: 3}
   m_Name: DefaultEnemyAI
   m_EditorClassIdentifier: 
-  viewAngle: 120
+  viewAngle: 210
   viewRadius: 20
   lerpAngleCoeff: 3
   addingAngleWhenCame: 120
-  minPathfinderRadius: 10
+  minPathfinderRadius: 30
   maxPathfinderRadius: 100
   targetMask:
     serializedVersion: 2

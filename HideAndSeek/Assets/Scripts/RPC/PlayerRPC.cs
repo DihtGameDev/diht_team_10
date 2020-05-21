@@ -45,6 +45,7 @@ public class PlayerRPC : MonoBehaviour {
     [PunRPC]
     void BecomeInvisibleForTime(float timeSec) {
         Debugger.Log("become invisible for: " + name);
+        invisiblePS.Play();
         foreach (var render in _renderers) {
             render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
         }

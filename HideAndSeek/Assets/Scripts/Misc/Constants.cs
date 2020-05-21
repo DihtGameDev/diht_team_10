@@ -31,13 +31,7 @@ public static class Constants {
     public const string OCCUPIED_GRAVE_TAG = "OccGrave";
     public const string ARCH_TAG = "Arch";
     public const string ENEMY_SEEKER_AI_TAG = "AI";
-
-    public static Vector3[] GRAVE_SPAWN_POSITIONS = {
-        new Vector3(-65, 0, 85),
-        new Vector3(-65, 0, -85),
-        new Vector3(65, 0, 85),
-        new Vector3(65, 0, -85)
-    };
+    public const string SPAWNER_TAG = "Spawn";
 
     public static class AbilitiesTags {
         public static class Seeker {

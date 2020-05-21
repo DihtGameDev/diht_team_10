@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [HideInInspector]
     public PhotonView photonViewMainPlayer; // --||--
 
+    private Vector3[] _spawnPositions;
+
     protected void Awake() {
         instance = this;
 
@@ -81,7 +83,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
             LoadLauncherScene();
         }
 
-        StartCoroutine(Misc.WaitAndDo(1f, StartGame));
+        SetSpawnerPositions();
+        StartCoroutine(Misc.WaitAndDo(1f, StartGame));    
 
         UpdateAnalytics();
     }
@@ -104,7 +107,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     private void Respawn() {
         Debugger.Log("GameManager, Respawn");
-        CreatePlayer(PlayerType.SEEKER, Vector3.zero);
+        CreatePlayer(PlayerType.SEEKER, GetRandomSpawnPosition());
 
         if (archObject != null) {
             archObject.SetActive(false);
@@ -130,8 +133,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         CreatePlayer(PlayerType.HIDEMAN, spawnPos);
 
         if (archObject == null) {
-            int randIndex = Random.Range(0, Constants.GRAVE_SPAWN_POSITIONS.Length);
-            archObject = Instantiate(_archPrefab, Constants.GRAVE_SPAWN_POSITIONS[randIndex], Quaternion.identity);
+            archObject = Instantiate(_archPrefab, GetRandomSpawnPosition(), Quaternion.identity);
         } else {
             archObject.SetActive(true);
         }
@@ -236,11 +238,23 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
     }
 
+    private Vector3 GetRandomSpawnPosition() {
+        return _spawnPositions[Random.Range(0, _spawnPositions.Length)];
+    }
+
+    private void SetSpawnerPositions() {
+        GameObject[] spawnerObjects = GameObject.FindGameObjectsWithTag(Constants.SPAWNER_TAG);
+        _spawnPositions = new Vector3[spawnerObjects.Length];
+        for (int i = 0; i < spawnerObjects.Length; ++i) {
+            _spawnPositions[i] = spawnerObjects[i].transform.position;
+        }
+    }
+
     private void SpawnAIEnemiesIfNeeds() {
         int missingAIEnemiesNum = Constants.MAX_PLAYERS_IN_SCENE - GetPlayersCountInTheScene();
 
         for (int i = 0; i < missingAIEnemiesNum; ++i) {
-            GameObject seekerAI = PhotonNetwork.Instantiate("EnemyAISeeker", Vector3.zero, Quaternion.identity, 0);
+            GameObject seekerAI = PhotonNetwork.Instantiate("EnemyAISeeker", GetRandomSpawnPosition(), Quaternion.identity, 0);
         }
     }
 
@@ -331,8 +345,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
             GameObject.FindGameObjectsWithTag(Constants.ENEMY_SEEKER_AI_TAG).Length +
             GameObject.FindGameObjectsWithTag(Constants.SEEKER_TAG).Length +
             GameObject.FindGameObjectsWithTag(Constants.HIDEMAN_TAG).Length;
-
-        Debugger.Log("count: " + count);
         return count;
     }
 
