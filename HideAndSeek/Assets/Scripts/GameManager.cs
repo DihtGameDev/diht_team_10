@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public GameObject archObject;
 
+    public float minDistanceForArchPosition = 40f;
+
     [HideInInspector]
     public bool isWinner = false;
 
@@ -133,10 +135,12 @@ public class GameManager : MonoBehaviourPunCallbacks {
         CreatePlayer(PlayerType.HIDEMAN, spawnPos);
 
         if (archObject == null) {
-            archObject = Instantiate(_archPrefab, GetRandomSpawnPosition(), Quaternion.identity);
+            archObject = Instantiate(_archPrefab, Vector3.zero, Quaternion.identity);
         } else {
             archObject.SetActive(true);
         }
+
+        SetRandomSpawnPositionForArch(archObject);
 
         yield return null;
     }
@@ -236,6 +240,17 @@ public class GameManager : MonoBehaviourPunCallbacks {
                 AddEnemyAIScriptToObject(aiSeekerObjects[i]);
             }
         }
+    }
+
+    private IEnumerator SetRandomSpawnPositionForArch(GameObject archGO) {
+        Vector3 randomPos = GetRandomSpawnPosition();
+
+        while (Vector3.Distance(mainPlayer.transform.position, randomPos) < minDistanceForArchPosition) {
+            randomPos = GetRandomSpawnPosition();
+            yield return null;
+        }
+
+        archGO.transform.position = randomPos;
     }
 
     private Vector3 GetRandomSpawnPosition() {
