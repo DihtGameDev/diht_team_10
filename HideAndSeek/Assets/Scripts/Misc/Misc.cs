@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AbilityType {
+    NULL, FLARE, INVISIBILITY, SURGE, RADAR
+}
+
 public class Misc {
     public static Vector2 WorldToRectTransformPosition(Vector3 targetWorldPos, RectTransform rectTransform) {
         Vector2 viewportPosition = Camera.main.WorldToViewportPoint(targetWorldPos);
@@ -31,4 +35,28 @@ public class Misc {
 
         action();
     }
-}
+
+    public static AbilityType GetAbilityTypeByTag(string abilityTag) {
+        if (abilityTag == null || abilityTag == "") {
+            return AbilityType.NULL;
+        }
+
+        string suffix = abilityTag.Substring(2);
+        switch (suffix) {
+            case "Flare": {
+                return AbilityType.FLARE;
+            }
+            case "Surge": {
+                return AbilityType.SURGE;
+            }
+            case "Invisible": {
+                return AbilityType.INVISIBILITY;
+            }
+            case "ShowAllHideman": {
+                return AbilityType.RADAR;
+            }
+        }
+
+        return AbilityType.FLARE;
+    }
+} 

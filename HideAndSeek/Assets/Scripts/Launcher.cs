@@ -10,10 +10,10 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     private UILauncher _launcherUI;
 
-    public static Launcher LAUNCHER;
+    public static Launcher instance;
 
     protected void Awake() {
-        LAUNCHER = this;
+        instance = this;
 
         Debugger.Log("Launcher, Awake");
     }
@@ -23,7 +23,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
         PhotonNetwork.AutomaticallySyncScene = true;
 
         _launcherUI = new UILauncher(_uiLauncherWidget);
-        _launcherUI.SetScreen(UILauncher.Screen.INIT);
+        _launcherUI.SetScreen(UILauncher.Screen.MAIN);
 
         CheckAndSetUserIdWithFirebase();
     }
@@ -32,9 +32,6 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     public void Connect() {
-        SaveNickname(_launcherUI.initScreen.nicknameField.text);
-        _launcherUI.initScreen.ConnectingState();
-
         // connecting to a photon server
         if (PhotonNetwork.IsConnected) {  // if for some reason i'm alreader connected
             PhotonNetwork.JoinRoom("test");
