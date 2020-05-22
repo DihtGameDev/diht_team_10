@@ -36,10 +36,15 @@ public class AbilitiesMenuScreen : AbstractSoulsIndicatorScreen {
         });
 
         SetAbilitiesIconsAndText();
+
+        GhostAbilitiesScreen.OnChangingAbility += SetAbilitiesIconsAndText;
+        SkeletonAbilitiesScreen.OnChangingAbility += SetAbilitiesIconsAndText;
+
+        FirebaseController.instance.OnSettingSettingsFromFirebase += SetSoulsCount;
     }
 
     private void OnPlayClick() {
-        // TODO
+        Launcher.instance.Connect();
     }
 
     private void OnBackClick() {

@@ -59,4 +59,25 @@ public class Misc {
 
         return AbilityType.FLARE;
     }
+
+    public static string GetAbilityTagByType(AbilityType abilityType, bool isSeeker) {  // sorry for all this =((
+        string suffix = isSeeker ? "S_" : "H_";
+
+        switch (abilityType) {
+            case AbilityType.FLARE: {
+                return suffix + "Flare";
+            }
+            case AbilityType.SURGE: {
+                return suffix + "Surge";
+            }
+            case AbilityType.INVISIBILITY: {
+                return suffix + "Invisible";
+            }
+            case AbilityType.RADAR: {
+                return suffix + "ShowAllHideman";
+            }
+        }
+
+        return suffix + "Flare";
+    }
 } 

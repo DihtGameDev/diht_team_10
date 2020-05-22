@@ -21,6 +21,14 @@ public class FirebaseGameData {
     public int coins = 0;
     public StringsList abilityTags;
 
+    public int H_SurgePrice;
+    public int H_InvisiblePrice;
+
+    public int S_FlarePrice;
+    public int S_SurgePrice;
+    public int S_InvisiblePrice;
+    public int S_RadarPrice;
+
     public FirebaseGameData() {
         string[] defaultAbilityTags = { Constants.AbilitiesTags.Seeker.FLARE, Constants.AbilitiesTags.Hideman.SURGE };
         abilityTags = new StringsList(defaultAbilityTags);
@@ -34,6 +42,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     private FirebaseGameData _firebaseGameData = new FirebaseGameData(); // optimization
 
     public event Action<FirebaseGameData> OnGettingFirebaseData;
+    public event Action OnSettingSettingsFromFirebase;
 
     public FbAuth auth;
     public bool isReady = false;
@@ -41,6 +50,8 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
     protected void Start() {
         InitFirebase();
         IncrementAnalyticsData(AnalyticsType.LAUNCH_GAME);
+        SetAbilitiesPriceToSettingsAsync();
+        SetFirebaseDataToSettingsAsync();
     }
 
     protected void Update() {
@@ -67,14 +78,66 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                 DatabaseReference userReference = instance._databaseRoot.Child("users").Child(newFirebaseUserId);
                 userReference.Child("coins").SetValueAsync(firebaseData.coins);
                 for (int i = 0; i < firebaseData.abilityTags.size; ++i) {
-                    string abilityType = firebaseData.abilityTags.buffer[i][0] == 'S' ? "seeker" : "hideman";
-                    userReference.Child("abilities").Child(abilityType).Child(firebaseData.abilityTags.buffer[i]).SetValueAsync(1);
+                    string playerType = firebaseData.abilityTags.buffer[i][0] == 'S' ? "seeker" : "hideman";
+                    userReference.Child("abilities").Child(playerType).Child(firebaseData.abilityTags.buffer[i]).SetValueAsync(1);
                 }
 
                 Settings.getInstance().firebaseUserId = newFirebaseUserId;
                 Settings.getInstance().save();
+                OnSettingSettingsFromFirebase?.Invoke();
             }
         );
+    }
+
+    public ReadyState BuyAbilityAsync(string abilityTag) {
+        ReadyState readyState = new ReadyState();
+
+        instance._databaseRoot.Child("abilities_prices").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted) {
+                Debugger.Log("fail while settings firebase game data");
+                return;
+            }
+
+            Dictionary<string, object> result = task.Result.Value as Dictionary<string, object>; // ability tag -> price
+
+            UnityMainThreadDispatcher.instance.Enqueue(
+                    () => {
+                        int abilityPrice = Convert.ToInt32(result[abilityTag]);
+
+                        GetFirebaseDataAsync(
+                            Settings.getInstance().firebaseUserId,
+                            firebaseGameData => {
+                                if (firebaseGameData.coins >= abilityPrice) {
+                                    instance._databaseRoot  // unlock ability
+                                    .Child("users")
+                                    .Child(Settings.getInstance().firebaseUserId)
+                                    .Child("abilities")
+                                    .Child(abilityTag[0] == 'S' ? "seeker" : "hideman")
+                                    .Child(abilityTag).SetValueAsync(1);
+
+                                    instance._databaseRoot
+                                    .Child("users")
+                                    .Child(Settings.getInstance().firebaseUserId)
+                                    .Child("coins").SetValueAsync(firebaseGameData.coins - abilityPrice).ContinueWith(innerTask => {
+                                        if (innerTask.IsFaulted) {
+                                            Debugger.Log("fail while set coins in the price method");
+                                            return;
+                                        }
+
+                                        UnityMainThreadDispatcher.instance.Enqueue(
+                                            () => { SetFirebaseGameDataToPlayerPrefs(Settings.getInstance().firebaseUserId); readyState.isReady = true; }
+                                        );
+                                        
+                                    });
+
+                                    Debug.Log("ability bought");
+                                }
+                            });
+                    }
+                );
+        });
+
+        return readyState;
     }
 
     private void InitFirebase() {
@@ -91,6 +154,39 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                   "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
             }
         });
+    }
+
+    private void SetAbilitiesPriceToSettingsAsync() {
+        StartCoroutine(Misc.WaitWhile(
+            () => { return instance._databaseRoot == null;  },
+            () => {
+                instance._databaseRoot.Child("abilities_prices").GetValueAsync().ContinueWith(task => {
+                    if (task.IsFaulted) {
+                        Debugger.Log("fail while settings firebase game data");
+                        return;
+                    }
+
+                    Dictionary<string, object> result = task.Result.Value as Dictionary<string, object>; // ability tag -> price
+
+                    UnityMainThreadDispatcher.instance.Enqueue(
+                            () => {
+                                Debug.Log("ASD");
+                                Debug.Log("h_invisible price: " + Convert.ToInt32(result[Constants.AbilitiesTags.Hideman.INVISIBLE]));
+                                _firebaseGameData.H_SurgePrice = Convert.ToInt32(result[Constants.AbilitiesTags.Hideman.SURGE]);
+                                _firebaseGameData.H_InvisiblePrice = Convert.ToInt32(result[Constants.AbilitiesTags.Hideman.INVISIBLE]);
+
+                                _firebaseGameData.S_FlarePrice = Convert.ToInt32(result[Constants.AbilitiesTags.Seeker.FLARE]);
+                                _firebaseGameData.S_InvisiblePrice = Convert.ToInt32(result[Constants.AbilitiesTags.Seeker.INVISIBLE]);
+                                _firebaseGameData.S_SurgePrice = Convert.ToInt32(result[Constants.AbilitiesTags.Seeker.SURGE]);
+                                _firebaseGameData.S_RadarPrice = Convert.ToInt32(result[Constants.AbilitiesTags.Seeker.SHOW_ALL_HIDEMAN]);
+
+                                Settings.getInstance().SetFirebaseGameData(_firebaseGameData);
+                                OnSettingSettingsFromFirebase?.Invoke();
+                            }
+                        );
+                });
+            }
+        ));
     }
 
     public void IncrementAnalyticsData(AnalyticsType type) {
@@ -119,6 +215,15 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
         ));
     }
 
+    public void SetFirebaseDataToSettingsAsync() {
+        StartCoroutine(Misc.WaitWhile(
+                () => { return instance._databaseRoot == null; },  // wait condition
+                () => {
+                    GetFirebaseDataAsync(Settings.getInstance().firebaseUserId, firebaseData => { Debugger.Log("firebasedata updated, coins: " + firebaseData.coins); });
+                }
+        ));
+    }
+
     // check if we have this abilities, and if we havn't, we set default abilities
     public ReadyState CheckAndResetAbilities() {
         ReadyState readyState = new ReadyState();
@@ -135,6 +240,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                 }
 
                 Settings.getInstance().save();
+                OnSettingSettingsFromFirebase?.Invoke();
 
                 readyState.isReady = true;
             } 
@@ -200,6 +306,9 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                         }
 
                         OnGettingFirebaseData?.Invoke(_firebaseGameData);
+
+                        Settings.getInstance().SetFirebaseGameData(_firebaseGameData);
+                        OnSettingSettingsFromFirebase?.Invoke();
 
                         actionInvokedInMainThread(_firebaseGameData);
                     }    
