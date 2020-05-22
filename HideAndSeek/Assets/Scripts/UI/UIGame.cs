@@ -8,15 +8,17 @@ public class UIGame : UIBase<UIGameWidget> {
     public Joystick moveJoystick => _widget.moveJoystick;
     public Text chatText => _widget.chatText;
     public Text respawnText => _widget.respawnText;
-
     public Text playerCounterText => _widget.playerCounterText;
-
     public Button disconnectBtn => _widget.disconnectBtn;
+
     public Button abilityBtn => _widget.abilityBtn;
+    public Image abilityLoadingBar => _widget.abilityLoadingBar;
+
+    public event System.Action OnUseAbility;
 
     public UIGame(UIGameWidget gameWidget) : base(gameWidget) {
         disconnectBtn.onClick.AddListener(OnDisconnectClick);
-        abilityBtn.onClick.AddListener(GameManager.instance.UseAbility);
+        abilityBtn.onClick.AddListener(UseAbility);
 
         GameManager.instance.OnPlayersCountChanged += SetPlayersCounter;
     }
@@ -60,6 +62,24 @@ public class UIGame : UIBase<UIGameWidget> {
 
     public void StartRespawnTimer() {
         GameManager.instance.StartCoroutine(RespawnTick());
+    }
+
+    public void UseAbility() {
+        abilityBtn.interactable = false;
+        OnUseAbility?.Invoke();
+        GameManager.instance.StartCoroutine(UnlockAbilityAndUpdateLoadingBar(GameManager.instance.ability.Cooldown()));
+    }
+
+    public IEnumerator UnlockAbilityAndUpdateLoadingBar(float delay) {
+        float startTime = Time.time;
+
+        while (Time.time - startTime < delay) {
+            float amount = (Time.time - startTime) / delay;
+            abilityLoadingBar.fillAmount = amount;
+            yield return null;
+        }
+
+        abilityBtn.interactable = true;
     }
 
     private IEnumerator RespawnTick() {

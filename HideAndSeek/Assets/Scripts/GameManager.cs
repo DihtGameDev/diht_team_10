@@ -183,6 +183,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public void CreatePlayer(PlayerType playerType, Vector3 spawnPos) {  // =(
+        if (ability != null) {
+            uiGame.OnUseAbility -= ability.UseAbility;
+        }
+
         if (playerType == PlayerType.SEEKER) {
             mainPlayer = PhotonNetwork.Instantiate("SeekerGhost", spawnPos, Quaternion.identity, 0);
             FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
@@ -205,6 +209,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             ability = hidemanAbilitiesDict.Get(Settings.getInstance().hidemanAbility);
         }
 
+        uiGame.OnUseAbility += ability.UseAbility;
         nicknameManager.SetVisiblePlayerType(playerType);
 
         //  otherwise the player starts blinking when there are several fov on the scene
@@ -332,17 +337,6 @@ public class GameManager : MonoBehaviourPunCallbacks {
         __pv.RPC("OnPunPlayerLeave", RpcTarget.All, PhotonNetwork.NickName, isWinner);  // send all users, that i am leaving the game
         PhotonNetwork.SendAllOutgoingCommands();  // because rpc call has delay and after disconnect, message will not be sent
         PhotonNetwork.Disconnect();  // leaves the room and photon server 
-    }
-
-    public void UseAbility() {
-        uiGame.abilityBtn.interactable = false;
-        ability.UseAbility();
-        StartCoroutine(UnlockAbility(ability.Cooldown()));
-    }
-
-    public IEnumerator UnlockAbility(float delay) {
-        yield return new WaitForSeconds(delay);
-        uiGame.abilityBtn.interactable = true;
     }
 
     public void AddEnemyAIScriptToObject(GameObject enemyAIObject) {
