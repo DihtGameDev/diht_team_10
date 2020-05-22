@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public void CreatePlayer(PlayerType playerType, Vector3 spawnPos) {  // =(
         if (ability != null) {
-            uiGame.OnUseAbility -= ability.UseAbility;
+            uiGame.onUseAbility -= ability.UseAbility;
         }
 
         if (playerType == PlayerType.SEEKER) {
@@ -209,7 +209,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             ability = hidemanAbilitiesDict.Get(Settings.getInstance().hidemanAbility);
         }
 
-        uiGame.OnUseAbility += ability.UseAbility;
+        uiGame.onUseAbility += ability.UseAbility;
         nicknameManager.SetVisiblePlayerType(playerType);
 
         //  otherwise the player starts blinking when there are several fov on the scene

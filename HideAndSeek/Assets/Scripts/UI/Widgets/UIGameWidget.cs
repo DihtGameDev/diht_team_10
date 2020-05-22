@@ -9,8 +9,14 @@ public class UIGameWidget : MonoBehaviour {
     public Text chatText;
     public Text respawnText;
     public Text playerCounterText;
-    public Button disconnectBtn;
+
     [Header("Ability settings")]
     public Button abilityBtn;
     public Image abilityLoadingBar;
+
+    [Header("Pause dialog")]
+    public Button pauseBtn;
+    public GameObject pauseDialogGO;
+    public Button closePauseDialogBtn;
+    public Button disconnectBtn;
 }

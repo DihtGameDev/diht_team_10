@@ -9,16 +9,26 @@ public class UIGame : UIBase<UIGameWidget> {
     public Text chatText => _widget.chatText;
     public Text respawnText => _widget.respawnText;
     public Text playerCounterText => _widget.playerCounterText;
-    public Button disconnectBtn => _widget.disconnectBtn;
+    
 
     public Button abilityBtn => _widget.abilityBtn;
     public Image abilityLoadingBar => _widget.abilityLoadingBar;
 
-    public event System.Action OnUseAbility;
+    /*   Pause dialog   */
+    public Button pauseBtn => _widget.pauseBtn;
+    public GameObject pauseDialogGO => _widget.pauseDialogGO;
+    public Button closePauseDialogBtn => _widget.closePauseDialogBtn;
+    public Button disconnectBtn => _widget.disconnectBtn;
+
+    public event System.Action onUseAbility;
 
     public UIGame(UIGameWidget gameWidget) : base(gameWidget) {
+        pauseDialogGO.SetActive(false);
+
         disconnectBtn.onClick.AddListener(OnDisconnectClick);
         abilityBtn.onClick.AddListener(UseAbility);
+        pauseBtn.onClick.AddListener(OnPauseClicked);
+        closePauseDialogBtn.onClick.AddListener(() => { pauseDialogGO.SetActive(false); });
 
         GameManager.instance.OnPlayersCountChanged += SetPlayersCounter;
     }
@@ -38,6 +48,10 @@ public class UIGame : UIBase<UIGameWidget> {
         moveJoystick.gameObject.SetActive(true);
         playerCounterText.gameObject.SetActive(true);
         abilityBtn.gameObject.SetActive(true);
+    }
+
+    public void OnPauseClicked() {
+        pauseDialogGO.SetActive(!pauseDialogGO.activeSelf);
     }
 
     public void OnDisconnectClick() {
@@ -66,7 +80,7 @@ public class UIGame : UIBase<UIGameWidget> {
 
     public void UseAbility() {
         abilityBtn.interactable = false;
-        OnUseAbility?.Invoke();
+        onUseAbility?.Invoke();
         GameManager.instance.StartCoroutine(UnlockAbilityAndUpdateLoadingBar(GameManager.instance.ability.Cooldown()));
     }
 
