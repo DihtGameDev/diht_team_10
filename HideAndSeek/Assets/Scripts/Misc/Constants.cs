@@ -32,6 +32,7 @@ public static class Constants {
     public const string ARCH_TAG = "Arch";
     public const string ENEMY_SEEKER_AI_TAG = "AI";
     public const string SPAWNER_TAG = "Spawn";
+    public const string CANVAS_TAG = "Canvas";
 
     public static class AbilitiesTags {
         public static class Seeker {

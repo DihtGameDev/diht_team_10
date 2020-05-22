@@ -36,8 +36,15 @@ public class StringsList { // simple strings list, because collection not workin
         return false;
     }
 
-    public void Append(string value) {
+    public void AppendIfDoesntExists(string value) {
+        for (int i = 0; i < size; ++i) {
+            if (buffer[i] == value) {
+                return;
+            }
+        }
+
         ReserveIfNeeds();
+        Debugger.Log("append size: " + size);
         buffer[size] = value;
         ++size;
     }
@@ -53,7 +60,7 @@ public class StringsList { // simple strings list, because collection not workin
     }
 
     private void ReserveIfNeeds() {
-        if (size - 1 >= capacity) {
+        if (size - 3 >= capacity) {
             capacity += _additionalCount;
             string[] newBuffer = new string[capacity];
             for (int i = 0; i < buffer.Length; ++i) {

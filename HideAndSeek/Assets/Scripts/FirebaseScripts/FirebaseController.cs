@@ -187,7 +187,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                         foreach (var abilityAndLevel in seekerAbilities) {
                             int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
                             if (abilityValue > 0) {
-                                _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
+                                _firebaseGameData.abilityTags.AppendIfDoesntExists(abilityAndLevel.Key.ToString());
                             }
                         }
 
@@ -195,7 +195,7 @@ public class FirebaseController : SingletonGameObject<FirebaseController> {
                         foreach (var abilityAndLevel in hidemanAbilities) {
                             int abilityValue = Convert.ToInt32(abilityAndLevel.Value);
                             if (abilityValue > 0) {
-                                _firebaseGameData.abilityTags.Append(abilityAndLevel.Key.ToString());
+                                _firebaseGameData.abilityTags.AppendIfDoesntExists(abilityAndLevel.Key.ToString());
                             }
                         }
 

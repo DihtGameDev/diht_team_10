@@ -50,7 +50,8 @@ public class AbilitiesScreen : AbstractScreen {
         settingsInstance.seekerAbility = seekerDropwdown.options[seekerDropwdown.value].text;
         settingsInstance.save();
 
-        FirebaseController.instance.CheckAndResetAbilities(); // if we have cheaters
+        ReadyState readyState = FirebaseController.instance.CheckAndResetAbilities(); // if we have cheaters
+        DialogManager.instance.ShowDialog(DialogType.LOADING, () => { return readyState.isReady == false; });
     }
 
     private void OnSignUpClicked() {
@@ -82,6 +83,7 @@ public class AbilitiesScreen : AbstractScreen {
                     Debugger.Log(FirebaseController.instance.auth.MessageFromErrorType(errorType));
                 }
             );
+        DialogManager.instance.ShowDialog(DialogType.LOADING, () => { print(authState.state); return authState.state == AuthStates.NULL; });
     }
 
     public void UpdateCoinsFromFirebaseGameData(FirebaseGameData firebaseGameData) {

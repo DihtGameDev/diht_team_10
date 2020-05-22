@@ -319,6 +319,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         if (isWinner) {
             ReadyState readyState = FirebaseController.instance.AddCoins(Constants.ADDED_COINS_AFTER_WIN);
+            DialogManager.instance.ShowDialog(DialogType.LOADING, () => { return readyState.isReady == false; });
             StartCoroutine(Misc.WaitWhile(
                 () => { return readyState.isReady == false; },
                 () => {

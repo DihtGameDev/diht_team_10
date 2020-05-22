@@ -100,6 +100,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
                     SceneLoader.LoadSceneOnce(Constants.SceneName.GAME_SCENE);
                 }
             ));
+            DialogManager.instance.ShowDialog(DialogType.LOADING, () => { return readyState.isReady == false; });
         }
     }
 

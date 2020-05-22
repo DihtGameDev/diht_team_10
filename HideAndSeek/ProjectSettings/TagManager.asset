@@ -11,8 +11,8 @@ TagManager:
   - Grave
   - OccGrave
   - AI
-  - Test
   - Spawn
+  - Canvas
   layers:
   - Default
   - TransparentFX
