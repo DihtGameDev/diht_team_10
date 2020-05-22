@@ -20,7 +20,11 @@ public class UIGame : UIBase<UIGameWidget> {
     public Button closePauseDialogBtn => _widget.closePauseDialogBtn;
     public Button disconnectBtn => _widget.disconnectBtn;
 
+    public Button soundSettingsBtn => _widget.soundSettingsBtn;
+
     public event System.Action onUseAbility;
+
+    public bool soundOn = true;
 
     public UIGame(UIGameWidget gameWidget) : base(gameWidget) {
         pauseDialogGO.SetActive(false);
@@ -28,7 +32,11 @@ public class UIGame : UIBase<UIGameWidget> {
         disconnectBtn.onClick.AddListener(OnDisconnectClick);
         abilityBtn.onClick.AddListener(UseAbility);
         pauseBtn.onClick.AddListener(OnPauseClicked);
+        soundSettingsBtn.onClick.AddListener(OnSoundSettingsClick);
+
         closePauseDialogBtn.onClick.AddListener(() => { pauseDialogGO.SetActive(false); });
+
+        SetSoundIconForState(soundOn);
 
         GameManager.instance.OnPlayersCountChanged += SetPlayersCounter;
     }
@@ -51,11 +59,21 @@ public class UIGame : UIBase<UIGameWidget> {
     }
 
     public void OnPauseClicked() {
+        pauseDialogGO.transform.SetAsLastSibling();
         pauseDialogGO.SetActive(!pauseDialogGO.activeSelf);
     }
 
     public void OnDisconnectClick() {
         GameManager.instance.Leave();
+    }
+
+    public void OnSoundSettingsClick() {
+        soundOn = !soundOn;
+        SetSoundIconForState(soundOn);
+    }
+
+    private void SetSoundIconForState(bool soundOn) {
+        soundSettingsBtn.image.sprite = soundOn ? _widget.soundOnSprite : _widget.soundOffSprite;
     }
 
     public void PrintInChat(string message) {

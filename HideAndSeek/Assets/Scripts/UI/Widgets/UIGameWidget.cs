@@ -19,4 +19,7 @@ public class UIGameWidget : MonoBehaviour {
     public GameObject pauseDialogGO;
     public Button closePauseDialogBtn;
     public Button disconnectBtn;
+    public Button soundSettingsBtn;
+    public Sprite soundOnSprite;
+    public Sprite soundOffSprite;
 }
