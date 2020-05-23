@@ -23,7 +23,8 @@ public class Launcher : MonoBehaviourPunCallbacks {
         PhotonNetwork.AutomaticallySyncScene = true;
 
         _launcherUI = new UILauncher(_uiLauncherWidget);
-        _launcherUI.SetScreen(UILauncher.Screen.MAIN);
+
+        _launcherUI.SetScreen(Settings.getInstance().nickname == "" ? UILauncher.Screen.WHO_ARE_YOU : UILauncher.Screen.MAIN);
 
         CheckAndSetUserIdWithFirebase();
     }
@@ -32,6 +33,9 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     public void Connect() {
+        DialogManager.instance.ShowDialog(DialogType.LOADING,
+            () => { return SceneManager.GetActiveScene().buildIndex == 0; });
+
         // connecting to a photon server
         if (PhotonNetwork.IsConnected) {  // if for some reason i'm alreader connected
             PhotonNetwork.JoinRoom("test");

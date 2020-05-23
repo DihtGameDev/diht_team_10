@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIGameWidget : MonoBehaviour {
-    public GameObject loadingScreenGO;
     public Joystick moveJoystick;
     public Text chatText;
     public Text respawnText;
@@ -22,4 +21,10 @@ public class UIGameWidget : MonoBehaviour {
     public Button soundSettingsBtn;
     public Sprite soundOnSprite;
     public Sprite soundOffSprite;
+
+    [Header("Abilities Icons")]
+    public Sprite flareIcon;
+    public Sprite speedupIcon;
+    public Sprite invisibilityIcon;
+    public Sprite radarIcon;
 }

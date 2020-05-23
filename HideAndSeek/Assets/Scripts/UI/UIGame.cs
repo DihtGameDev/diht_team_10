@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIGame : UIBase<UIGameWidget> {
-    public GameObject loadingScreenGO => _widget.loadingScreenGO;
     public Joystick moveJoystick => _widget.moveJoystick;
     public Text chatText => _widget.chatText;
     public Text respawnText => _widget.respawnText;
@@ -26,6 +25,8 @@ public class UIGame : UIBase<UIGameWidget> {
 
     public bool soundOn = true;
 
+    private bool stopLoadingBar = false;
+
     public UIGame(UIGameWidget gameWidget) : base(gameWidget) {
         pauseDialogGO.SetActive(false);
 
@@ -46,13 +47,12 @@ public class UIGame : UIBase<UIGameWidget> {
     }
 
     public void LoadingState() {
-        loadingScreenGO.SetActive(true);
         playerCounterText.gameObject.SetActive(false);
         moveJoystick.gameObject.SetActive(false);
+        abilityBtn.gameObject.SetActive(false);
     }
 
     public void PlayingState() {
-        loadingScreenGO.SetActive(false);
         moveJoystick.gameObject.SetActive(true);
         playerCounterText.gameObject.SetActive(true);
         abilityBtn.gameObject.SetActive(true);
@@ -88,6 +88,29 @@ public class UIGame : UIBase<UIGameWidget> {
         }
     }
 
+    public void SetAbilityIcon(AbilityType abilityType) {
+        abilityLoadingBar.sprite = GetAbilityIconByType(abilityType);
+    }
+
+    public Sprite GetAbilityIconByType(AbilityType abilityType) {
+        switch (abilityType) {
+            case AbilityType.FLARE: {
+                return _widget.flareIcon;
+            }
+            case AbilityType.INVISIBILITY: {
+                return _widget.invisibilityIcon;
+            }
+            case AbilityType.RADAR: {
+                return _widget.radarIcon;
+            }
+            case AbilityType.SURGE: {
+                return _widget.speedupIcon;
+            }
+        }
+
+        return _widget.flareIcon;
+    }
+
     public void SetPlayersCounter(int playersCount) {
         playerCounterText.text = "Players: " + playersCount;
     }
@@ -104,13 +127,29 @@ public class UIGame : UIBase<UIGameWidget> {
 
     public IEnumerator UnlockAbilityAndUpdateLoadingBar(float delay) {
         float startTime = Time.time;
+        stopLoadingBar = false;
 
         while (Time.time - startTime < delay) {
+            if (stopLoadingBar) {
+                yield break;
+            }
+
             float amount = (Time.time - startTime) / delay;
+            if (1f - amount < 0.001f) {
+                amount = 1f;
+            }
+
             abilityLoadingBar.fillAmount = amount;
+
             yield return null;
         }
 
+        abilityBtn.interactable = true;
+    }
+
+    public void UnlockAbility() {
+        stopLoadingBar = true;
+        abilityLoadingBar.fillAmount = 1f;
         abilityBtn.interactable = true;
     }
 

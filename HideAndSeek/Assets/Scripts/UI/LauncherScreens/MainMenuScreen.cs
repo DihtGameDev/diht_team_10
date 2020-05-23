@@ -11,7 +11,7 @@ public class MainMenuScreen : AbstractScreen {
     public Button settingsBtn;
 
     protected void Start() {
-        hiText.text = "Hi, Egorik";
+        hiText.text = "Hi, " + Settings.getInstance().nickname;
 
         playBtn.onClick.AddListener(OnPlayClick);
         settingsBtn.onClick.AddListener(OnSettingsClick);

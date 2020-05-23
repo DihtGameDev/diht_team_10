@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     private Vector3[] _spawnPositions;
 
+    private bool gameIsStarted = false;
+
     protected void Awake() {
         instance = this;
 
@@ -74,9 +76,14 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         uiGame.LoadingState();
 
-        Debugger.OnLog += uiGame.PrintInChat;
+       // Debugger.OnLog += uiGame.PrintInChat;
 
         nicknameManager = NicknameManager.GetInstance(_uiGameWidget.gameObject, _nicknameTextPrefab);
+
+        DialogManager.instance.ShowDialog(
+            DialogType.LOADING,
+            () => { return gameIsStarted == false; }
+        );
     }
 
     protected void Start() {
@@ -105,6 +112,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         uiGame.PlayingState();
         uiGame.SetPlayersCounter(PlayersInTheScene());
+
+        gameIsStarted = true;
     }
 
     private void Respawn() {
@@ -187,6 +196,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
             uiGame.onUseAbility -= ability.UseAbility;
         }
 
+        string abilityTag;
+
         if (playerType == PlayerType.SEEKER) {
             mainPlayer = PhotonNetwork.Instantiate("SeekerGhost", spawnPos, Quaternion.identity, 0);
             FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
@@ -197,6 +208,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             SetFovSettings(fov, seekerPlayerData);
 
             ability = seekerAbilitiesDict.Get(Settings.getInstance().seekerAbility);
+            abilityTag = Settings.getInstance().seekerAbility;
         } else {
             mainPlayer = PhotonNetwork.Instantiate("Skeleton", spawnPos, Quaternion.identity, 0);
             FieldOfView fov = Object.Instantiate(_fovPrefab, mainPlayer.transform).GetComponent<FieldOfView>();
@@ -207,10 +219,13 @@ public class GameManager : MonoBehaviourPunCallbacks {
             SetFovSettings(fov, hidemanPlayerData);
 
             ability = hidemanAbilitiesDict.Get(Settings.getInstance().hidemanAbility);
+            abilityTag = Settings.getInstance().hidemanAbility;
         }
 
         uiGame.onUseAbility += ability.UseAbility;
         nicknameManager.SetVisiblePlayerType(playerType);
+
+        uiGame.SetAbilityIcon(Misc.GetAbilityTypeByTag(abilityTag));
 
         //  otherwise the player starts blinking when there are several fov on the scene
         mainPlayer.GetComponent<FogCoverable>().enabled = false;
@@ -220,7 +235,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         cameraController.SetChasingObject(mainPlayer);
 
         mainPlayer.name = "MyPlayer";
-        uiGame.abilityBtn.interactable = true;
+        uiGame.UnlockAbility();
     }
 
     private void PrintGameObjectsTagWithPrefix(string prefix) {
@@ -346,7 +361,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     private void LoadLauncherScene() {
         nicknameManager.Clear();
-        Debugger.OnLog -= uiGame.PrintInChat;
+       // Debugger.OnLog -= uiGame.PrintInChat;
         SceneLoader.LoadSceneOnce(Constants.SceneName.LAUNCHER);
     }
 

@@ -8,4 +8,5 @@ public class UILauncherWidget : MonoBehaviour {
     public AbilitiesMenuScreen abilitiesMenuScreen;
     public GhostAbilitiesScreen ghostAbilitiesScreen;
     public SkeletonAbilitiesScreen skeletonAbilitiesScreen;
+    public WhoAreYouScreen whoAreYouScreen;
 }

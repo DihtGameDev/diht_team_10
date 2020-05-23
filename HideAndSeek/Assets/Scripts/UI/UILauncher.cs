@@ -8,11 +8,12 @@ public class UILauncher : UIBase<UILauncherWidget> {
     public AbilitiesMenuScreen abilitiesMenuScreen => _widget.abilitiesMenuScreen;
     public GhostAbilitiesScreen ghostAbilitiesScreen => _widget.ghostAbilitiesScreen;
     public SkeletonAbilitiesScreen skeletonAbilitiesScreen => _widget.skeletonAbilitiesScreen;
+    public WhoAreYouScreen whoAreYouScreen => _widget.whoAreYouScreen;
 
     public AbstractScreen prevScreen;
 
     public enum Screen {
-        NULL, MAIN, ABILITIES, GHOST_ABILITIES, SKELETON_ABILITIES
+        NULL, WHO_ARE_YOU, MAIN, ABILITIES, GHOST_ABILITIES, SKELETON_ABILITIES
     }
 
     public UILauncher(UILauncherWidget widget) : base(widget) {
@@ -26,6 +27,11 @@ public class UILauncher : UIBase<UILauncherWidget> {
 
     public void SetScreen(Screen state) {
         switch (state) {
+            case Screen.WHO_ARE_YOU: {
+                Debug.Log("Switch to way screen");
+                SwitchScreen(whoAreYouScreen);
+                break;
+            }
             case Screen.MAIN: {
                 Debug.Log("Switch main screen");
                 SwitchScreen(mainMenuScreen);
