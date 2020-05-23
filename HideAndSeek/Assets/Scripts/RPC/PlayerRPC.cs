@@ -28,6 +28,7 @@ public class PlayerRPC : MonoBehaviour {
     [PunRPC]
     void KillHideman(string killerNickname, string victimName) {
         if (gameObject == GameManager.instance.mainPlayer) {  // this is mine hideman
+            GameManager.instance.playerAudioSoure.PlayOneShot(GameManager.instance.deathClip);
             Camera.main.GetComponent<CameraController>().SetChasingObject(null);
             GameManager.instance.uiGame.StartRespawnTimer();
             GameManager.instance.Invoke("Respawn", Constants.RESPAWN_TIME);

@@ -33,6 +33,7 @@ public class Seeker : MonoBehaviour {
     }
 
     private void BecomeSkeleton() {
+        GameManager.instance.playerAudioSoure.PlayOneShot(GameManager.instance.becomeSkeleton);
         Camera.main.GetComponent<CameraController>().SetChasingObject(null);
         GameManager.instance.StartCoroutine(GameManager.instance.BecomeSkeleton(transform.position));
         GetComponent<PhotonView>().RPC("DestroyThisPUNObject", RpcTarget.All); // we send all players that this object they should destroy nickname for this object

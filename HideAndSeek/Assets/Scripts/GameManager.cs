@@ -69,6 +69,14 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     private bool gameIsStarted = false;
 
+    public AudioSource playerAudioSoure;
+
+    [Header("Set audio clips")]
+    public AudioClip deathClip;
+    public AudioClip enterToArchClip;
+    public AudioClip becomeSkeleton;
+    
+
     protected void Awake() {
         instance = this;
 
